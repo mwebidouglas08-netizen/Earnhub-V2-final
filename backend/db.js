@@ -248,7 +248,6 @@ addPayment(data) {
     });
     saveDb(_db);
   },
-  },
   getAllPayments() {
     return [..._db.payments]
       .reverse()
@@ -256,6 +255,10 @@ addPayment(data) {
         ...p,
         username: (_db.users.find(u => u.id === p.user_id) || {}).username || '?'
       }));
+  },
+  updatePaymentStatus(id, status) {
+    const p = _db.payments.find(p => p.id === parseInt(id));
+    if (p) { p.status = status; saveDb(_db); }
   },
 
   // Stats
@@ -276,9 +279,5 @@ addPayment(data) {
     };
   }
 };
-// Add this inside the db object
-  updatePaymentStatus(id, status) {
-    const p = _db.payments.find(p => p.id === parseInt(id));
-    if (p) { p.status = status; saveDb(_db); }
-  },
+
 module.exports = db;
