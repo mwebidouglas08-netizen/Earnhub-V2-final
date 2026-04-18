@@ -1,20 +1,19 @@
 'use strict';
 const router = require('express').Router();
-const { getDb } = require('../db');
+const db = require('../db');
 const { requireActivated } = require('../middleware/auth');
 
 /* ── WITHDRAW ── */
 router.post('/withdraw', requireActivated, (req, res) => {
   const { amount, mobile } = req.body;
   if (!amount || !mobile) return res.json({ success: false, message: 'Amount and phone required.' });
-  const db = getDb();
-  const minW = parseFloat(db.prepare("SELECT value FROM settings WHERE key='min_withdrawal'").get()?.value || 500);
-  const user = db.prepare('SELECT balance FROM users WHERE id=?').get(req.session.userId);
+  const minW = parseFloat(db.getSetting('min_withdrawal') || 500);
+  const user = db.getUserById(req.session.userId);
   const amt = parseFloat(amount);
   if (!user || user.balance < amt) return res.json({ success: false, message: 'Insufficient balance.' });
   if (amt < minW) return res.json({ success: false, message: `Minimum withdrawal is KES ${minW}.` });
-  db.prepare('UPDATE users SET balance=balance-? WHERE id=?').run(amt, req.session.userId);
-  db.prepare('INSERT INTO withdrawals (user_id,amount,mobile) VALUES (?,?,?)').run(req.session.userId, amt, mobile);
+  db.updateUser(req.session.userId, { balance: user.balance - amt });
+  db.addWithdrawal({ user_id: req.session.userId, amount: amt, mobile });
   return res.json({ success: true, message: 'Withdrawal request submitted! Processed within 24hrs.' });
 });
 
@@ -25,9 +24,12 @@ router.post('/voucher', requireActivated, (req, res) => {
 
 /* ── DOWNLINES ── */
 router.get('/downlines', requireActivated, (req, res) => {
-  const db = getDb();
-  const user = db.prepare('SELECT referral_code FROM users WHERE id=?').get(req.session.userId);
-  const downlines = db.prepare('SELECT username,country,created_at FROM users WHERE referred_by=? ORDER BY created_at DESC').all(user?.referral_code || '');
+  const user = db.getUserById(req.session.userId);
+  const allUsers = db.getAllUsers();
+  const downlines = allUsers
+    .filter(u => u.referred_by === (user?.referral_code || ''))
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    .map(({ username, country, created_at }) => ({ username, country, created_at }));
   return res.json({ success: true, downlines });
 });
 
@@ -36,8 +38,13 @@ router.post('/spin', requireActivated, (req, res) => {
   const prizes = [0, 0, 0, 5, 0, 10, 0, 20, 0, 5];
   const prize = prizes[Math.floor(Math.random() * prizes.length)];
   if (prize > 0) {
-    const db = getDb();
-    db.prepare('UPDATE users SET balance=balance+?,total_earnings=total_earnings+? WHERE id=?').run(prize, prize, req.session.userId);
+    const user = db.getUserById(req.session.userId);
+    if (user) {
+      db.updateUser(req.session.userId, {
+        balance: user.balance + prize,
+        total_earnings: user.total_earnings + prize
+      });
+    }
   }
   return res.json({ success: true, prize, message: prize > 0 ? `🎉 You won KES ${prize}!` : 'Better luck next time!' });
 });

@@ -6,8 +6,7 @@ const path       = require('path');
 const fs         = require('fs');
 
 /* ─── Init DB early so it doesn't fail mid-request ─── */
-const { getDb } = require('./backend/db');
-getDb();
+const db = require('./backend/db');
 
 const app  = express();
 const PORT = parseInt(process.env.PORT || '3000', 10);
@@ -63,7 +62,7 @@ app.get('/activate', (req, res) => {
 
 app.get('/dashboard', (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
-  const user = getDb().prepare('SELECT is_activated, is_banned FROM users WHERE id=?').get(req.session.userId);
+  const user = db.getUserById(req.session.userId);
   if (!user || user.is_banned) { req.session.destroy(); return res.redirect('/login'); }
   if (!user.is_activated) return res.redirect('/activate');
   return res.sendFile(path.join(PAGES, 'dashboard.html'));
