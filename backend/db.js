@@ -235,17 +235,19 @@ const db = {
   },
 
   // Payments
-  addPayment(data) {
+addPayment(data) {
     _db.payments.push({
       id:         _db._nextId.payments++,
       user_id:    data.user_id,
       amount:     data.amount,
       phone:      data.phone,
       type:       data.type   || 'activation',
-      status:     data.status || 'completed',
+      status:     data.status || 'pending',
+      ref:        data.ref    || '',
       created_at: new Date().toISOString()
     });
     saveDb(_db);
+  },
   },
   getAllPayments() {
     return [..._db.payments]
@@ -274,5 +276,9 @@ const db = {
     };
   }
 };
-
+// Add this inside the db object
+  updatePaymentStatus(id, status) {
+    const p = _db.payments.find(p => p.id === parseInt(id));
+    if (p) { p.status = status; saveDb(_db); }
+  },
 module.exports = db;
