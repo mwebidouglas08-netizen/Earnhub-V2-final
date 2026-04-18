@@ -3,88 +3,221 @@
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>EarnHub – Activate Account</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-:root{--gold:#F5C518;--gd:#D4A017;--green:#00C853;--dark:#08111F;--card:#121E30;--border:rgba(245,197,24,.14);--text:#E8EAF0;--muted:#6B7280;--red:#EF5350;}
+:root{--gold:#E8900A;--gold-light:#FFF3DC;--dark:#0F172A;--body:#F8FAFC;--card:#fff;--border:#E2E8F0;--text:#1E293B;--muted:#64748B;--red:#DC2626;--green:#16A34A;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--dark);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background-image:radial-gradient(ellipse 65% 50% at 50% 0%,rgba(245,197,24,.09) 0%,transparent 68%);}
-.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:430px;}
+body{background:var(--body);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background-image:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(232,144,10,.08) 0%,transparent 70%);}
+.card{background:var(--card);border-radius:22px;padding:2.5rem 2rem;width:100%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,.1);}
 .top-icon{text-align:center;font-size:3rem;margin-bottom:.8rem;}
-h2{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.5rem;text-align:center;margin-bottom:.3rem;}
-.sub{text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:2rem;}
-.info-box{background:rgba(245,197,24,.06);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.5rem;}
-.irow{display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem;}
-.irow:last-child{margin-bottom:0;padding-top:.65rem;border-top:1px solid var(--border);}
-.ilabel{color:var(--muted);font-size:.88rem;}
-.ival{font-weight:700;color:var(--gold);font-family:'Space Grotesk',sans-serif;}
+h2{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.5rem;text-align:center;margin-bottom:.3rem;color:var(--dark);}
+.sub{text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:1.8rem;}
+.info-box{background:var(--gold-light);border:1.5px solid #FDE68A;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.5rem;}
+.irow{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;}
+.irow:last-child{margin-bottom:0;padding-top:.6rem;border-top:1px solid #FDE68A;}
+.ilabel{color:#92400E;font-size:.87rem;font-weight:500;}
+.ival{font-weight:800;color:var(--gold);font-size:1rem;}
 .fg{margin-bottom:1.2rem;}
-label{font-size:.83rem;font-weight:500;margin-bottom:.35rem;display:block;}
+label{font-size:.83rem;font-weight:600;margin-bottom:.38rem;display:block;color:var(--text);}
 .ph-row{display:flex;gap:.5rem;}
-.ph-pre{padding:.72rem .85rem;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:.88rem;}
-input{width:100%;padding:.72rem 1rem;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s;font-family:'Inter',sans-serif;}
-input:focus{border-color:var(--gold);}
-input::placeholder{color:var(--muted);}
-.btn{width:100%;padding:.9rem;background:var(--gold);color:#08111F;font-weight:700;border:none;border-radius:10px;font-size:1rem;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .2s;}
-.btn:hover{background:var(--gd);transform:translateY(-1px);}
-.btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
-.loader{display:none;text-align:center;margin-top:1rem;}
-.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .5rem;}
+.ph-pre{padding:.75rem .9rem;background:#F1F5F9;border:1.5px solid var(--border);border-radius:10px;color:var(--muted);font-size:.9rem;font-weight:700;}
+input{width:100%;padding:.75rem 1rem;background:var(--body);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+input:focus{border-color:var(--gold);background:#fff;}
+input::placeholder{color:#CBD5E1;}
+.btn{width:100%;padding:.9rem;background:var(--gold);color:#fff;font-weight:700;border:none;border-radius:11px;font-size:1rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;margin-top:.3rem;}
+.btn:hover{background:#C97D08;transform:translateY(-1px);box-shadow:0 4px 14px rgba(232,144,10,.35);}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* LOADING STATE */
+.loader{display:none;text-align:center;padding:1.5rem 0;}
+.spinner{width:44px;height:44px;border:4px solid #E2E8F0;border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .9rem;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.note{font-size:.8rem;color:var(--muted);text-align:center;margin-top:1rem;line-height:1.55;}
-.alert{padding:.7rem 1rem;border-radius:8px;font-size:.88rem;margin-bottom:.9rem;display:none;}
-.alert.error{background:rgba(239,83,80,.1);border:1px solid rgba(239,83,80,.3);color:var(--red);}
-.alert.success{background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.3);color:var(--green);}
+.loader-title{font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:.4rem;}
+.loader-sub{font-size:.85rem;color:var(--muted);line-height:1.6;}
+.dots span{animation:blink 1.4s infinite;}
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:0;}40%{opacity:1;}}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:.7rem;margin-top:1.2rem;}
+.step-item{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--muted);}
+.step-item .dot{width:24px;height:24px;border-radius:50%;background:#F1F5F9;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;transition:all .3s;}
+.step-item.done .dot{background:var(--green);border-color:var(--green);color:#fff;}
+.step-item.active .dot{background:var(--gold);border-color:var(--gold);color:#fff;animation:pulse .8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+.step-item.done{color:var(--green);}
+.step-item.active{color:var(--dark);font-weight:600;}
+
+.note{font-size:.79rem;color:var(--muted);text-align:center;margin-top:1.2rem;line-height:1.6;}
+.alert{padding:.75rem 1rem;border-radius:10px;font-size:.88rem;margin-bottom:.9rem;display:none;font-weight:500;}
+.alert.error{background:#FEF2F2;border:1.5px solid #FECACA;color:var(--red);}
+.alert.success{background:#F0FDF4;border:1.5px solid #BBF7D0;color:var(--green);}
 </style>
 </head>
 <body>
 <div class="card">
   <div class="top-icon">📱</div>
   <h2>Activate Your Account</h2>
-  <div class="sub">Complete payment to unlock all 10+ earning tools</div>
-  <div id="alert" class="alert"></div>
-  <div class="info-box">
-    <div class="irow"><span class="ilabel">💰 Activation Fee</span><span class="ival" id="feeDisplay">KES 300</span></div>
-    <div class="irow"><span class="ilabel">✅ Payment type</span><span style="color:var(--green);font-size:.84rem;">One-time · Lifetime Access</span></div>
-    <div class="irow"><span class="ilabel">🔓 Unlocks</span><span style="font-size:.84rem;">All 10+ earning tools</span></div>
-  </div>
-  <div class="fg">
-    <label>📞 M-Pesa Phone Number</label>
-    <div class="ph-row">
-      <div class="ph-pre">+254</div>
-      <input type="tel" id="phone" placeholder="712 345 678" style="flex:1" maxlength="9"/>
-    </div>
-  </div>
-  <button class="btn" id="btn" onclick="doActivate()">🚀 Pay &amp; Activate — KES <span id="feeBtn">300</span></button>
-  <div class="loader" id="loader">
-    <div class="spinner"></div>
-    <p style="color:var(--muted);font-size:.88rem;">STK Push sent to your phone…<br>Enter your M-Pesa PIN to confirm</p>
-  </div>
-  <p class="note">You will receive an M-Pesa STK push on the number above.<br>Enter your PIN to complete payment and activate your account.</p>
-</div>
-<script>
-fetch('/api/auth/me').then(r=>r.json()).then(d=>{
-  if(!d.success){window.location.href='/login';return;}
-  if(d.user.is_activated){window.location.href='/dashboard';return;}
-  const fee=d.settings?.activation_fee||300;
-  document.getElementById('feeDisplay').textContent='KES '+fee;
-  document.getElementById('feeBtn').textContent=fee;
-}).catch(()=>window.location.href='/login');
+  <div class="sub">Pay once via M-Pesa to unlock all 10+ earning tools for life</div>
 
-async function doActivate(){
-  const ph=document.getElementById('phone').value.trim();
-  if(!ph||ph.length<9){show('Enter a valid 9-digit phone number.','error');return;}
-  const btn=document.getElementById('btn');
-  btn.disabled=true;
-  document.getElementById('loader').style.display='block';
-  try{
-    const r=await fetch('/api/auth/activate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:'+254'+ph})});
-    const d=await r.json();
-    document.getElementById('loader').style.display='none';
-    if(d.success){show('🎉 Payment confirmed! Activating…','success');setTimeout(()=>window.location.href='/dashboard',1600);}
-    else{show(d.message,'error');btn.disabled=false;}
-  }catch{document.getElementById('loader').style.display='none';show('Network error. Try again.','error');btn.disabled=false;}
+  <!-- FORM VIEW -->
+  <div id="formView">
+    <div id="alert" class="alert"></div>
+    <div class="info-box">
+      <div class="irow"><span class="ilabel">💰 Activation Fee</span><span class="ival" id="feeDisplay">KES 300</span></div>
+      <div class="irow"><span class="ilabel">✅ Payment type</span><span style="color:var(--green);font-size:.85rem;font-weight:600;">One-time · Lifetime Access</span></div>
+      <div class="irow"><span class="ilabel">🔓 Unlocks</span><span style="font-size:.84rem;font-weight:600;">All 10+ earning tools</span></div>
+    </div>
+    <div class="fg">
+      <label>📞 M-Pesa Phone Number</label>
+      <div class="ph-row">
+        <div class="ph-pre">+254</div>
+        <input type="tel" id="phone" placeholder="712 345 678" style="flex:1" maxlength="9"/>
+      </div>
+    </div>
+    <button class="btn" id="payBtn" onclick="initiatePayment()">
+      🚀 Pay &amp; Activate — KES <span id="feeBtn">300</span>
+    </button>
+    <p class="note">You will receive an M-Pesa STK push prompt on the phone number above. Enter your PIN to complete payment.</p>
+  </div>
+
+  <!-- LOADING / POLLING VIEW -->
+  <div class="loader" id="loaderView">
+    <div class="spinner"></div>
+    <div class="loader-title">Waiting for payment<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+    <div class="loader-sub">Check your phone for the M-Pesa prompt and enter your PIN</div>
+    <div class="steps" id="stepList">
+      <div class="step-item done" id="s1"><div class="dot">✓</div><span>STK push sent to your phone</span></div>
+      <div class="step-item active" id="s2"><div class="dot">2</div><span>Waiting for M-Pesa PIN entry</span></div>
+      <div class="step-item" id="s3"><div class="dot">3</div><span>Confirming payment</span></div>
+      <div class="step-item" id="s4"><div class="dot">4</div><span>Activating account</span></div>
+    </div>
+    <button onclick="cancelPayment()" style="margin-top:1.5rem;background:none;border:none;color:var(--muted);font-size:.85rem;cursor:pointer;text-decoration:underline;">Cancel &amp; try again</button>
+  </div>
+
+</div>
+
+<script>
+let pollInterval = null;
+let pollCount    = 0;
+const MAX_POLLS  = 40; // 40 × 3s = 2 minutes
+
+// Load fee on page load
+fetch('/api/auth/me').then(r => r.json()).then(d => {
+  if (!d.success) { window.location.href = '/login'; return; }
+  if (d.user.is_activated) { window.location.href = '/dashboard'; return; }
+  const fee = d.settings?.activation_fee || 300;
+  document.getElementById('feeDisplay').textContent = 'KES ' + fee;
+  document.getElementById('feeBtn').textContent      = fee;
+}).catch(() => window.location.href = '/login');
+
+async function initiatePayment() {
+  const phoneRaw = document.getElementById('phone').value.trim();
+  if (!phoneRaw || phoneRaw.length < 9) {
+    showAlert('Enter a valid 9-digit M-Pesa number.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('payBtn');
+  btn.disabled    = true;
+  btn.textContent = 'Sending STK push…';
+
+  try {
+    const r = await fetch('/api/auth/activate/stk', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ phone: '+254' + phoneRaw })
+    });
+    const d = await r.json();
+
+    if (d.success) {
+      // Switch to polling view
+      document.getElementById('formView').style.display   = 'none';
+      document.getElementById('loaderView').style.display = 'block';
+      startPolling();
+    } else {
+      showAlert(d.message || 'Failed to send STK push. Try again.', 'error');
+      btn.disabled    = false;
+      btn.textContent = '🚀 Pay & Activate';
+    }
+  } catch (e) {
+    showAlert('Network error. Check your connection and try again.', 'error');
+    btn.disabled    = false;
+    btn.textContent = '🚀 Pay & Activate';
+  }
 }
-function show(m,t){const e=document.getElementById('alert');e.textContent=m;e.className='alert '+t;e.style.display='block';}
+
+function startPolling() {
+  pollCount    = 0;
+  pollInterval = setInterval(pollStatus, 3000);
+}
+
+async function pollStatus() {
+  pollCount++;
+
+  // Update step UI
+  if (pollCount > 3)  setStep('s3', 'active');
+  if (pollCount > 8)  setStep('s3', 'done');
+  if (pollCount > 10) setStep('s4', 'active');
+
+  try {
+    const r = await fetch('/api/auth/activate/status');
+    const d = await r.json();
+
+    if (d.activated) {
+      clearInterval(pollInterval);
+      setStep('s3', 'done');
+      setStep('s4', 'done');
+      document.querySelector('.loader-title').textContent = '🎉 Payment confirmed!';
+      document.querySelector('.loader-sub').textContent   = 'Your account is activated. Redirecting to dashboard…';
+      document.querySelector('.spinner').style.borderTopColor = '#16A34A';
+      setTimeout(() => window.location.href = '/dashboard', 1800);
+      return;
+    }
+  } catch (e) {
+    console.error('Poll error:', e.message);
+  }
+
+  // Timeout after MAX_POLLS
+  if (pollCount >= MAX_POLLS) {
+    clearInterval(pollInterval);
+    cancelPayment();
+    showAlert('Payment not confirmed within 2 minutes. If you paid, contact support. Otherwise try again.', 'error');
+  }
+}
+
+function setStep(id, state) {
+  const el = document.getElementById(id);
+  el.classList.remove('active', 'done');
+  el.classList.add(state);
+  if (state === 'done') el.querySelector('.dot').textContent = '✓';
+}
+
+function cancelPayment() {
+  clearInterval(pollInterval);
+  document.getElementById('loaderView').style.display = 'none';
+  document.getElementById('formView').style.display   = 'block';
+  const btn = document.getElementById('payBtn');
+  btn.disabled    = false;
+  btn.textContent = '🚀 Pay & Activate';
+  // Reset steps
+  ['s1','s2','s3','s4'].forEach((id,i) => {
+    const el = document.getElementById(id);
+    el.classList.remove('active','done');
+    if (i === 0) { el.classList.add('done'); el.querySelector('.dot').textContent = '✓'; }
+    else         { el.querySelector('.dot').textContent = String(i+1); }
+  });
+  document.getElementById('s1').classList.remove('done');
+  document.getElementById('s1').querySelector('.dot').textContent = '1';
+}
+
+function showAlert(msg, type) {
+  const el = document.getElementById('alert');
+  el.textContent  = msg;
+  el.className    = 'alert ' + type;
+  el.style.display= 'block';
+}
 </script>
 </body>
 </html>
