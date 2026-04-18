@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const db     = require('../db');
 const lipana = require('../lipana');
 
+/* ── REGISTER ── */
 router.post('/register', (req, res) => {
   const { username, email, country, mobile, password, confirm_password, referral } = req.body;
   if (!username || !email || !password || !mobile)
@@ -17,13 +18,13 @@ router.post('/register', (req, res) => {
     const hash    = bcrypt.hashSync(password, 10);
     const refCode = uuidv4().slice(0, 8).toUpperCase();
     db.createUser({
-      username:     username.trim(),
-      email:        email.trim().toLowerCase(),
-      country:      country || 'Kenya',
+      username:      username.trim(),
+      email:         email.trim().toLowerCase(),
+      country:       country || 'Kenya',
       mobile,
-      password:     hash,
-      referral_code:refCode,
-      referred_by:  referral || null
+      password:      hash,
+      referral_code: refCode,
+      referred_by:   referral || null
     });
     if (referral) {
       const referrer = db.getUserByReferralCode(referral);
@@ -44,6 +45,7 @@ router.post('/register', (req, res) => {
   }
 });
 
+/* ── LOGIN ── */
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
@@ -58,11 +60,12 @@ router.post('/login', (req, res) => {
   return res.json({ success: true, activated: !!user.is_activated });
 });
 
+/* ── LOGOUT ── */
 router.post('/logout', (req, res) => {
   req.session.destroy(() => res.json({ success: true }));
 });
 
-// ── INITIATE STK PUSH ──
+/* ── INITIATE STK PUSH ── */
 router.post('/activate/stk', async (req, res) => {
   if (!req.session || !req.session.userId)
     return res.json({ success: false, message: 'Not logged in.' });
@@ -82,33 +85,43 @@ router.post('/activate/stk', async (req, res) => {
   try {
     const result = await lipana.stkPush({
       phone,
-      amount:    fee,
-      accountRef: `EARNHUB-${user.id}`,
-      description:`EarnHub Activation - ${user.username}`
+      amount:      fee,
+      accountRef:  `EARNHUB-${user.id}`,
+      description: `EarnHub Activation - ${user.username}`
     });
 
-    // Save pending payment with lipana transaction ref
+    // Extract transaction/checkout ID from response
+    const ref = result?.transactionId
+             || result?.CheckoutRequestID
+             || result?.checkoutRequestId
+             || result?.id
+             || '';
+
     db.addPayment({
-      user_id:  user.id,
-      amount:   fee,
+      user_id: user.id,
+      amount:  fee,
       phone,
-      type:     'activation',
-      status:   'pending',
-      ref:      result.CheckoutRequestID || result.checkoutRequestId || result.ref || ''
+      type:    'activation',
+      status:  'pending',
+      ref
     });
 
     return res.json({
       success:    true,
       message:    'STK push sent! Enter your M-Pesa PIN on your phone.',
-      checkoutId: result.CheckoutRequestID || result.checkoutRequestId || result.ref || ''
+      checkoutId: ref
     });
+
   } catch (e) {
     console.error('STK push error:', e.message);
-    return res.json({ success: false, message: e.message || 'Failed to send STK push. Try again.' });
+    return res.json({
+      success: false,
+      message: e.message || 'Failed to send STK push. Try again.'
+    });
   }
 });
 
-// ── POLL PAYMENT STATUS (frontend polls this every 3s) ──
+/* ── POLL PAYMENT STATUS ── */
 router.get('/activate/status', (req, res) => {
   if (!req.session || !req.session.userId)
     return res.json({ success: false, message: 'Not logged in.' });
@@ -116,13 +129,16 @@ router.get('/activate/status', (req, res) => {
   const user = db.getUserById(req.session.userId);
   if (!user) return res.json({ success: false });
 
+  // Already activated
   if (user.is_activated)
     return res.json({ success: true, activated: true });
 
-  // Check if any completed payment exists for this user
+  // Check payments for completed
   const payments  = db.getAllPayments();
   const completed = payments.find(
-    p => p.user_id === user.id && p.status === 'completed' && p.type === 'activation'
+    p => p.user_id === user.id &&
+         p.type   === 'activation' &&
+         p.status === 'completed'
   );
   if (completed) {
     db.updateUser(user.id, { is_activated: 1 });
@@ -132,65 +148,78 @@ router.get('/activate/status', (req, res) => {
   return res.json({ success: true, activated: false });
 });
 
-// ── LIPANA CALLBACK (Lipana posts here when payment completes) ──
+/* ── LIPANA WEBHOOK CALLBACK ── */
 router.post('/activate/callback', (req, res) => {
-  console.log('Lipana callback received:', JSON.stringify(req.body));
+  console.log('📩 Lipana callback:', JSON.stringify(req.body));
+
   try {
     const body = req.body;
 
-    // Lipana callback structure (adjust field names to match their actual API)
-    const resultCode   = body.ResultCode
-                      ?? body.result_code
-                      ?? body.Body?.stkCallback?.ResultCode
-                      ?? -1;
+    // Lipana SDK webhook payload
+    const resultCode = body?.ResultCode
+                    ?? body?.result_code
+                    ?? body?.Body?.stkCallback?.ResultCode
+                    ?? body?.status   // some providers use "status"
+                    ?? -1;
 
-    const checkoutId   = body.CheckoutRequestID
-                      ?? body.checkout_request_id
-                      ?? body.Body?.stkCallback?.CheckoutRequestID
-                      ?? '';
+    const isSuccess = resultCode === 0
+                   || resultCode === '0'
+                   || body?.status === 'success'
+                   || body?.status === 'completed';
 
-    const accountRef   = body.AccountReference
-                      ?? body.account_reference
-                      ?? body.Body?.stkCallback?.CallbackMetadata?.Item?.find?.(
-                           i => i.Name === 'AccountReference'
-                         )?.Value
-                      ?? '';
+    const txRef = body?.transactionId
+               || body?.CheckoutRequestID
+               || body?.checkoutRequestId
+               || body?.checkout_request_id
+               || body?.id
+               || '';
 
-    if (parseInt(resultCode) === 0) {
-      // Payment successful — find payment by checkoutId or accountRef
+    const accountRef = body?.AccountReference
+                    || body?.account_reference
+                    || body?.accountReference
+                    || '';
+
+    if (isSuccess) {
       const payments = db.getAllPayments();
-      let payment = payments.find(p => p.ref === checkoutId);
 
-      // Fallback: match by account ref (EARNHUB-{userId})
-      if (!payment && accountRef) {
+      // Try match by transaction ref first
+      let payment = txRef
+        ? payments.find(p => p.ref === txRef)
+        : null;
+
+      // Fallback: match by account reference EARNHUB-{userId}
+      if (!payment && accountRef && accountRef.startsWith('EARNHUB-')) {
         const userId = parseInt(accountRef.replace('EARNHUB-', ''));
-        payment = payments.find(p => p.user_id === userId && p.status === 'pending');
+        payment = payments.find(
+          p => p.user_id === userId && p.status === 'pending' && p.type === 'activation'
+        );
       }
 
       if (payment) {
         db.updatePaymentStatus(payment.id, 'completed');
         db.updateUser(payment.user_id, { is_activated: 1 });
-        console.log(`✅ User ${payment.user_id} activated via Lipana callback`);
+        console.log(`✅ User ${payment.user_id} activated via callback`);
       } else {
-        console.log('⚠️ Payment record not found for checkoutId:', checkoutId);
+        console.warn('⚠️  No matching pending payment found for callback');
       }
+
     } else {
-      // Payment failed — mark as failed
-      if (checkoutId) {
+      console.log('❌ Payment failed/cancelled, code:', resultCode);
+      if (txRef) {
         const payments = db.getAllPayments();
-        const payment  = payments.find(p => p.ref === checkoutId);
+        const payment  = payments.find(p => p.ref === txRef);
         if (payment) db.updatePaymentStatus(payment.id, 'failed');
       }
-      console.log('❌ Payment failed, ResultCode:', resultCode);
     }
   } catch (e) {
-    console.error('Callback processing error:', e.message);
+    console.error('Callback error:', e.message);
   }
 
-  // Always return 200 to Lipana so they stop retrying
+  // Always 200 so Lipana stops retrying
   return res.status(200).json({ success: true });
 });
 
+/* ── ME ── */
 router.get('/me', (req, res) => {
   if (!req.session || !req.session.userId) return res.json({ success: false });
   const user = db.getUserById(req.session.userId);
@@ -201,6 +230,7 @@ router.get('/me', (req, res) => {
   return res.json({ success: true, user: safeUser, notifications, settings });
 });
 
+/* ── MARK NOTIFICATION READ ── */
 router.post('/notification/read/:id', (req, res) => {
   if (!req.session || !req.session.userId) return res.json({ success: false });
   db.markNotificationRead(req.params.id);
