@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>EarnHub – Activate Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--gold:#F5C518;--gd:#D4A017;--green:#00C853;--dark:#08111F;--card:#121E30;--border:rgba(245,197,24,.14);--text:#E8EAF0;--muted:#6B7280;--red:#EF5350;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background-image:radial-gradient(ellipse 65% 50% at 50% 0%,rgba(245,197,24,.09) 0%,transparent 68%);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:430px;}
+.top-icon{text-align:center;font-size:3rem;margin-bottom:.8rem;}
+h2{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.5rem;text-align:center;margin-bottom:.3rem;}
+.sub{text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:2rem;}
+.info-box{background:rgba(245,197,24,.06);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.5rem;}
+.irow{display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem;}
+.irow:last-child{margin-bottom:0;padding-top:.65rem;border-top:1px solid var(--border);}
+.ilabel{color:var(--muted);font-size:.88rem;}
+.ival{font-weight:700;color:var(--gold);font-family:'Space Grotesk',sans-serif;}
+.fg{margin-bottom:1.2rem;}
+label{font-size:.83rem;font-weight:500;margin-bottom:.35rem;display:block;}
+.ph-row{display:flex;gap:.5rem;}
+.ph-pre{padding:.72rem .85rem;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:.88rem;}
+input{width:100%;padding:.72rem 1rem;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s;font-family:'Inter',sans-serif;}
+input:focus{border-color:var(--gold);}
+input::placeholder{color:var(--muted);}
+.btn{width:100%;padding:.9rem;background:var(--gold);color:#08111F;font-weight:700;border:none;border-radius:10px;font-size:1rem;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .2s;}
+.btn:hover{background:var(--gd);transform:translateY(-1px);}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.loader{display:none;text-align:center;margin-top:1rem;}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .5rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.note{font-size:.8rem;color:var(--muted);text-align:center;margin-top:1rem;line-height:1.55;}
+.alert{padding:.7rem 1rem;border-radius:8px;font-size:.88rem;margin-bottom:.9rem;display:none;}
+.alert.error{background:rgba(239,83,80,.1);border:1px solid rgba(239,83,80,.3);color:var(--red);}
+.alert.success{background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.3);color:var(--green);}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top-icon">📱</div>
+  <h2>Activate Your Account</h2>
+  <div class="sub">Complete payment to unlock all 10+ earning tools</div>
+  <div id="alert" class="alert"></div>
+  <div class="info-box">
+    <div class="irow"><span class="ilabel">💰 Activation Fee</span><span class="ival" id="feeDisplay">KES 300</span></div>
+    <div class="irow"><span class="ilabel">✅ Payment type</span><span style="color:var(--green);font-size:.84rem;">One-time · Lifetime Access</span></div>
+    <div class="irow"><span class="ilabel">🔓 Unlocks</span><span style="font-size:.84rem;">All 10+ earning tools</span></div>
+  </div>
+  <div class="fg">
+    <label>📞 M-Pesa Phone Number</label>
+    <div class="ph-row">
+      <div class="ph-pre">+254</div>
+      <input type="tel" id="phone" placeholder="712 345 678" style="flex:1" maxlength="9"/>
+    </div>
+  </div>
+  <button class="btn" id="btn" onclick="doActivate()">🚀 Pay &amp; Activate — KES <span id="feeBtn">300</span></button>
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <p style="color:var(--muted);font-size:.88rem;">STK Push sent to your phone…<br>Enter your M-Pesa PIN to confirm</p>
+  </div>
+  <p class="note">You will receive an M-Pesa STK push on the number above.<br>Enter your PIN to complete payment and activate your account.</p>
+</div>
+<script>
+fetch('/api/auth/me').then(r=>r.json()).then(d=>{
+  if(!d.success){window.location.href='/login';return;}
+  if(d.user.is_activated){window.location.href='/dashboard';return;}
+  const fee=d.settings?.activation_fee||300;
+  document.getElementById('feeDisplay').textContent='KES '+fee;
+  document.getElementById('feeBtn').textContent=fee;
+}).catch(()=>window.location.href='/login');
+
+async function doActivate(){
+  const ph=document.getElementById('phone').value.trim();
+  if(!ph||ph.length<9){show('Enter a valid 9-digit phone number.','error');return;}
+  const btn=document.getElementById('btn');
+  btn.disabled=true;
+  document.getElementById('loader').style.display='block';
+  try{
+    const r=await fetch('/api/auth/activate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:'+254'+ph})});
+    const d=await r.json();
+    document.getElementById('loader').style.display='none';
+    if(d.success){show('🎉 Payment confirmed! Activating…','success');setTimeout(()=>window.location.href='/dashboard',1600);}
+    else{show(d.message,'error');btn.disabled=false;}
+  }catch{document.getElementById('loader').style.display='none';show('Network error. Try again.','error');btn.disabled=false;}
+}
+function show(m,t){const e=document.getElementById('alert');e.textContent=m;e.className='alert '+t;e.style.display='block';}
+</script>
+</body>
+</html>

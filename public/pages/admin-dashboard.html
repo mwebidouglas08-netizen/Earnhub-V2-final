@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>EarnHub – Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--gold:#F5C518;--gd:#D4A017;--green:#00C853;--dark:#060E1A;--dark2:#0B1523;--card:#101C2E;--card2:#142035;--border:rgba(245,197,24,.1);--text:#E8EAF0;--muted:#5A6478;--red:#EF5350;--blue:#42A5F5;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;}
+.sb{width:230px;background:var(--dark2);border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:50;}
+.sb-logo{padding:1.3rem 1.2rem .9rem;border-bottom:1px solid var(--border);}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:800;color:var(--gold);}
+.logo span{color:var(--green);}
+.atag{font-size:.67rem;color:var(--red);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-top:.2rem;}
+.nsc{padding:.7rem .7rem .2rem;font-size:.66rem;font-weight:700;color:var(--muted);letter-spacing:1.6px;text-transform:uppercase;}
+.ni{display:flex;align-items:center;gap:.6rem;padding:.58rem .85rem;margin:.08rem .42rem;border-radius:8px;cursor:pointer;color:var(--muted);font-size:.86rem;transition:all .15s;border:none;background:none;width:calc(100% - .84rem);text-align:left;}
+.ni:hover{background:rgba(245,197,24,.07);color:var(--text);}
+.ni.active{background:rgba(245,197,24,.11);color:var(--gold);font-weight:600;}
+.sb-foot{padding:.9rem;}
+.lbtn{width:100%;padding:.62rem;background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.2);border-radius:8px;color:#EF5350;font-size:.86rem;cursor:pointer;font-weight:600;}
+.lbtn:hover{background:rgba(239,83,80,.18);}
+.main{margin-left:230px;flex:1;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.4rem;background:var(--dark2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40;}
+.topbar h1{font-family:'Space Grotesk',sans-serif;font-size:.97rem;font-weight:700;}
+.achip{background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.2);border-radius:50px;padding:.28rem .75rem;font-size:.76rem;color:#EF5350;}
+.cnt{padding:1.4rem;}
+.sec{display:none;}
+.sec.active{display:block;}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.9rem;margin-bottom:1.4rem;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:1.1rem;}
+.sc .lbl{font-size:.72rem;color:var(--muted);margin-bottom:.35rem;}
+.sc .val{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;color:var(--gold);}
+.sc .sl{font-size:.7rem;color:var(--muted);margin-top:.15rem;}
+.stitle{font-family:'Space Grotesk',sans-serif;font-size:.98rem;font-weight:700;margin-bottom:.9rem;}
+.twrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:auto;}
+table{width:100%;border-collapse:collapse;min-width:580px;}
+th{padding:.7rem .95rem;text-align:left;font-size:.75rem;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:.7rem .95rem;font-size:.84rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.015);}
+.badge{display:inline-block;padding:.18rem .55rem;border-radius:50px;font-size:.7rem;font-weight:700;}
+.bg{background:rgba(0,200,83,.12);color:var(--green);}
+.br{background:rgba(239,83,80,.12);color:var(--red);}
+.by{background:rgba(245,197,24,.12);color:var(--gold);}
+.bb{background:rgba(66,165,245,.12);color:var(--blue);}
+.btn{padding:.48rem .95rem;border-radius:7px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-p{background:var(--gold);color:var(--dark);}
+.btn-p:hover{background:var(--gd);}
+.btn-d{background:rgba(239,83,80,.1);border:1px solid rgba(239,83,80,.2);color:var(--red);}
+.btn-d:hover{background:rgba(239,83,80,.2);}
+.btn-s{background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);color:var(--green);}
+.btn-sm{padding:.3rem .65rem;font-size:.76rem;}
+.fcard{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:1.4rem;max-width:580px;margin-bottom:1.4rem;}
+.fg{margin-bottom:.9rem;}
+.fg label{font-size:.8rem;font-weight:500;margin-bottom:.3rem;display:block;color:var(--muted);}
+.fg input,.fg select,.fg textarea{width:100%;padding:.62rem .88rem;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.86rem;outline:none;font-family:'Inter',sans-serif;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);}
+.fg select option{background:var(--card);}
+.fg textarea{resize:vertical;min-height:75px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.al{padding:.65rem .9rem;border-radius:8px;font-size:.85rem;margin-top:.75rem;display:none;}
+.al.ok{background:rgba(0,200,83,.09);border:1px solid rgba(0,200,83,.3);color:var(--green);}
+.al.err{background:rgba(239,83,80,.09);border:1px solid rgba(239,83,80,.3);color:var(--red);}
+.sbar{padding:.58rem .95rem;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.86rem;outline:none;width:240px;}
+.sbar:focus{border-color:var(--gold);}
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;flex-wrap:wrap;gap:.65rem;}
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;align-items:center;justify-content:center;padding:1rem;}
+.modal.open{display:flex;}
+.mcard{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;}
+.mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;}
+.mtitle{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;}
+.xbtn{background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;line-height:1;}
+/* TOGGLE */
+.tgl{position:relative;display:inline-block;width:38px;height:21px;}
+.tgl input{opacity:0;width:0;height:0;}
+.tgl .sl{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:21px;cursor:pointer;transition:.2s;}
+.tgl .sl:before{content:'';position:absolute;width:15px;height:15px;bottom:3px;left:3px;background:var(--muted);border-radius:50%;transition:.2s;}
+.tgl input:checked+.sl{background:var(--green);}
+.tgl input:checked+.sl:before{transform:translateX(17px);background:#fff;}
+@media(max-width:768px){.sb{display:none;}.main{margin-left:0;}.frow{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<aside class="sb">
+  <div class="sb-logo"><div class="logo">Earn<span>Hub</span></div><div class="atag">🔐 Admin Panel</div></div>
+  <div class="nsc">Overview</div>
+  <button class="ni active" onclick="show('overview',this)">📊 Dashboard</button>
+  <div class="nsc">Users</div>
+  <button class="ni" onclick="show('users',this)">👥 All Users</button>
+  <button class="ni" onclick="show('notify',this)">🔔 Send Notification</button>
+  <div class="nsc">Finance</div>
+  <button class="ni" onclick="show('withdrawals',this)">💸 Withdrawals</button>
+  <button class="ni" onclick="show('payments',this)">💳 Payments</button>
+  <div class="nsc">Configuration</div>
+  <button class="ni" onclick="show('settings',this)">⚙️ Site Settings</button>
+  <div style="flex:1;"></div>
+  <div class="sb-foot"><button class="lbtn" onclick="doLogout()">🚪 Logout</button></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <h1 id="ptitle">📊 Dashboard Overview</h1>
+    <span class="achip" id="aname">Admin</span>
+  </div>
+  <div class="cnt">
+
+    <!-- OVERVIEW -->
+    <div class="sec active" id="s-overview">
+      <div class="sgrid">
+        <div class="sc"><div class="lbl">👥 Total Users</div><div class="val" id="st-u">0</div><div class="sl">Registered</div></div>
+        <div class="sc"><div class="lbl">✅ Active</div><div class="val" id="st-a">0</div><div class="sl">Activated</div></div>
+        <div class="sc"><div class="lbl">🚫 Banned</div><div class="val" id="st-b">0</div><div class="sl">Suspended</div></div>
+        <div class="sc"><div class="lbl">💸 Pending Withdrawals</div><div class="val" id="st-pw">0</div><div class="sl">Awaiting</div></div>
+        <div class="sc"><div class="lbl">💰 Revenue</div><div class="val" id="st-rev">0</div><div class="sl">KES collected</div></div>
+        <div class="sc"><div class="lbl">🏦 Paid Out</div><div class="val" id="st-po">0</div><div class="sl">KES withdrawn</div></div>
+      </div>
+      <div class="stitle">👤 Recent Registrations</div>
+      <div class="twrap"><table><thead><tr><th>Username</th><th>Email</th><th>Country</th><th>Status</th><th>Joined</th></tr></thead><tbody id="rt-body"></tbody></table></div>
+    </div>
+
+    <!-- USERS -->
+    <div class="sec" id="s-users">
+      <div class="toolbar">
+        <div class="stitle" style="margin:0;">👥 Manage Users</div>
+        <input class="sbar" id="usearch" placeholder="🔍 Search username or email" oninput="searchU()"/>
+      </div>
+      <div class="twrap"><table><thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Country</th><th>Status</th><th>Balance</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="u-body"></tbody></table></div>
+    </div>
+
+    <!-- NOTIFY -->
+    <div class="sec" id="s-notify">
+      <div class="stitle">🔔 Send Notification</div>
+      <div class="fcard">
+        <div class="fg"><label>Send To</label><select id="nto" onchange="toggleUID()"><option value="global">📢 All Users (Global)</option><option value="user">👤 Specific User</option></select></div>
+        <div class="fg" id="uid-wrap" style="display:none;"><label>User ID</label><input type="number" id="nuid" placeholder="Enter user ID"/></div>
+        <div class="fg"><label>Title</label><input type="text" id="ntitle" placeholder="Notification title"/></div>
+        <div class="fg"><label>Message</label><textarea id="nmsg" placeholder="Your message…"></textarea></div>
+        <div class="fg"><label>Type</label><select id="ntype"><option value="info">ℹ️ Info</option><option value="success">✅ Success</option><option value="warning">⚠️ Warning</option></select></div>
+        <button class="btn btn-p" onclick="sendNotif()">Send Notification</button>
+        <div class="al" id="nal"></div>
+      </div>
+    </div>
+
+    <!-- WITHDRAWALS -->
+    <div class="sec" id="s-withdrawals">
+      <div class="stitle">💸 Withdrawal Requests</div>
+      <div class="twrap"><table><thead><tr><th>ID</th><th>Username</th><th>Amount</th><th>Mobile</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody id="wd-body"></tbody></table></div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div class="sec" id="s-payments">
+      <div class="stitle">💳 Activation Payments</div>
+      <div class="twrap"><table><thead><tr><th>ID</th><th>Username</th><th>Amount</th><th>Phone</th><th>Type</th><th>Status</th><th>Date</th></tr></thead><tbody id="pay-body"></tbody></table></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="sec" id="s-settings">
+      <div class="stitle">⚙️ Site Settings</div>
+      <div class="fcard">
+        <div class="frow">
+          <div class="fg"><label>💰 Activation Fee (KES)</label><input type="number" id="s-activation_fee" placeholder="300"/></div>
+          <div class="fg"><label>👥 Referral Bonus (KES)</label><input type="number" id="s-referral_bonus" placeholder="50"/></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label>📤 Min Withdrawal (KES)</label><input type="number" id="s-min_withdrawal" placeholder="500"/></div>
+          <div class="fg"><label>🎁 Welcome Bonus (KES)</label><input type="number" id="s-welcome_bonus" placeholder="0"/></div>
+        </div>
+        <div class="fg"><label>🏷️ Site Name</label><input type="text" id="s-site_name" placeholder="EarnHub"/></div>
+        <button class="btn btn-p" style="padding:.72rem 1.6rem;" onclick="saveSettings()">💾 Save All Settings</button>
+        <div class="al" id="sal"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EDIT USER MODAL -->
+<div class="modal" id="editModal">
+  <div class="mcard">
+    <div class="mhead"><div class="mtitle">✏️ Edit User</div><button class="xbtn" onclick="closeModal()">×</button></div>
+    <input type="hidden" id="eid"/>
+    <div class="frow">
+      <div class="fg"><label>Balance (KES)</label><input type="number" id="e-balance"/></div>
+      <div class="fg"><label>Total Earnings</label><input type="number" id="e-total_earnings"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Ads Earnings</label><input type="number" id="e-ads_earnings"/></div>
+      <div class="fg"><label>TikTok Earnings</label><input type="number" id="e-tiktok_earnings"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>YouTube Earnings</label><input type="number" id="e-youtube_earnings"/></div>
+      <div class="fg"><label>Trivia Earnings</label><input type="number" id="e-trivia_earnings"/></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Articles Earnings</label><input type="number" id="e-articles_earnings"/></div>
+      <div class="fg"><label>Affiliate Earnings</label><input type="number" id="e-affiliate_earnings"/></div>
+    </div>
+    <div class="fg"><label>Agent Bonus</label><input type="number" id="e-agent_bonus"/></div>
+    <div class="frow" style="align-items:center;margin-bottom:.5rem;">
+      <div style="display:flex;align-items:center;gap:.75rem;"><label style="margin:0;font-size:.82rem;color:var(--muted);">Activated</label><label class="tgl"><input type="checkbox" id="e-is_activated"/><span class="sl"></span></label></div>
+      <div style="display:flex;align-items:center;gap:.75rem;"><label style="margin:0;font-size:.82rem;color:var(--muted);">Banned</label><label class="tgl"><input type="checkbox" id="e-is_banned"/><span class="sl"></span></label></div>
+    </div>
+    <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+      <button class="btn btn-p" onclick="saveUser()">💾 Save</button>
+      <button class="btn btn-d" onclick="delUser()">🗑️ Delete</button>
+    </div>
+    <div class="al" id="eal"></div>
+  </div>
+</div>
+
+<script>
+const PT={overview:'📊 Dashboard Overview',users:'👥 Manage Users',notify:'🔔 Send Notification',withdrawals:'💸 Withdrawals',payments:'💳 Payments',settings:'⚙️ Settings'};
+let allU=[];
+
+async function init(){
+  const r=await fetch('/api/admin/me');
+  const d=await r.json();
+  if(!d.success){window.location.href='/admin/login';return;}
+  document.getElementById('aname').textContent='🔐 '+d.username;
+  loadOverview();
+}
+
+function show(id,el){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  document.getElementById('ptitle').textContent=PT[id]||id;
+  if(id==='overview')loadOverview();
+  if(id==='users')loadUsers();
+  if(id==='withdrawals')loadWD();
+  if(id==='payments')loadPay();
+  if(id==='settings')loadSettings();
+}
+
+async function loadOverview(){
+  const r=await fetch('/api/admin/stats');
+  const d=await r.json();if(!d.success)return;
+  const s=d.stats;
+  document.getElementById('st-u').textContent=s.totalUsers;
+  document.getElementById('st-a').textContent=s.activeUsers;
+  document.getElementById('st-b').textContent=s.bannedUsers;
+  document.getElementById('st-pw').textContent=s.pendingWd;
+  document.getElementById('st-rev').textContent=(s.totalRevenue||0).toFixed(0);
+  document.getElementById('st-po').textContent=(s.totalWdPaid||0).toFixed(0);
+  document.getElementById('rt-body').innerHTML=(d.recentUsers||[]).map(u=>`<tr>
+    <td><strong>${u.username}</strong></td>
+    <td style="color:var(--muted);font-size:.79rem;">${u.email}</td>
+    <td>${u.country}</td>
+    <td><span class="badge ${u.is_banned?'br':u.is_activated?'bg':'by'}">${u.is_banned?'Banned':u.is_activated?'Active':'Pending'}</span></td>
+    <td style="color:var(--muted);font-size:.79rem;">${new Date(u.created_at).toLocaleDateString()}</td>
+  </tr>`).join('');
+}
+
+async function loadUsers(){
+  const r=await fetch('/api/admin/users');
+  const d=await r.json();allU=d.users||[];renderU(allU);
+}
+function searchU(){const q=document.getElementById('usearch').value.toLowerCase();renderU(allU.filter(u=>u.username.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)));}
+function renderU(users){
+  document.getElementById('u-body').innerHTML=users.map(u=>`<tr>
+    <td style="color:var(--muted);">#${u.id}</td>
+    <td><strong>${u.username}</strong></td>
+    <td style="color:var(--muted);font-size:.79rem;">${u.email}</td>
+    <td>${u.country}</td>
+    <td><span class="badge ${u.is_banned?'br':u.is_activated?'bg':'by'}">${u.is_banned?'Banned':u.is_activated?'Active':'Pending'}</span></td>
+    <td style="color:var(--gold);">KES ${u.balance||0}</td>
+    <td style="color:var(--muted);font-size:.79rem;">${new Date(u.created_at).toLocaleDateString()}</td>
+    <td><button class="btn btn-p btn-sm" onclick="openEdit(${u.id})">✏️ Edit</button></td>
+  </tr>`).join('');
+}
+
+async function openEdit(id){
+  const r=await fetch('/api/admin/users/'+id);
+  const d=await r.json();if(!d.success)return;
+  const u=d.user;
+  document.getElementById('eid').value=u.id;
+  ['balance','total_earnings','ads_earnings','tiktok_earnings','youtube_earnings','trivia_earnings','articles_earnings','affiliate_earnings','agent_bonus'].forEach(f=>{
+    document.getElementById('e-'+f).value=u[f]||0;
+  });
+  document.getElementById('e-is_activated').checked=!!u.is_activated;
+  document.getElementById('e-is_banned').checked=!!u.is_banned;
+  document.getElementById('eal').style.display='none';
+  document.getElementById('editModal').classList.add('open');
+}
+function closeModal(){document.getElementById('editModal').classList.remove('open');}
+
+async function saveUser(){
+  const id=document.getElementById('eid').value;
+  const body={};
+  ['balance','total_earnings','ads_earnings','tiktok_earnings','youtube_earnings','trivia_earnings','articles_earnings','affiliate_earnings','agent_bonus'].forEach(f=>{body[f]=parseFloat(document.getElementById('e-'+f).value)||0;});
+  body.is_activated=document.getElementById('e-is_activated').checked;
+  body.is_banned=document.getElementById('e-is_banned').checked;
+  const r=await fetch('/api/admin/users/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json();
+  showAl('eal',d.message,d.success?'ok':'err');
+  if(d.success){loadUsers();setTimeout(closeModal,1100);}
+}
+async function delUser(){
+  if(!confirm('Delete this user permanently?'))return;
+  const id=document.getElementById('eid').value;
+  const r=await fetch('/api/admin/users/'+id,{method:'DELETE'});
+  const d=await r.json();
+  if(d.success){closeModal();loadUsers();}
+}
+
+function toggleUID(){document.getElementById('uid-wrap').style.display=document.getElementById('nto').value==='user'?'block':'none';}
+async function sendNotif(){
+  const isGlobal=document.getElementById('nto').value==='global';
+  const body={title:document.getElementById('ntitle').value,message:document.getElementById('nmsg').value,type:document.getElementById('ntype').value,is_global:isGlobal,user_id:isGlobal?null:document.getElementById('nuid').value};
+  const r=await fetch('/api/admin/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json();showAl('nal',d.message,d.success?'ok':'err');
+}
+
+async function loadWD(){
+  const r=await fetch('/api/admin/withdrawals');
+  const d=await r.json();
+  document.getElementById('wd-body').innerHTML=(d.withdrawals||[]).map(w=>`<tr>
+    <td>#${w.id}</td><td>${w.username}</td>
+    <td style="color:var(--gold);">KES ${w.amount}</td><td>${w.mobile}</td>
+    <td><span class="badge ${w.status==='approved'?'bg':w.status==='rejected'?'br':'by'}">${w.status}</span></td>
+    <td style="color:var(--muted);font-size:.79rem;">${new Date(w.created_at).toLocaleDateString()}</td>
+    <td>${w.status==='pending'?`<button class="btn btn-s btn-sm" onclick="updateWD(${w.id},'approved')">✅ Approve</button> <button class="btn btn-d btn-sm" onclick="updateWD(${w.id},'rejected')">❌ Reject</button>`:'<span style="color:var(--muted)">Done</span>'}</td>
+  </tr>`).join('');
+}
+async function updateWD(id,status){
+  await fetch('/api/admin/withdrawals/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+  loadWD();loadOverview();
+}
+
+async function loadPay(){
+  const r=await fetch('/api/admin/payments');
+  const d=await r.json();
+  document.getElementById('pay-body').innerHTML=(d.payments||[]).map(p=>`<tr>
+    <td>#${p.id}</td><td>${p.username}</td>
+    <td style="color:var(--gold);">KES ${p.amount}</td><td>${p.phone}</td>
+    <td><span class="badge bb">${p.type}</span></td>
+    <td><span class="badge ${p.status==='completed'?'bg':'by'}">${p.status}</span></td>
+    <td style="color:var(--muted);font-size:.79rem;">${new Date(p.created_at).toLocaleDateString()}</td>
+  </tr>`).join('');
+}
+
+async function loadSettings(){
+  const r=await fetch('/api/admin/stats');
+  const d=await r.json();if(!d.settings)return;
+  ['activation_fee','referral_bonus','min_withdrawal','welcome_bonus','site_name'].forEach(k=>{
+    const el=document.getElementById('s-'+k);if(el)el.value=d.settings[k]||'';
+  });
+}
+async function saveSettings(){
+  const body={};
+  ['activation_fee','referral_bonus','min_withdrawal','welcome_bonus','site_name'].forEach(k=>{
+    const el=document.getElementById('s-'+k);if(el)body[k]=el.value;
+  });
+  const r=await fetch('/api/admin/settings',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json();showAl('sal',d.message,d.success?'ok':'err');
+}
+
+async function doLogout(){await fetch('/api/admin/logout',{method:'POST'});window.location.href='/admin/login';}
+function showAl(id,msg,type){const e=document.getElementById(id);e.textContent=msg;e.className='al '+type;e.style.display='block';}
+document.getElementById('editModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+init();
+</script>
+</body>
+</html>
