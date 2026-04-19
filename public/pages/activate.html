@@ -99,9 +99,10 @@ input::placeholder{color:#CBD5E1;}
 </div>
 
 <script>
-let pollInterval = null;
-let pollCount    = 0;
-const MAX_POLLS  = 40; // 40 × 3s = 2 minutes
+let pollInterval  = null;
+let pollCount     = 0;
+const MAX_POLLS   = 100; // 100 × 3s = 5 minutes
+const BASE_DELAY  = 3000; // 3 seconds base polling interval
 
 // Load fee on page load
 fetch('/api/auth/me').then(r => r.json()).then(d => {
@@ -149,8 +150,16 @@ async function initiatePayment() {
 }
 
 function startPolling() {
-  pollCount    = 0;
-  pollInterval = setInterval(pollStatus, 3000);
+  pollCount = 0;
+  schedulePoll();
+}
+
+function schedulePoll() {
+  // Exponential backoff: start at 3s, increase gradually after 20 polls, cap at 10s
+  const delay = pollCount < 20
+    ? BASE_DELAY
+    : Math.min(BASE_DELAY * Math.pow(1.05, pollCount - 20), 10000);
+  pollInterval = setTimeout(pollStatus, delay);
 }
 
 async function pollStatus() {
@@ -161,30 +170,52 @@ async function pollStatus() {
   if (pollCount > 8)  setStep('s3', 'done');
   if (pollCount > 10) setStep('s4', 'active');
 
+  // Show elapsed time hint after 30 polls (~90s)
+  if (pollCount === 30) {
+    document.querySelector('.loader-sub').textContent =
+      'Still waiting… M-Pesa can take up to 5 minutes. Please keep this page open.';
+  }
+
   try {
     const r = await fetch('/api/auth/activate/status');
     const d = await r.json();
 
     if (d.activated) {
-      clearInterval(pollInterval);
-      setStep('s3', 'done');
-      setStep('s4', 'done');
-      document.querySelector('.loader-title').textContent = '🎉 Payment confirmed!';
-      document.querySelector('.loader-sub').textContent   = 'Your account is activated. Redirecting to dashboard…';
-      document.querySelector('.spinner').style.borderTopColor = '#16A34A';
-      setTimeout(() => window.location.href = '/dashboard', 1800);
+      clearTimeout(pollInterval);
+      activationSuccess();
       return;
     }
   } catch (e) {
-    console.error('Poll error:', e.message);
+    console.error('Poll error:', e);
   }
 
   // Timeout after MAX_POLLS
   if (pollCount >= MAX_POLLS) {
-    clearInterval(pollInterval);
+    clearTimeout(pollInterval);
     cancelPayment();
-    showAlert('Payment not confirmed within 2 minutes. If you paid, contact support. Otherwise try again.', 'error');
+    showAlert(
+      'Payment not confirmed within 5 minutes. If you completed the M-Pesa payment, please contact support with your transaction code. Otherwise, try again.',
+      'error'
+    );
+    return;
   }
+
+  // Schedule next poll
+  schedulePoll();
+}
+
+function activationSuccess() {
+  setStep('s3', 'done');
+  setStep('s4', 'done');
+  document.querySelector('.loader-title').textContent = '🎉 Payment confirmed!';
+  document.querySelector('.loader-sub').innerHTML =
+    'Your account is activated. Redirecting to dashboard…' +
+    '<br><br><a id="dashLink" href="/dashboard" ' +
+    'style="display:inline-block;margin-top:.5rem;padding:.6rem 1.4rem;' +
+    'background:var(--gold);color:#fff;border-radius:8px;font-weight:700;' +
+    'text-decoration:none;font-size:.9rem;">Go to Dashboard →</a>';
+  document.querySelector('.spinner').style.borderTopColor = '#16A34A';
+  setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
 }
 
 function setStep(id, state) {
@@ -195,28 +226,25 @@ function setStep(id, state) {
 }
 
 function cancelPayment() {
-  clearInterval(pollInterval);
+  clearTimeout(pollInterval);
   document.getElementById('loaderView').style.display = 'none';
   document.getElementById('formView').style.display   = 'block';
   const btn = document.getElementById('payBtn');
   btn.disabled    = false;
   btn.textContent = '🚀 Pay & Activate';
   // Reset steps
-  ['s1','s2','s3','s4'].forEach((id,i) => {
+  ['s1','s2','s3','s4'].forEach((id, i) => {
     const el = document.getElementById(id);
-    el.classList.remove('active','done');
-    if (i === 0) { el.classList.add('done'); el.querySelector('.dot').textContent = '✓'; }
-    else         { el.querySelector('.dot').textContent = String(i+1); }
+    el.classList.remove('active', 'done');
+    el.querySelector('.dot').textContent = String(i + 1);
   });
-  document.getElementById('s1').classList.remove('done');
-  document.getElementById('s1').querySelector('.dot').textContent = '1';
 }
 
 function showAlert(msg, type) {
   const el = document.getElementById('alert');
-  el.textContent  = msg;
-  el.className    = 'alert ' + type;
-  el.style.display= 'block';
+  el.textContent   = msg;
+  el.className     = 'alert ' + type;
+  el.style.display = 'block';
 }
 </script>
 </body>
