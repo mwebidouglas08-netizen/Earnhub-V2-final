@@ -12,18 +12,13 @@ const app  = express();
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const PAGES = path.join(__dirname, 'public', 'pages');
 
-/* ─── Session store ─── */
-const SQLiteStore = require('connect-sqlite3')(session);
-
 /* ─── Core middleware ─── */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({
-  store: new SQLiteStore({
-    db: 'sessions.db',
-    dir: process.env.RAILWAY_VOLUME_MOUNT_PATH || __dirname
-  }),
+  // Using memory store - sessions are stored in RAM
+  // For production with persistence, consider adding a session store package
   secret: process.env.SESSION_SECRET || 'earnhub_s3cr3t_k3y_2024_xK9mPqRt',
   resave: false,
   saveUninitialized: false,
