@@ -129,33 +129,47 @@ router.get('/activate/status', (req, res) => {
   const user = db.getUserById(req.session.userId);
   if (!user) return res.json({ success: false });
 
-  // Already activated
-  if (user.is_activated)
-    return res.json({ success: true, activated: true });
+  console.log(`🔍 Status check for user ${user.id} (${user.username}) — is_activated: ${user.is_activated}`);
 
-  // Check payments for completed
+  // Fallback: user flag already set (callback succeeded before this poll)
+  if (user.is_activated) {
+    console.log(`✅ User ${user.id} already marked activated — returning true`);
+    return res.json({ success: true, activated: true });
+  }
+
+  // Check payments table for a completed activation payment
   const payments  = db.getAllPayments();
   const completed = payments.find(
     p => p.user_id === user.id &&
          p.type   === 'activation' &&
          p.status === 'completed'
   );
+
   if (completed) {
+    console.log(`✅ Completed payment found (id: ${completed.id}) for user ${user.id} — activating`);
     db.updateUser(user.id, { is_activated: 1 });
     return res.json({ success: true, activated: true });
   }
+
+  // Also check for any pending payment that may have been missed by the callback
+  const pending = payments.find(
+    p => p.user_id === user.id &&
+         p.type   === 'activation' &&
+         p.status === 'pending'
+  );
+  console.log(`⏳ User ${user.id} — pending payment: ${pending ? `id ${pending.id}, ref: ${pending.ref}` : 'none'}`);
 
   return res.json({ success: true, activated: false });
 });
 
 /* ── LIPANA WEBHOOK CALLBACK ── */
 router.post('/activate/callback', (req, res) => {
-  console.log('📩 Lipana callback:', JSON.stringify(req.body));
+  console.log('📩 Lipana callback received:', JSON.stringify(req.body));
 
   try {
     const body = req.body;
 
-    // Lipana SDK webhook payload
+    // Lipana SDK webhook payload — handle all known response shapes
     const resultCode = body?.ResultCode
                     ?? body?.result_code
                     ?? body?.Body?.stkCallback?.ResultCode
@@ -179,6 +193,8 @@ router.post('/activate/callback', (req, res) => {
                     || body?.accountReference
                     || '';
 
+    console.log(`📋 Callback parsed — resultCode: ${resultCode}, isSuccess: ${isSuccess}, txRef: "${txRef}", accountRef: "${accountRef}"`);
+
     if (isSuccess) {
       const payments = db.getAllPayments();
 
@@ -189,30 +205,48 @@ router.post('/activate/callback', (req, res) => {
 
       // Fallback: match by account reference EARNHUB-{userId}
       if (!payment && accountRef && accountRef.startsWith('EARNHUB-')) {
-        const userId = parseInt(accountRef.replace('EARNHUB-', ''));
+        const userId = parseInt(accountRef.replace('EARNHUB-', ''), 10);
         payment = payments.find(
           p => p.user_id === userId && p.status === 'pending' && p.type === 'activation'
         );
+        if (payment) console.log(`🔗 Matched payment via accountRef fallback (userId: ${userId})`);
       }
 
       if (payment) {
-        db.updatePaymentStatus(payment.id, 'completed');
-        db.updateUser(payment.user_id, { is_activated: 1 });
-        console.log(`✅ User ${payment.user_id} activated via callback`);
+        // Update payment status — wrap individually so a failure here doesn't
+        // prevent the user from being activated
+        try {
+          db.updatePaymentStatus(payment.id, 'completed');
+          console.log(`💳 Payment ${payment.id} marked completed`);
+        } catch (payErr) {
+          console.error('⚠️  Failed to update payment status:', payErr.message);
+        }
+
+        // Always attempt to activate the user
+        try {
+          db.updateUser(payment.user_id, { is_activated: 1 });
+          console.log(`✅ User ${payment.user_id} activated via callback`);
+        } catch (userErr) {
+          console.error(`❌ Failed to activate user ${payment.user_id}:`, userErr.message);
+        }
       } else {
-        console.warn('⚠️  No matching pending payment found for callback');
+        console.warn(`⚠️  No matching pending activation payment found — txRef: "${txRef}", accountRef: "${accountRef}"`);
+        console.warn('📦 All payments:', JSON.stringify(db.getAllPayments().map(p => ({ id: p.id, user_id: p.user_id, ref: p.ref, status: p.status, type: p.type }))));
       }
 
     } else {
-      console.log('❌ Payment failed/cancelled, code:', resultCode);
+      console.log('❌ Payment failed/cancelled — resultCode:', resultCode);
       if (txRef) {
         const payments = db.getAllPayments();
         const payment  = payments.find(p => p.ref === txRef);
-        if (payment) db.updatePaymentStatus(payment.id, 'failed');
+        if (payment) {
+          db.updatePaymentStatus(payment.id, 'failed');
+          console.log(`💳 Payment ${payment.id} marked failed`);
+        }
       }
     }
   } catch (e) {
-    console.error('Callback error:', e.message);
+    console.error('Callback processing error:', e.message, e.stack);
   }
 
   // Always 200 so Lipana stops retrying
