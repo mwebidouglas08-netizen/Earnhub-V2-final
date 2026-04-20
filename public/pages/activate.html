@@ -155,10 +155,13 @@ function startPolling() {
 }
 
 function schedulePoll() {
-  // Exponential backoff: start at 3s, increase gradually after 20 polls, cap at 10s
-  const delay = pollCount < 20
-    ? BASE_DELAY
-    : Math.min(BASE_DELAY * Math.pow(1.05, pollCount - 20), 10000);
+  // Aggressive polling after step 3 is marked done (pollCount > 8): every 500ms
+  // Exponential backoff otherwise: start at 3s, increase gradually after 20 polls, cap at 10s
+  const delay = pollCount > 8
+    ? 500
+    : pollCount < 20
+      ? BASE_DELAY
+      : Math.min(BASE_DELAY * Math.pow(1.05, pollCount - 20), 10000);
   pollInterval = setTimeout(pollStatus, delay);
 }
 
@@ -182,7 +185,7 @@ async function pollStatus() {
 
     if (d.activated) {
       clearTimeout(pollInterval);
-      activationSuccess();
+      activationSuccess(); // redirect immediately — no delay
       return;
     }
   } catch (e) {
@@ -215,7 +218,10 @@ function activationSuccess() {
     'background:var(--gold);color:#fff;border-radius:8px;font-weight:700;' +
     'text-decoration:none;font-size:.9rem;">Go to Dashboard →</a>';
   document.querySelector('.spinner').style.borderTopColor = '#16A34A';
-  setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
+  // Redirect after 100ms — just enough for the UI to update
+  setTimeout(() => { window.location.href = '/dashboard'; }, 100);
+  // 3-second fallback redirect in case the first one is delayed
+  setTimeout(() => { window.location.href = '/dashboard'; }, 3000);
 }
 
 function setStep(id, state) {
