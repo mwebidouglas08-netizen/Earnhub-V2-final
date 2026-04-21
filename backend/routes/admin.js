@@ -4,34 +4,17 @@ const bcrypt = require('bcryptjs');
 const db     = require('../db');
 const { requireAdmin } = require('../middleware/auth');
 
+/* ── LOGIN ── */
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
-
-  console.log(`Admin login attempt — username: "${username}"`);
-
-  if (!username || !password) {
-    return res.json({ success: false, message: 'Enter username and password.' });
-  }
-
+  console.log(`Admin login attempt: "${username}"`);
   const admin = db.getAdminByUsername(username);
-
-  if (!admin) {
-    console.log(`Admin not found for username: "${username}"`);
-    return res.json({ success: false, message: 'Invalid admin credentials.' });
-  }
-
-  console.log(`Admin found: "${admin.username}" — checking password…`);
-
+  if (!admin) { console.log('Admin not found'); return res.json({ success: false, message: 'Invalid admin credentials.' }); }
   const match = bcrypt.compareSync(password, admin.password);
   console.log(`Password match: ${match}`);
-
-  if (!match) {
-    return res.json({ success: false, message: 'Invalid admin credentials.' });
-  }
-
+  if (!match) return res.json({ success: false, message: 'Invalid admin credentials.' });
   req.session.adminId       = admin.id;
   req.session.adminUsername = admin.username;
-  console.log(`Admin "${admin.username}" logged in successfully.`);
   return res.json({ success: true });
 });
 
@@ -43,6 +26,7 @@ router.get('/me', requireAdmin, (req, res) => {
   return res.json({ success: true, username: req.session.adminUsername });
 });
 
+/* ── STATS ── */
 router.get('/stats', requireAdmin, (req, res) => {
   const stats       = db.getStats();
   const recentUsers = db.getAllUsers().slice(-10).reverse();
@@ -50,16 +34,19 @@ router.get('/stats', requireAdmin, (req, res) => {
   return res.json({ success: true, stats, recentUsers, settings });
 });
 
+/* ── USERS ── */
 router.get('/users', requireAdmin, (req, res) => {
   const users = db.getAllUsers(req.query.search || '');
-  return res.json({ success: true, users });
+  // Return all fields except password
+  const safe  = users.map(({ password, ...u }) => u);
+  return res.json({ success: true, users: safe });
 });
 
 router.get('/users/:id', requireAdmin, (req, res) => {
   const user = db.getUserById(req.params.id);
   if (!user) return res.json({ success: false, message: 'User not found.' });
-  const { password, ...safeUser } = user;
-  return res.json({ success: true, user: safeUser });
+  const { password, ...safe } = user;
+  return res.json({ success: true, user: safe });
 });
 
 router.put('/users/:id', requireAdmin, (req, res) => {
@@ -69,8 +56,8 @@ router.put('/users/:id', requireAdmin, (req, res) => {
     trivia_earnings, articles_earnings, affiliate_earnings, agent_bonus
   } = req.body;
   db.updateUser(req.params.id, {
-    is_activated:      is_activated ? 1 : 0,
-    is_banned:         is_banned    ? 1 : 0,
+    is_activated:       is_activated ? 1 : 0,
+    is_banned:          is_banned    ? 1 : 0,
     balance:            parseFloat(balance)            || 0,
     total_earnings:     parseFloat(total_earnings)     || 0,
     ads_earnings:       parseFloat(ads_earnings)       || 0,
@@ -89,21 +76,22 @@ router.delete('/users/:id', requireAdmin, (req, res) => {
   return res.json({ success: true, message: 'User deleted.' });
 });
 
+/* ── NOTIFICATIONS ── */
 router.post('/notify', requireAdmin, (req, res) => {
   const { user_id, title, message, type, is_global } = req.body;
-  if (!title || !message)
-    return res.json({ success: false, message: 'Title and message required.' });
-  if (!is_global && !user_id)
-    return res.json({ success: false, message: 'User ID required.' });
+  if (!title || !message) return res.json({ success: false, message: 'Title and message required.' });
+  if (!is_global && !user_id) return res.json({ success: false, message: 'User ID required.' });
   db.addNotification({ user_id: user_id || null, title, message, type, is_global });
   return res.json({ success: true, message: 'Notification sent!' });
 });
 
+/* ── SETTINGS ── */
 router.put('/settings', requireAdmin, (req, res) => {
   db.setAllSettings(req.body);
-  return res.json({ success: true, message: 'Settings saved successfully.' });
+  return res.json({ success: true, message: 'Settings saved.' });
 });
 
+/* ── WITHDRAWALS ── */
 router.get('/withdrawals', requireAdmin, (req, res) => {
   return res.json({ success: true, withdrawals: db.getAllWithdrawals() });
 });
@@ -115,14 +103,15 @@ router.put('/withdrawals/:id', requireAdmin, (req, res) => {
   db.updateWithdrawal(req.params.id, status);
   if (status === 'approved') {
     const user = db.getUserById(w.user_id);
-    if (user) db.updateUser(w.user_id, { total_withdrawn: user.total_withdrawn + w.amount });
+    if (user) db.updateUser(w.user_id, { total_withdrawn: (user.total_withdrawn || 0) + w.amount });
   } else if (status === 'rejected') {
     const user = db.getUserById(w.user_id);
-    if (user) db.updateUser(w.user_id, { balance: user.balance + w.amount });
+    if (user) db.updateUser(w.user_id, { balance: (user.balance || 0) + w.amount });
   }
   return res.json({ success: true, message: `Withdrawal ${status}.` });
 });
 
+/* ── PAYMENTS ── */
 router.get('/payments', requireAdmin, (req, res) => {
   return res.json({ success: true, payments: db.getAllPayments() });
 });
