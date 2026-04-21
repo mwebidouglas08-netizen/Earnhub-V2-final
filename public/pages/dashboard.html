@@ -3,111 +3,160 @@
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>EarnHub – Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-:root{--gold:#F5C518;--gd:#D4A017;--green:#00C853;--dark:#08111F;--dark2:#0C1626;--card:#111B2C;--card2:#16203A;--border:rgba(245,197,24,.11);--text:#E8EAF0;--muted:#5C6880;--red:#EF5350;--blue:#42A5F5;}
+:root{
+  --gold:#E8900A;--gd:#C97D08;--green:#16A34A;
+  --dark:#0F172A;--dark2:#1E293B;
+  --body:#F1F5F9;--card:#FFFFFF;--card2:#F8FAFC;
+  --border:#E2E8F0;--text:#1E293B;--muted:#64748B;--muted2:#94A3B8;
+  --red:#DC2626;--blue:#2563EB;
+  --shadow:0 1px 4px rgba(0,0,0,.06);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08);
+}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--dark);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;display:flex;}
-/* SIDEBAR */
-.sb{width:255px;background:var(--dark2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:60;transition:transform .3s;}
-.sb-logo{padding:1.4rem 1.3rem 1rem;border-bottom:1px solid var(--border);}
-.logo{font-family:'Space Grotesk',sans-serif;font-size:1.45rem;font-weight:800;color:var(--gold);}
-.logo span{color:var(--green);}
-.sb-sec{padding:.75rem .75rem .25rem;font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:1.8px;text-transform:uppercase;}
-.ni{display:flex;align-items:center;gap:.65rem;padding:.6rem .9rem;margin:.08rem .45rem;border-radius:9px;cursor:pointer;color:var(--muted);font-size:.87rem;transition:all .15s;text-decoration:none;border:none;background:none;width:calc(100% - .9rem);text-align:left;}
-.ni:hover{background:rgba(245,197,24,.07);color:var(--text);}
-.ni.active{background:rgba(245,197,24,.12);color:var(--gold);font-weight:600;}
-.ni .ic{font-size:1rem;width:20px;text-align:center;}
+body{background:var(--body);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;display:flex;}
+
+/* ── SIDEBAR ── */
+.sb{width:255px;background:var(--dark);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:60;transition:transform .3s;}
+.sb-logo{padding:1.4rem 1.3rem 1rem;border-bottom:1px solid rgba(255,255,255,.07);}
+.logo{font-size:1.45rem;font-weight:800;color:#fff;letter-spacing:-0.5px;}
+.logo span{color:var(--gold);}
+.sb-sec{padding:.75rem .75rem .2rem;font-size:.67rem;font-weight:700;color:#475569;letter-spacing:1.8px;text-transform:uppercase;}
+.ni{display:flex;align-items:center;gap:.65rem;padding:.6rem .9rem;margin:.07rem .45rem;border-radius:9px;cursor:pointer;color:#94A3B8;font-size:.87rem;transition:all .15s;border:none;background:none;width:calc(100% - .9rem);text-align:left;font-family:'Plus Jakarta Sans',sans-serif;}
+.ni:hover{background:rgba(255,255,255,.07);color:#fff;}
+.ni.active{background:rgba(232,144,10,.15);color:var(--gold);font-weight:700;}
+.ni .ic{font-size:1rem;width:20px;text-align:center;flex-shrink:0;}
 .sb-foot{margin-top:auto;padding:.9rem;}
-.lbtn{width:100%;padding:.65rem;background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.2);border-radius:9px;color:#EF5350;font-size:.87rem;cursor:pointer;font-weight:600;transition:all .2s;}
-.lbtn:hover{background:rgba(239,83,80,.18);}
-/* MAIN */
+.lbtn{width:100%;padding:.65rem;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:9px;color:#EF4444;font-size:.87rem;cursor:pointer;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;}
+.lbtn:hover{background:rgba(239,68,68,.2);}
+
+/* ── MAIN ── */
 .main{margin-left:255px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.5rem;background:var(--dark2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40;}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.5rem;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40;box-shadow:var(--shadow);}
 .ham{display:none;background:none;border:none;color:var(--text);font-size:1.35rem;cursor:pointer;}
-.page-t{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;}
-.nb{position:relative;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:9px;padding:.45rem .75rem;cursor:pointer;color:var(--text);font-size:1.05rem;border:none;background:none;}
-.nbadge{position:absolute;top:-3px;right:-3px;background:var(--red);color:#fff;font-size:.6rem;font-weight:700;border-radius:50%;width:15px;height:15px;display:none;align-items:center;justify-content:center;}
-/* CONTENT */
+.page-t{font-weight:700;font-size:1rem;color:var(--dark);}
+.nb{position:relative;background:none;border:none;cursor:pointer;font-size:1.2rem;padding:.3rem;}
+.nbadge{position:absolute;top:-2px;right:-2px;background:var(--red);color:#fff;font-size:.58rem;font-weight:800;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;}
+
+/* ── CONTENT ── */
 .cnt{padding:1.4rem;flex:1;}
 .sec{display:none;}
 .sec.active{display:block;}
-/* WELCOME */
-.wbanner{background:linear-gradient(135deg,rgba(245,197,24,.1),rgba(0,200,83,.05));border:1px solid var(--border);border-radius:16px;padding:1.4rem 1.8rem;margin-bottom:1.4rem;}
-.wbanner h2{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:.3rem;}
-.wbanner p{color:var(--muted);font-size:.87rem;margin-bottom:.9rem;line-height:1.65;}
+
+/* ── WELCOME BANNER ── */
+.wbanner{
+  border-radius:18px;padding:2rem 2.2rem;margin-bottom:1.4rem;position:relative;overflow:hidden;
+  background:
+    linear-gradient(135deg,rgba(10,20,40,.85) 0%,rgba(232,144,10,.35) 100%),
+    url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1200&q=80&auto=format&fit=crop')
+    center/cover no-repeat;
+  box-shadow:var(--shadow-md);
+}
+.wbanner h2{font-size:1.35rem;font-weight:800;margin-bottom:.3rem;color:#fff;}
+.wbanner p{color:rgba(255,255,255,.78);font-size:.88rem;margin-bottom:1rem;line-height:1.65;max-width:520px;}
 .pills{display:flex;gap:.7rem;flex-wrap:wrap;}
-.pill{background:rgba(245,197,24,.09);border:1px solid var(--border);border-radius:50px;padding:.25rem .75rem;font-size:.75rem;color:var(--gold);}
-/* STAT CARDS */
+.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:.28rem .8rem;font-size:.75rem;color:#fff;font-weight:600;backdrop-filter:blur(4px);}
+
+/* ── STAT CARDS ── */
 .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.9rem;margin-bottom:1.4rem;}
-.sc{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:1.1rem;}
-.sc .lbl{font-size:.72rem;color:var(--muted);margin-bottom:.35rem;}
-.sc .val{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:800;color:var(--gold);}
-.sc .sl{font-size:.72rem;color:var(--muted);margin-top:.15rem;}
-/* EARNINGS LIST */
-.stitle{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:.9rem;}
-.elist{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:hidden;}
-.ei{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.1rem;border-bottom:1px solid var(--border);}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.15rem;box-shadow:var(--shadow);}
+.sc .lbl{font-size:.72rem;color:var(--muted);margin-bottom:.35rem;font-weight:600;}
+.sc .val{font-size:1.35rem;font-weight:800;color:var(--gold);}
+.sc .sl{font-size:.71rem;color:var(--muted2);margin-top:.15rem;}
+
+/* ── EARNINGS LIST ── */
+.stitle{font-size:1rem;font-weight:700;margin-bottom:.9rem;color:var(--dark);}
+.stitle-sub{font-size:.78rem;color:var(--muted);font-weight:400;margin-left:.5rem;}
+.elist{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);}
+.ei{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.15rem;border-bottom:1px solid var(--border);}
 .ei:last-child{border-bottom:none;}
-.eil{display:flex;align-items:center;gap:.75rem;}
-.eico{width:34px;height:34px;border-radius:9px;background:rgba(245,197,24,.09);display:flex;align-items:center;justify-content:center;font-size:1rem;}
-.enm{font-size:.88rem;font-weight:600;}
+.eil{display:flex;align-items:center;gap:.8rem;}
+.eico{width:36px;height:36px;border-radius:10px;background:#FFF3DC;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;}
+.enm{font-size:.88rem;font-weight:700;color:var(--dark);}
 .esb{font-size:.73rem;color:var(--muted);}
-.eamt{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--gold);font-size:.95rem;}
-/* SCHEDULE */
-.sgd{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem;margin-top:.9rem;}
-.sdcard{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:.95rem;}
-.sdcard h4{font-size:.88rem;font-weight:700;margin-bottom:.3rem;}
+.eamt{font-weight:800;color:var(--gold);font-size:.95rem;}
+
+/* ── SCHEDULE ── */
+.sgd{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:.8rem;margin-top:.9rem;}
+.sdcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.95rem;box-shadow:var(--shadow);}
+.sdcard h4{font-size:.9rem;font-weight:700;margin-bottom:.3rem;color:var(--dark);}
 .sdcard p{font-size:.78rem;color:var(--muted);}
-/* TODAY */
+
+/* ── TODAY ── */
 .tgd{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-top:.9rem;}
-.tcard{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:1.2rem;}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;box-shadow:var(--shadow);}
 .tcard .em{font-size:1.9rem;margin-bottom:.65rem;}
-.tcard h4{font-family:'Space Grotesk',sans-serif;font-weight:700;margin-bottom:.3rem;font-size:.97rem;}
-.tcard p{font-size:.83rem;color:var(--muted);line-height:1.55;}
-/* FORM CARD */
-.fcard{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:1.4rem;max-width:480px;}
-.fg{margin-bottom:1rem;}
-.fg label{font-size:.82rem;font-weight:500;margin-bottom:.32rem;display:block;color:var(--muted);}
-.fg input{width:100%;padding:.68rem .9rem;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:.88rem;outline:none;font-family:'Inter',sans-serif;}
-.fg input:focus{border-color:var(--gold);}
-.fg input::placeholder{color:var(--muted);}
-.btn{padding:.75rem 1.7rem;background:var(--gold);color:var(--dark);font-weight:700;border:none;border-radius:9px;font-size:.92rem;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .2s;}
-.btn:hover{background:var(--gd);}
-.btn:disabled{opacity:.6;cursor:not-allowed;}
-.al{padding:.65rem .9rem;border-radius:8px;font-size:.85rem;margin-top:.75rem;display:none;}
-.al.ok{background:rgba(0,200,83,.09);border:1px solid rgba(0,200,83,.3);color:var(--green);}
-.al.err{background:rgba(239,83,80,.09);border:1px solid rgba(239,83,80,.3);color:var(--red);}
-/* SHARE */
-.srow{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:1rem;}
-.sbtn{display:flex;align-items:center;gap:.55rem;padding:.7rem 1.1rem;border-radius:9px;border:none;font-weight:600;font-size:.87rem;cursor:pointer;transition:all .2s;text-decoration:none;}
+.tcard h4{font-weight:700;margin-bottom:.3rem;font-size:.97rem;color:var(--dark);}
+.tcard p{font-size:.84rem;color:var(--muted);line-height:1.55;}
+
+/* ── FORM CARD ── */
+.fcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;max-width:490px;box-shadow:var(--shadow);}
+.fg{margin-bottom:1.05rem;}
+.fg label{font-size:.82rem;font-weight:600;margin-bottom:.33rem;display:block;color:var(--muted);}
+.fg input{width:100%;padding:.7rem .95rem;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:.88rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:border-color .2s;}
+.fg input:focus{border-color:var(--gold);background:#fff;}
+.fg input::placeholder{color:#CBD5E1;}
+.btn{padding:.78rem 1.8rem;background:var(--gold);color:#fff;font-weight:700;border:none;border-radius:10px;font-size:.93rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
+.btn:hover{background:var(--gd);transform:translateY(-1px);}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.al{padding:.65rem .9rem;border-radius:8px;font-size:.86rem;margin-top:.8rem;display:none;font-weight:600;}
+.al.ok{background:#F0FDF4;border:1px solid #BBF7D0;color:var(--green);}
+.al.err{background:#FEF2F2;border:1px solid #FECACA;color:var(--red);}
+
+/* ── REFERRAL / SHARE ── */
+.ref-code-box{background:#FFF3DC;border:1.5px solid #FDE68A;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem;}
+.ref-code-label{font-size:.73rem;font-weight:700;color:#92400E;margin-bottom:.35rem;letter-spacing:.5px;}
+.ref-code-val{font-family:monospace;font-size:1.5rem;font-weight:800;color:var(--gold);letter-spacing:3px;}
+.ref-link-box{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.ref-link-txt{font-family:monospace;font-size:.8rem;color:var(--gold);word-break:break-all;flex:1;}
+.copy-btn{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:.45rem .95rem;font-size:.8rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;}
+.srow{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.sbtn{display:inline-flex;align-items:center;gap:.55rem;padding:.72rem 1.2rem;border-radius:10px;border:none;font-weight:700;font-size:.87rem;cursor:pointer;text-decoration:none;font-family:'Plus Jakarta Sans',sans-serif;}
 .swa{background:#25D366;color:#fff;}
 .swa:hover{background:#1fbb58;}
-.scopy{background:var(--card2);border:1px solid var(--border);color:var(--text);}
+.scopy{background:var(--card);border:1.5px solid var(--border);color:var(--text);}
 .scopy:hover{border-color:var(--gold);}
-.refbox{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1.1rem;margin-top:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
-.reflink{font-family:monospace;font-size:.82rem;color:var(--gold);word-break:break-all;}
-.copybtn{background:rgba(245,197,24,.1);border:1px solid var(--border);border-radius:7px;padding:.35rem .75rem;color:var(--gold);font-size:.78rem;cursor:pointer;white-space:nowrap;}
-/* TABLE */
-.twrap{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:auto;}
-table{width:100%;border-collapse:collapse;min-width:400px;}
-th{padding:.75rem 1rem;text-align:left;font-size:.76rem;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);}
-td{padding:.75rem 1rem;font-size:.85rem;border-bottom:1px solid var(--border);}
+.ref-earn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.7rem;margin-top:.5rem;}
+.rec{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:.8rem;text-align:center;}
+.rec-amt{font-size:1.1rem;font-weight:800;color:var(--gold);}
+.rec-lbl{font-size:.72rem;color:var(--muted);margin-top:.15rem;}
+
+/* ── TABLE ── */
+.twrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:auto;box-shadow:var(--shadow);}
+table{width:100%;border-collapse:collapse;min-width:380px;}
+th{padding:.72rem 1rem;text-align:left;font-size:.75rem;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);}
+td{padding:.72rem 1rem;font-size:.86rem;border-bottom:1px solid var(--border);}
 tr:last-child td{border-bottom:none;}
-/* SPIN */
-.spin-wrap{text-align:center;padding:2rem 1rem;}
-.spin-btn{padding:.85rem 2.3rem;background:var(--gold);color:var(--dark);font-weight:800;border:none;border-radius:11px;font-size:1.05rem;cursor:pointer;font-family:'Space Grotesk',sans-serif;margin-top:1.5rem;}
-.spin-res{margin-top:1rem;font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;min-height:1.8rem;}
-/* NOTIF PANEL */
-.npanel{position:fixed;top:56px;right:1rem;width:300px;background:var(--card);border:1px solid var(--border);border-radius:15px;box-shadow:0 20px 50px rgba(0,0,0,.55);z-index:200;display:none;max-height:380px;overflow-y:auto;}
-.nh{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);font-weight:700;font-family:'Space Grotesk',sans-serif;font-size:.92rem;}
+tr:hover td{background:var(--card2);}
+
+/* ── SPIN ── */
+.spin-wrap{text-align:center;padding:1.5rem 1rem;}
+.spin-btn{padding:.88rem 2.5rem;background:var(--gold);color:#fff;font-weight:800;border:none;border-radius:12px;font-size:1.05rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:1.5rem;transition:all .2s;}
+.spin-btn:hover{background:var(--gd);transform:translateY(-1px);}
+.spin-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.spin-res{margin-top:1rem;font-weight:800;font-size:1.1rem;min-height:1.8rem;color:var(--gold);}
+
+/* ── GENERIC SECTION ── */
+.gen-sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;max-width:600px;box-shadow:var(--shadow);}
+.gen-sec .em{font-size:2.5rem;margin-bottom:1rem;}
+.gen-sec h3{font-size:1.1rem;font-weight:800;margin-bottom:.6rem;color:var(--dark);}
+.gen-sec p{color:var(--muted);font-size:.9rem;line-height:1.7;}
+
+/* ── NOTIF PANEL ── */
+.npanel{position:fixed;top:56px;right:1rem;width:305px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 16px 50px rgba(0,0,0,.14);z-index:200;display:none;max-height:380px;overflow-y:auto;}
+.nh{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.9rem;color:var(--dark);}
 .nitem{padding:.8rem 1.1rem;border-bottom:1px solid var(--border);}
 .nitem:last-child{border-bottom:none;}
-.nitem h5{font-size:.85rem;margin-bottom:.2rem;}
+.nitem h5{font-size:.86rem;margin-bottom:.2rem;font-weight:700;}
 .nitem p{font-size:.78rem;color:var(--muted);}
-.nempty{padding:1.8rem;text-align:center;color:var(--muted);font-size:.88rem;}
-/* OVERLAY */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;}
+.nempty{padding:2rem;text-align:center;color:var(--muted);font-size:.88rem;}
+
+/* ── OVERLAY ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;}
+
 @media(max-width:768px){
   .sb{transform:translateX(-100%);}
   .sb.open{transform:translateX(0);}
@@ -119,24 +168,31 @@ tr:last-child td{border-bottom:none;}
 </style>
 </head>
 <body>
+
+<!-- SIDEBAR -->
 <aside class="sb" id="sb">
   <div class="sb-logo"><div class="logo">Earn<span>Hub</span></div></div>
+
   <div class="sb-sec">Main Menu</div>
   <button class="ni active" onclick="go('dash',this)"><span class="ic">🏠</span>Dashboard</button>
+
   <div class="sb-sec">Financial</div>
   <button class="ni" onclick="go('voucher',this)"><span class="ic">🎟️</span>Voucher</button>
   <button class="ni" onclick="go('recharge',this)"><span class="ic">💳</span>Account Recharge</button>
   <button class="ni" onclick="go('withdraw',this)"><span class="ic">💸</span>Withdraw</button>
   <button class="ni" onclick="go('redeem',this)"><span class="ic">🎁</span>Redeem Bonus</button>
+
   <div class="sb-sec">Community</div>
   <button class="ni" onclick="go('share',this)"><span class="ic">📤</span>Share WhatsApp</button>
   <button class="ni" onclick="openWA()"><span class="ic">👥</span>Join Group</button>
   <button class="ni" onclick="go('downlines',this)"><span class="ic">🌐</span>Downlines</button>
   <button class="ni" onclick="go('chat',this)"><span class="ic">💬</span>Chat Foreigners</button>
+
   <div class="sb-sec">Products</div>
   <button class="ni" onclick="go('spin',this)"><span class="ic">🎰</span>Spin Games</button>
   <button class="ni" onclick="go('aviator',this)"><span class="ic">✈️</span>Aviator Predictor</button>
   <button class="ni" onclick="go('revshare',this)"><span class="ic">📈</span>Aviator REVSHARE</button>
+
   <div class="sb-sec">Digital Services</div>
   <button class="ni" onclick="go('ads',this)"><span class="ic">📣</span>Ads Earnings</button>
   <button class="ni" onclick="go('tiktok',this)"><span class="ic">🎵</span>TikTok Earn</button>
@@ -146,12 +202,18 @@ tr:last-child td{border-bottom:none;}
   <button class="ni" onclick="go('forex',this)"><span class="ic">💱</span>Forex Lessons</button>
   <button class="ni" onclick="go('ebooks',this)"><span class="ic">📚</span>Business Ebooks</button>
   <button class="ni" onclick="go('tournaments',this)"><span class="ic">🏆</span>Tournaments</button>
+
   <div class="sb-sec">Account</div>
   <button class="ni" onclick="go('profile',this)"><span class="ic">👤</span>Profile</button>
-  <div class="sb-foot"><button class="lbtn" onclick="doLogout()">🚪 Logout</button></div>
+
+  <div class="sb-foot">
+    <button class="lbtn" onclick="doLogout()">🚪 Logout</button>
+  </div>
 </aside>
+
 <div class="overlay" id="overlay" onclick="closeSb()"></div>
 
+<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:.9rem;">
@@ -159,56 +221,68 @@ tr:last-child td{border-bottom:none;}
       <div class="page-t" id="ptitle">Dashboard</div>
     </div>
     <div style="display:flex;align-items:center;gap:.8rem;">
-      <span style="font-size:.83rem;color:var(--muted);">Hi, <span id="topUser" style="color:var(--gold);font-weight:600;"></span></span>
-      <button class="nb" onclick="toggleNotif()" title="Notifications">🔔<span class="nbadge" id="nbadge"></span></button>
+      <span style="font-size:.83rem;color:var(--muted);">Hi, <span id="topUser" style="color:var(--gold);font-weight:700;"></span></span>
+      <button class="nb" onclick="toggleNotif()">🔔<span class="nbadge" id="nbadge"></span></button>
     </div>
   </div>
+
+  <!-- NOTIFICATION PANEL -->
   <div class="npanel" id="npanel">
     <div class="nh">🔔 Notifications</div>
     <div id="nlist"><div class="nempty">No new notifications</div></div>
   </div>
 
   <div class="cnt">
+
     <!-- DASHBOARD -->
     <div class="sec active" id="s-dash">
       <div class="wbanner">
-        <h2>Welcome Back, <span id="wname" style="color:var(--gold);"></span> 👋</h2>
-        <p>Ready to maximize your earnings? Dive into 10+ powerful earning tools, from YouTube monetization to TikTok rewards, surveys, trivia, and more! Start earning today! 💰✨</p>
-        <div class="pills"><span class="pill">10+ Earning Tools</span><span class="pill">Secure Platform</span><span class="pill">Fast Payouts</span></div>
+        <h2>Welcome Back, <span id="wname" style="color:#FBBF24;"></span> 👋</h2>
+        <p>Ready to maximize your earnings? Dive into 10+ powerful earning tools — YouTube, TikTok, trivia, articles, and more. Earn KES 100 for every referral! 💰✨</p>
+        <div class="pills">
+          <span class="pill">10+ Earning Tools</span>
+          <span class="pill">KES 100 Per Referral</span>
+          <span class="pill">Secure Platform</span>
+          <span class="pill">Fast M-Pesa Payouts</span>
+        </div>
       </div>
+
       <div class="sgrid">
         <div class="sc"><div class="lbl">💸 Expenses</div><div class="val" id="d-exp">KSh 0</div><div class="sl">Activation Fee</div></div>
-        <div class="sc"><div class="lbl">💰 Total Earnings</div><div class="val" id="d-tot">KSh 0</div><div class="sl">All Sources Combined</div></div>
-        <div class="sc"><div class="lbl">💳 Balance</div><div class="val" id="d-bal">KSh 0</div><div class="sl">Withdrawable Balance</div></div>
+        <div class="sc"><div class="lbl">💰 Total Earnings</div><div class="val" id="d-tot">KSh 0</div><div class="sl">All Sources</div></div>
+        <div class="sc"><div class="lbl">💳 Balance</div><div class="val" id="d-bal">KSh 0</div><div class="sl">Withdrawable</div></div>
         <div class="sc"><div class="lbl">🏦 Withdrawn</div><div class="val" id="d-wd">KSh 0</div><div class="sl">Total Withdrawn</div></div>
-        <div class="sc"><div class="lbl">👥 Affiliate Earnings</div><div class="val" id="d-aff">KSh 0</div><div class="sl">From Direct Referrals</div></div>
-        <div class="sc"><div class="lbl">🎁 Agent Bonus</div><div class="val" id="d-bon">KSh 100</div><div class="sl">Agent Bonus Earnings</div></div>
+        <div class="sc"><div class="lbl">👥 Affiliate Earnings</div><div class="val" id="d-aff">KSh 0</div><div class="sl">From Referrals</div></div>
+        <div class="sc"><div class="lbl">🎁 Agent Bonus</div><div class="val" id="d-bon">KSh 100</div><div class="sl">Bonus Earnings</div></div>
       </div>
-      <div class="stitle">📊 Earnings Sources <span style="font-size:.78rem;color:var(--muted);font-weight:400;">Complete breakdown of all your earnings</span></div>
+
+      <div class="stitle">📊 Earnings Sources <span class="stitle-sub">Complete breakdown</span></div>
       <div class="elist">
         <div class="ei"><div class="eil"><div class="eico">📣</div><div><div class="enm">Ads Earnings</div><div class="esb">Ads Sales</div></div></div><div class="eamt" id="e-ads">KSh 0</div></div>
         <div class="ei"><div class="eil"><div class="eico">🎵</div><div><div class="enm">TikTok Earnings</div><div class="esb">TikTok Views</div></div></div><div class="eamt" id="e-tik">KSh 0</div></div>
         <div class="ei"><div class="eil"><div class="eico">📺</div><div><div class="enm">YouTube Earnings</div><div class="esb">YouTube Views</div></div></div><div class="eamt" id="e-yt">KSh 0</div></div>
         <div class="ei"><div class="eil"><div class="eico">🧩</div><div><div class="enm">Trivia Earnings</div><div class="esb">Trivia Games</div></div></div><div class="eamt" id="e-tri">KSh 0</div></div>
-        <div class="ei"><div class="eil"><div class="eico">✍️</div><div><div class="enm">Articles Earnings</div><div class="esb">Articles Winnings</div></div></div><div class="eamt" id="e-art">KSh 0</div></div>
-        <div class="ei"><div class="eil"><div class="eico">👥</div><div><div class="enm">Affiliate Earnings</div><div class="esb">From Referrals</div></div></div><div class="eamt" id="e-aff2">KSh 0</div></div>
+        <div class="ei"><div class="eil"><div class="eico">✍️</div><div><div class="enm">Articles Earnings</div><div class="esb">Articles</div></div></div><div class="eamt" id="e-art">KSh 0</div></div>
+        <div class="ei"><div class="eil"><div class="eico">👥</div><div><div class="enm">Affiliate Earnings</div><div class="esb">From Referrals (KES 100 each)</div></div></div><div class="eamt" id="e-aff2">KSh 0</div></div>
       </div>
+
       <div style="margin-top:2rem;">
-        <div class="stitle">📅 Weekly Schedule <span style="font-size:.78rem;color:var(--muted);font-weight:400;">Your earning opportunities throughout the week</span></div>
+        <div class="stitle">📅 Weekly Schedule <span class="stitle-sub">Earning opportunities throughout the week</span></div>
         <div class="sgd">
           <div class="sdcard"><h4>📺 YouTube</h4><p>Saturday &amp; Sunday</p></div>
           <div class="sdcard"><h4>🎵 TikTok</h4><p>Tuesday &amp; Wednesday</p></div>
-          <div class="sdcard"><h4>🧩 Trivia</h4><p>Monday, Wednesday &amp; Friday</p></div>
-          <div class="sdcard"><h4>📣 Ads</h4><p>Monday, Thursday &amp; Friday</p></div>
+          <div class="sdcard"><h4>🧩 Trivia</h4><p>Mon, Wed &amp; Fri</p></div>
+          <div class="sdcard"><h4>📣 Ads</h4><p>Mon, Thu &amp; Fri</p></div>
           <div class="sdcard"><h4>✍️ Articles</h4><p>Monday &amp; Friday</p></div>
           <div class="sdcard"><h4>👥 Affiliate</h4><p>Daily</p></div>
         </div>
       </div>
+
       <div style="margin-top:2rem;">
-        <div class="stitle">📆 Today's Activities <span style="font-size:.78rem;color:var(--muted);font-weight:400;">Your earning opportunities for today</span></div>
+        <div class="stitle">📆 Today's Activities <span class="stitle-sub">Your earning opportunities for today</span></div>
         <div class="tgd">
-          <div class="tcard"><div class="em">✍️</div><h4>Article Writing</h4><p>Write articles and get paid for your creativity! ✍️💰<br><br>💡 Create and get rewarded!</p></div>
-          <div class="tcard"><div class="em">👥</div><h4>Affiliate (Referrals)</h4><p>Invite friends and earn commission from their activities! 👥💰</p></div>
+          <div class="tcard"><div class="em">✍️</div><h4>Article Writing</h4><p>Write articles and get paid for your creativity! 💰<br><br>💡 Create and get rewarded!</p></div>
+          <div class="tcard"><div class="em">👥</div><h4>Affiliate (Referrals)</h4><p>Invite friends and earn <strong style="color:var(--gold);">KES 100</strong> for every person who activates! 🎉</p></div>
         </div>
       </div>
     </div>
@@ -224,6 +298,7 @@ tr:last-child td{border-bottom:none;}
         <p style="margin-top:1rem;font-size:.79rem;color:var(--muted);">Minimum: KES 500. Processed within 24 hours.</p>
       </div>
     </div>
+
     <!-- VOUCHER -->
     <div class="sec" id="s-voucher">
       <div class="stitle">🎟️ Redeem Voucher</div>
@@ -233,30 +308,57 @@ tr:last-child td{border-bottom:none;}
         <div class="al" id="val"></div>
       </div>
     </div>
-    <!-- SHARE -->
+
+    <!-- SHARE / REFERRAL -->
     <div class="sec" id="s-share">
-      <div class="stitle">📤 Share &amp; Earn</div>
-      <p style="color:var(--muted);margin-bottom:1rem;font-size:.88rem;">Share your referral link and earn KES 50 for every friend who activates!</p>
-      <div class="refbox"><div class="reflink" id="rlink">Loading…</div><button class="copybtn" onclick="copyRef()">Copy</button></div>
+      <div class="stitle">📤 Share &amp; Earn — KES 100 Per Referral</div>
+      <p style="color:var(--muted);margin-bottom:1.3rem;font-size:.88rem;">Share your unique referral link. When someone signs up and activates using your link, you earn <strong style="color:var(--gold);">KES 100</strong> instantly credited to your balance.</p>
+
+      <div class="ref-code-box">
+        <div class="ref-code-label">YOUR REFERRAL CODE</div>
+        <div class="ref-code-val" id="refCode">—</div>
+      </div>
+
+      <div class="ref-link-box">
+        <div class="ref-link-txt" id="rlink">Loading…</div>
+        <button class="copy-btn" onclick="copyRef()">📋 Copy</button>
+      </div>
+
       <div class="srow">
         <a id="washr" href="#" target="_blank" class="sbtn swa">📱 Share on WhatsApp</a>
-        <button class="sbtn scopy" onclick="copyRef()">📋 Copy Link</button>
+        <button onclick="copyRef()" class="sbtn scopy">📋 Copy Link</button>
+      </div>
+
+      <div class="stitle" style="margin-top:1rem;">💰 Earnings Calculator</div>
+      <div class="ref-earn-grid">
+        <div class="rec"><div class="rec-amt">KES 100</div><div class="rec-lbl">1 referral</div></div>
+        <div class="rec"><div class="rec-amt">KES 500</div><div class="rec-lbl">5 referrals</div></div>
+        <div class="rec"><div class="rec-amt">KES 1,000</div><div class="rec-lbl">10 referrals</div></div>
+        <div class="rec"><div class="rec-amt">KES 5,000</div><div class="rec-lbl">50 referrals</div></div>
+        <div class="rec"><div class="rec-amt">KES 10,000</div><div class="rec-lbl">100 referrals</div></div>
       </div>
     </div>
+
     <!-- DOWNLINES -->
     <div class="sec" id="s-downlines">
       <div class="stitle">🌐 My Downlines</div>
-      <div class="twrap"><table><thead><tr><th>Username</th><th>Country</th><th>Joined</th></tr></thead><tbody id="dlbody"></tbody></table></div>
+      <div class="twrap">
+        <table><thead><tr><th>Username</th><th>Country</th><th>Joined</th></tr></thead>
+        <tbody id="dlbody"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:2rem;">Loading…</td></tr></tbody>
+        </table>
+      </div>
     </div>
+
     <!-- SPIN -->
     <div class="sec" id="s-spin">
       <div class="stitle">🎰 Spin &amp; Win</div>
       <div class="spin-wrap">
-        <canvas id="wheel" width="220" height="220" style="border-radius:50%;border:3px solid var(--gold);"></canvas>
-        <div><button class="spin-btn" id="spinBtn" onclick="doSpin()">🎰 SPIN NOW</button></div>
+        <canvas id="wheel" width="220" height="220" style="border-radius:50%;border:3px solid var(--gold);display:block;margin:0 auto;"></canvas>
+        <button class="spin-btn" id="spinBtn" onclick="doSpin()">🎰 SPIN NOW</button>
         <div class="spin-res" id="spinRes"></div>
       </div>
     </div>
+
     <!-- PROFILE -->
     <div class="sec" id="s-profile">
       <div class="stitle">👤 My Profile</div>
@@ -269,144 +371,207 @@ tr:last-child td{border-bottom:none;}
         <div class="fg"><label>Member Since</label><input type="text" id="pms" readonly style="opacity:.65;"/></div>
       </div>
     </div>
+
     <!-- GENERIC STUBS -->
-    <div class="sec" id="s-recharge"><div class="stitle">💳 Account Recharge</div><p style="color:var(--muted);">Top up your account. Contact support for recharge options.</p></div>
-    <div class="sec" id="s-redeem"><div class="stitle">🎁 Redeem Bonus</div><p style="color:var(--muted);">Redeem accumulated bonus points. Bonuses credited monthly.</p></div>
-    <div class="sec" id="s-chat"><div class="stitle">💬 Chat Foreigners</div><p style="color:var(--muted);">Connect with international members. Coming soon!</p></div>
-    <div class="sec" id="s-aviator"><div class="stitle">✈️ Aviator Predictor</div><p style="color:var(--muted);">AI-powered Aviator prediction. Use responsibly. Launching soon!</p></div>
-    <div class="sec" id="s-revshare"><div class="stitle">📈 Aviator REVSHARE</div><p style="color:var(--muted);">Earn a share of Aviator game revenue. Enrollment opening soon!</p></div>
-    <div class="sec" id="s-ads"><div class="stitle">📣 Ads Earnings</div><p style="color:var(--muted);">View ads to earn. Available Mon, Thu &amp; Fri. Check back then!</p></div>
-    <div class="sec" id="s-tiktok"><div class="stitle">🎵 TikTok Earn</div><p style="color:var(--muted);">Watch TikTok and earn. Available Tue &amp; Wed.</p></div>
-    <div class="sec" id="s-youtube"><div class="stitle">📺 YouTube Earn</div><p style="color:var(--muted);">Watch YouTube and earn. Available Sat &amp; Sun.</p></div>
-    <div class="sec" id="s-trivia"><div class="stitle">🧩 Trivia Questions</div><p style="color:var(--muted);">Answer trivia and win KES per correct answer. Mon, Wed &amp; Fri!</p></div>
-    <div class="sec" id="s-articles"><div class="stitle">✍️ Write Articles</div><p style="color:var(--muted);">Write quality articles and earn per approval. Mon &amp; Fri!</p></div>
-    <div class="sec" id="s-forex"><div class="stitle">💱 Forex Lessons</div><p style="color:var(--muted);">Learn forex trading and earn while you grow your skills!</p></div>
-    <div class="sec" id="s-ebooks"><div class="stitle">📚 Business Ebooks</div><p style="color:var(--muted);">Access business and entrepreneurship ebooks. Grow your knowledge!</p></div>
-    <div class="sec" id="s-tournaments"><div class="stitle">🏆 Tournaments</div><p style="color:var(--muted);">Join weekly earning tournaments. Top earners win bonus prizes. Next: Friday!</p></div>
-  </div>
-</div>
+    <div class="sec" id="s-recharge"><div class="gen-sec"><div class="em">💳</div><h3>Account Recharge</h3><p>Top up your account balance. Contact support for recharge options.</p></div></div>
+    <div class="sec" id="s-redeem"><div class="gen-sec"><div class="em">🎁</div><h3>Redeem Bonus</h3><p>Redeem accumulated bonus points. Bonuses credited monthly.</p></div></div>
+    <div class="sec" id="s-chat"><div class="gen-sec"><div class="em">💬</div><h3>Chat Foreigners</h3><p>Connect with international members. Feature coming soon!</p></div></div>
+    <div class="sec" id="s-aviator"><div class="gen-sec"><div class="em">✈️</div><h3>Aviator Predictor</h3><p>AI-powered Aviator prediction tool. Launching soon!</p></div></div>
+    <div class="sec" id="s-revshare"><div class="gen-sec"><div class="em">📈</div><h3>Aviator REVSHARE</h3><p>Earn a share of Aviator game revenue. Enrollment opening soon!</p></div></div>
+    <div class="sec" id="s-ads"><div class="gen-sec"><div class="em">📣</div><h3>Ads Earnings</h3><p>View ads to earn. Available Mon, Thu &amp; Fri. Check back!</p></div></div>
+    <div class="sec" id="s-tiktok"><div class="gen-sec"><div class="em">🎵</div><h3>TikTok Earn</h3><p>Watch TikTok and earn. Available Tue &amp; Wed.</p></div></div>
+    <div class="sec" id="s-youtube"><div class="gen-sec"><div class="em">📺</div><h3>YouTube Earn</h3><p>Watch YouTube and earn. Available Sat &amp; Sun.</p></div></div>
+    <div class="sec" id="s-trivia"><div class="gen-sec"><div class="em">🧩</div><h3>Trivia Questions</h3><p>Answer trivia and win KES per correct answer. Mon, Wed &amp; Fri!</p></div></div>
+    <div class="sec" id="s-articles"><div class="gen-sec"><div class="em">✍️</div><h3>Write Articles</h3><p>Write quality articles and earn per approval. Mon &amp; Fri!</p></div></div>
+    <div class="sec" id="s-forex"><div class="gen-sec"><div class="em">💱</div><h3>Forex Lessons</h3><p>Learn forex trading and earn while you grow!</p></div></div>
+    <div class="sec" id="s-ebooks"><div class="gen-sec"><div class="em">📚</div><h3>Business Ebooks</h3><p>Access business and entrepreneurship ebooks.</p></div></div>
+    <div class="sec" id="s-tournaments"><div class="gen-sec"><div class="em">🏆</div><h3>Tournaments</h3><p>Join weekly earning tournaments. Top earners win bonus prizes. Next: Friday!</p></div></div>
+
+  </div><!-- /cnt -->
+</div><!-- /main -->
 
 <script>
-const TITLES={dash:'Dashboard',voucher:'Voucher',recharge:'Account Recharge',withdraw:'Withdraw',redeem:'Redeem Bonus',share:'Share & Earn',downlines:'Downlines',chat:'Chat Foreigners',spin:'Spin Games',aviator:'Aviator Predictor',revshare:'Aviator REVSHARE',ads:'Ads Earnings',tiktok:'TikTok Earn',youtube:'YouTube Earn',trivia:'Trivia Questions',articles:'Articles',forex:'Forex Lessons',ebooks:'Business Ebooks',tournaments:'Tournaments',profile:'Profile'};
-let notifOpen=false,spinning=false,rot=0;
+const TITLES={
+  dash:'Dashboard',voucher:'Voucher',recharge:'Account Recharge',withdraw:'Withdraw',
+  redeem:'Redeem Bonus',share:'Share & Earn',downlines:'Downlines',chat:'Chat Foreigners',
+  spin:'Spin Games',aviator:'Aviator Predictor',revshare:'Aviator REVSHARE',
+  ads:'Ads Earnings',tiktok:'TikTok Earn',youtube:'YouTube Earn',trivia:'Trivia Questions',
+  articles:'Articles',forex:'Forex Lessons',ebooks:'Business Ebooks',
+  tournaments:'Tournaments',profile:'Profile'
+};
+let notifOpen=false, spinning=false, rot=0;
 
+// ── Load user data ──
 async function loadUser(){
   try{
     const r=await fetch('/api/auth/me');
     const d=await r.json();
     if(!d.success){window.location.href='/login';return;}
     const u=d.user;
-    document.getElementById('wname').textContent=u.username;
-    document.getElementById('topUser').textContent=u.username;
-    document.getElementById('d-exp').textContent='KSh '+(d.settings?.activation_fee||300);
-    document.getElementById('d-tot').textContent='KSh '+(u.total_earnings||0);
-    document.getElementById('d-bal').textContent='KSh '+(u.balance||0);
-    document.getElementById('d-wd').textContent='KSh '+(u.total_withdrawn||0);
-    document.getElementById('d-aff').textContent='KSh '+(u.affiliate_earnings||0);
-    document.getElementById('d-bon').textContent='KSh '+(u.agent_bonus||100);
-    document.getElementById('e-ads').textContent='KSh '+(u.ads_earnings||0);
-    document.getElementById('e-tik').textContent='KSh '+(u.tiktok_earnings||0);
-    document.getElementById('e-yt').textContent='KSh '+(u.youtube_earnings||0);
-    document.getElementById('e-tri').textContent='KSh '+(u.trivia_earnings||0);
-    document.getElementById('e-art').textContent='KSh '+(u.articles_earnings||0);
-    document.getElementById('e-aff2').textContent='KSh '+(u.affiliate_earnings||0);
-    document.getElementById('pun').value=u.username;
-    document.getElementById('pem').value=u.email;
-    document.getElementById('pco').value=u.country;
-    document.getElementById('pmo').value=u.mobile;
-    document.getElementById('prc').value=u.referral_code;
-    document.getElementById('pms').value=new Date(u.created_at).toLocaleDateString();
-    const refUrl=window.location.origin+'/register?ref='+u.referral_code;
-    document.getElementById('rlink').textContent=refUrl;
-    document.getElementById('washr').href='https://wa.me/?text='+encodeURIComponent('Join EarnHub and earn online! Use my referral: '+refUrl);
-    if(d.notifications&&d.notifications.length>0){
+    // Topbar & welcome
+    document.getElementById('wname').textContent  = u.username;
+    document.getElementById('topUser').textContent= u.username;
+    // Stats
+    document.getElementById('d-exp').textContent  = 'KSh '+(d.settings?.activation_fee||300);
+    document.getElementById('d-tot').textContent  = 'KSh '+(u.total_earnings||0);
+    document.getElementById('d-bal').textContent  = 'KSh '+(u.balance||0);
+    document.getElementById('d-wd').textContent   = 'KSh '+(u.total_withdrawn||0);
+    document.getElementById('d-aff').textContent  = 'KSh '+(u.affiliate_earnings||0);
+    document.getElementById('d-bon').textContent  = 'KSh '+(u.agent_bonus||100);
+    // Earnings breakdown
+    document.getElementById('e-ads').textContent  = 'KSh '+(u.ads_earnings||0);
+    document.getElementById('e-tik').textContent  = 'KSh '+(u.tiktok_earnings||0);
+    document.getElementById('e-yt').textContent   = 'KSh '+(u.youtube_earnings||0);
+    document.getElementById('e-tri').textContent  = 'KSh '+(u.trivia_earnings||0);
+    document.getElementById('e-art').textContent  = 'KSh '+(u.articles_earnings||0);
+    document.getElementById('e-aff2').textContent = 'KSh '+(u.affiliate_earnings||0);
+    // Profile
+    document.getElementById('pun').value = u.username;
+    document.getElementById('pem').value = u.email;
+    document.getElementById('pco').value = u.country;
+    document.getElementById('pmo').value = u.mobile;
+    document.getElementById('prc').value = u.referral_code;
+    document.getElementById('pms').value = new Date(u.created_at).toLocaleDateString();
+    // Referral
+    const refUrl = window.location.origin+'/register?ref='+u.referral_code;
+    document.getElementById('refCode').textContent = u.referral_code||'—';
+    document.getElementById('rlink').textContent   = refUrl;
+    document.getElementById('washr').href =
+      'https://wa.me/?text='+encodeURIComponent(
+        'Join EarnHub and earn online! Use my referral link: '+refUrl+
+        '\n\nEarn from TikTok, YouTube, Ads, Articles & more. Activate for only KES 300 and I earn KES 100!'
+      );
+    // Notifications
+    if(d.notifications && d.notifications.length>0){
       const nb=document.getElementById('nbadge');
-      nb.textContent=d.notifications.length;nb.style.display='flex';
-      document.getElementById('nlist').innerHTML=d.notifications.map(n=>`<div class="nitem"><h5>${n.title}</h5><p>${n.message}</p></div>`).join('');
+      nb.textContent=d.notifications.length; nb.style.display='flex';
+      document.getElementById('nlist').innerHTML=
+        d.notifications.map(n=>`<div class="nitem"><h5>${n.title}</h5><p>${n.message}</p></div>`).join('');
     }
-  }catch{window.location.href='/login';}
+  }catch(e){
+    console.error(e);
+    window.location.href='/login';
+  }
 }
 
+// ── Navigation ──
 function go(id,el){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   document.getElementById('s-'+id).classList.add('active');
   if(el)el.classList.add('active');
   document.getElementById('ptitle').textContent=TITLES[id]||id;
-  if(id==='downlines')loadDL();
+  if(id==='downlines')loadDownlines();
   if(id==='spin')drawWheel();
   closeSb();
 }
-function openWA(){window.open('https://chat.whatsapp.com/','_blank');}
-function toggleSb(){document.getElementById('sb').classList.toggle('open');document.getElementById('overlay').classList.toggle('open');}
-function closeSb(){document.getElementById('sb').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
-function toggleNotif(){notifOpen=!notifOpen;document.getElementById('npanel').style.display=notifOpen?'block':'none';}
-async function doLogout(){await fetch('/api/auth/logout',{method:'POST'});window.location.href='/';}
 
+function openWA(){ window.open('https://chat.whatsapp.com/','_blank'); }
+function toggleSb(){ document.getElementById('sb').classList.toggle('open'); document.getElementById('overlay').classList.toggle('open'); }
+function closeSb(){ document.getElementById('sb').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+function toggleNotif(){ notifOpen=!notifOpen; document.getElementById('npanel').style.display=notifOpen?'block':'none'; }
+async function doLogout(){ await fetch('/api/auth/logout',{method:'POST'}); window.location.href='/'; }
+
+// ── Withdraw ──
 async function doWithdraw(){
-  const a=document.getElementById('wa').value,p=document.getElementById('wp').value;
+  const a=document.getElementById('wa').value;
+  const p=document.getElementById('wp').value;
   const r=await fetch('/api/user/withdraw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:parseFloat(a),mobile:p})});
   const d=await r.json();
   showAl('wal',d.message,d.success?'ok':'err');
-  if(d.success)loadUser();
+  if(d.success) loadUser();
 }
+
+// ── Voucher ──
 async function doVoucher(){
   const c=document.getElementById('vc').value;
   const r=await fetch('/api/user/voucher',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:c})});
   const d=await r.json();
   showAl('val',d.message,d.success?'ok':'err');
 }
-function copyRef(){navigator.clipboard.writeText(document.getElementById('rlink').textContent).then(()=>alert('Referral link copied!'));}
-async function loadDL(){
+
+// ── Copy referral ──
+function copyRef(){
+  const txt=document.getElementById('rlink').textContent;
+  navigator.clipboard.writeText(txt).then(()=>alert('✅ Referral link copied to clipboard!')).catch(()=>{
+    const ta=document.createElement('textarea'); ta.value=txt;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); alert('✅ Referral link copied!');
+  });
+}
+
+// ── Load downlines ──
+async function loadDownlines(){
   const r=await fetch('/api/user/downlines');
   const d=await r.json();
   const tb=document.getElementById('dlbody');
-  if(!d.downlines||!d.downlines.length){tb.innerHTML='<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:2rem;">No downlines yet. Share your referral link!</td></tr>';return;}
-  tb.innerHTML=d.downlines.map(dl=>`<tr><td>${dl.username}</td><td>${dl.country}</td><td>${new Date(dl.created_at).toLocaleDateString()}</td></tr>`).join('');
+  if(!d.downlines||!d.downlines.length){
+    tb.innerHTML='<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:2rem;">No downlines yet. Share your referral link to earn KES 100 per signup!</td></tr>';
+    return;
+  }
+  tb.innerHTML=d.downlines.map(dl=>
+    `<tr><td><strong>${dl.username}</strong></td><td>${dl.country}</td><td style="color:var(--muted);">${new Date(dl.created_at).toLocaleDateString()}</td></tr>`
+  ).join('');
 }
-function showAl(id,msg,type){const e=document.getElementById(id);e.textContent=msg;e.className='al '+type;e.style.display='block';}
 
-// SPIN WHEEL
+// ── Alert helper ──
+function showAl(id,msg,type){
+  const e=document.getElementById(id);
+  e.textContent=msg; e.className='al '+(type==='ok'?'ok':'err'); e.style.display='block';
+}
+
+// ── Spin Wheel ──
 function drawWheel(){
-  const cv=document.getElementById('wheel');if(!cv)return;
+  const cv=document.getElementById('wheel');
+  if(!cv)return;
   const ctx=cv.getContext('2d');
   const prizes=['KES 0','KES 5','KES 0','KES 10','KES 0','KES 20','KES 0','KES 5'];
-  const colors=['#111B2C','#F5C518','#111B2C','#00C853','#111B2C','#F5C518','#111B2C','#00C853'];
+  const colors=['#F1F5F9','#E8900A','#F1F5F9','#16A34A','#F1F5F9','#E8900A','#F1F5F9','#16A34A'];
   const arc=(2*Math.PI)/prizes.length;
   ctx.clearRect(0,0,220,220);
   prizes.forEach((p,i)=>{
     const a=rot*(Math.PI/180)+i*arc;
     ctx.beginPath();ctx.moveTo(110,110);ctx.arc(110,110,105,a,a+arc);ctx.closePath();
-    ctx.fillStyle=colors[i];ctx.fill();
+    ctx.fillStyle=colors[i];ctx.fill();ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.stroke();
     ctx.save();ctx.translate(110,110);ctx.rotate(a+arc/2);
-    ctx.textAlign='right';ctx.fillStyle='#E8EAF0';ctx.font='bold 11px Space Grotesk';
-    ctx.fillText(p,92,4);ctx.restore();
+    ctx.textAlign='right';ctx.fillStyle=i%2===0?'#64748B':'#fff';
+    ctx.font='bold 11px Plus Jakarta Sans';ctx.fillText(p,92,4);ctx.restore();
   });
-  ctx.beginPath();ctx.arc(110,110,14,0,2*Math.PI);ctx.fillStyle='#F5C518';ctx.fill();
+  ctx.beginPath();ctx.arc(110,110,14,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();
+  ctx.beginPath();ctx.arc(110,110,12,0,2*Math.PI);ctx.fillStyle=var_gold();ctx.fill();
 }
+function var_gold(){return '#E8900A';}
+
 async function doSpin(){
   if(spinning)return;
   spinning=true;
   const btn=document.getElementById('spinBtn');
-  btn.disabled=true;document.getElementById('spinRes').textContent='';
+  btn.disabled=true;
+  document.getElementById('spinRes').textContent='';
   const spins=360*5+Math.random()*360;
-  const dur=3000;const start=performance.now();const startR=rot;
+  const dur=3000; const start=performance.now(); const startR=rot;
   function animate(now){
-    const el=now-start;const prog=Math.min(el/dur,1);
+    const el=now-start; const prog=Math.min(el/dur,1);
     const ease=1-Math.pow(1-prog,4);
-    rot=(startR+spins*ease)%360;drawWheel();
+    rot=(startR+spins*ease)%360; drawWheel();
     if(prog<1){requestAnimationFrame(animate);return;}
-    spinning=false;btn.disabled=false;
+    spinning=false; btn.disabled=false;
     fetch('/api/user/spin',{method:'POST'}).then(r=>r.json()).then(d=>{
       document.getElementById('spinRes').textContent=d.message;
-      document.getElementById('spinRes').style.color=d.prize>0?'#F5C518':'#5C6880';
       if(d.prize>0)loadUser();
     });
   }
   requestAnimationFrame(animate);
 }
 
-document.addEventListener('click',e=>{if(notifOpen&&!e.target.closest('.npanel')&&!e.target.closest('.nb')){notifOpen=false;document.getElementById('npanel').style.display='none';}});
+// Close notif panel on outside click
+document.addEventListener('click',e=>{
+  if(notifOpen && !e.target.closest('.npanel') && !e.target.closest('.nb')){
+    notifOpen=false; document.getElementById('npanel').style.display='none';
+  }
+});
+
+// Init
 loadUser();
 </script>
 </body>
