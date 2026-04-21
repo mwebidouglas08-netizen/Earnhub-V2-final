@@ -7,15 +7,15 @@
 <style>
 :root{--gold:#E8900A;--gold-light:#FFF3DC;--dark:#0F172A;--body:#F8FAFC;--card:#fff;--border:#E2E8F0;--text:#1E293B;--muted:#64748B;--red:#DC2626;--green:#16A34A;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--body);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background-image:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(232,144,10,.08) 0%,transparent 70%);}
-.card{background:var(--card);border-radius:22px;padding:2.5rem 2rem;width:100%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,.1);}
+body{background:var(--body);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background-image:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(232,144,10,.09) 0%,transparent 70%);}
+.card{background:var(--card);border-radius:22px;padding:2.5rem 2rem;width:100%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,.10);}
 .top-icon{text-align:center;font-size:3rem;margin-bottom:.8rem;}
-h2{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.5rem;text-align:center;margin-bottom:.3rem;color:var(--dark);}
+h2{font-weight:800;font-size:1.5rem;text-align:center;margin-bottom:.3rem;color:var(--dark);}
 .sub{text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:1.8rem;}
 .info-box{background:var(--gold-light);border:1.5px solid #FDE68A;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.5rem;}
 .irow{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;}
 .irow:last-child{margin-bottom:0;padding-top:.6rem;border-top:1px solid #FDE68A;}
-.ilabel{color:#92400E;font-size:.87rem;font-weight:500;}
+.ilabel{color:#92400E;font-size:.87rem;font-weight:600;}
 .ival{font-weight:800;color:var(--gold);font-size:1rem;}
 .fg{margin-bottom:1.2rem;}
 label{font-size:.83rem;font-weight:600;margin-bottom:.38rem;display:block;color:var(--text);}
@@ -27,32 +27,34 @@ input::placeholder{color:#CBD5E1;}
 .btn{width:100%;padding:.9rem;background:var(--gold);color:#fff;font-weight:700;border:none;border-radius:11px;font-size:1rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;margin-top:.3rem;}
 .btn:hover{background:#C97D08;transform:translateY(-1px);box-shadow:0 4px 14px rgba(232,144,10,.35);}
 .btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
-
-/* LOADING STATE */
-.loader{display:none;text-align:center;padding:1.5rem 0;}
-.spinner{width:44px;height:44px;border:4px solid #E2E8F0;border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .9rem;}
+.btn-green{background:var(--green) !important;}
+.btn-green:hover{background:#15803D !important;}
+.btn-outline{background:#fff !important;color:var(--muted) !important;border:1.5px solid var(--border) !important;margin-top:.7rem;}
+.btn-outline:hover{border-color:var(--text) !important;color:var(--text) !important;transform:none !important;box-shadow:none !important;}
+/* LOADER */
+.loader{display:none;text-align:center;}
+.spinner{width:52px;height:52px;border:4px solid #E2E8F0;border-top-color:var(--gold);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 1rem;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loader-title{font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:.4rem;}
-.loader-sub{font-size:.85rem;color:var(--muted);line-height:1.6;}
-.dots span{animation:blink 1.4s infinite;}
-.dots span:nth-child(2){animation-delay:.2s;}
-.dots span:nth-child(3){animation-delay:.4s;}
-@keyframes blink{0%,80%,100%{opacity:0;}40%{opacity:1;}}
-
+.loader-title{font-weight:800;font-size:1.15rem;color:var(--dark);margin-bottom:.4rem;}
+.loader-sub{font-size:.85rem;color:var(--muted);line-height:1.7;margin-bottom:1.3rem;}
 /* STEPS */
-.steps{display:flex;flex-direction:column;gap:.7rem;margin-top:1.2rem;}
-.step-item{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--muted);}
-.step-item .dot{width:24px;height:24px;border-radius:50%;background:#F1F5F9;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;transition:all .3s;}
-.step-item.done .dot{background:var(--green);border-color:var(--green);color:#fff;}
-.step-item.active .dot{background:var(--gold);border-color:var(--gold);color:#fff;animation:pulse .8s ease-in-out infinite;}
-@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
-.step-item.done{color:var(--green);}
-.step-item.active{color:var(--dark);font-weight:600;}
-
-.note{font-size:.79rem;color:var(--muted);text-align:center;margin-top:1.2rem;line-height:1.6;}
-.alert{padding:.75rem 1rem;border-radius:10px;font-size:.88rem;margin-bottom:.9rem;display:none;font-weight:500;}
+.steps{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.4rem;text-align:left;}
+.si{display:flex;align-items:center;gap:.75rem;font-size:.86rem;color:var(--muted);transition:color .3s;}
+.si .dot{width:28px;height:28px;border-radius:50%;background:#F1F5F9;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:700;flex-shrink:0;transition:all .3s;}
+.si.done{color:var(--green);}
+.si.done .dot{background:var(--green);border-color:var(--green);color:#fff;}
+.si.active{color:var(--dark);font-weight:600;}
+.si.active .dot{background:var(--gold);border-color:var(--gold);color:#fff;animation:pulse .9s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+/* MANUAL BOX */
+.manual-box{display:none;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.8rem;text-align:left;}
+.manual-box p{font-size:.85rem;color:#15803D;margin-bottom:.8rem;line-height:1.65;}
+.timer-txt{font-size:.78rem;color:var(--muted);text-align:center;margin-top:.5rem;min-height:1.2rem;}
+/* ALERT */
+.alert{padding:.75rem 1rem;border-radius:10px;font-size:.88rem;margin-bottom:.9rem;display:none;font-weight:600;}
 .alert.error{background:#FEF2F2;border:1.5px solid #FECACA;color:var(--red);}
 .alert.success{background:#F0FDF4;border:1.5px solid #BBF7D0;color:var(--green);}
+.note{font-size:.79rem;color:var(--muted);text-align:center;margin-top:1rem;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -66,7 +68,7 @@ input::placeholder{color:#CBD5E1;}
     <div id="alert" class="alert"></div>
     <div class="info-box">
       <div class="irow"><span class="ilabel">💰 Activation Fee</span><span class="ival" id="feeDisplay">KES 300</span></div>
-      <div class="irow"><span class="ilabel">✅ Payment type</span><span style="color:var(--green);font-size:.85rem;font-weight:600;">One-time · Lifetime Access</span></div>
+      <div class="irow"><span class="ilabel">✅ Payment type</span><span style="color:var(--green);font-size:.85rem;font-weight:700;">One-time · Lifetime Access</span></div>
       <div class="irow"><span class="ilabel">🔓 Unlocks</span><span style="font-size:.84rem;font-weight:600;">All 10+ earning tools</span></div>
     </div>
     <div class="fg">
@@ -79,178 +81,185 @@ input::placeholder{color:#CBD5E1;}
     <button class="btn" id="payBtn" onclick="initiatePayment()">
       🚀 Pay &amp; Activate — KES <span id="feeBtn">300</span>
     </button>
-    <p class="note">You will receive an M-Pesa STK push prompt on the phone number above. Enter your PIN to complete payment.</p>
+    <p class="note">You will receive an M-Pesa STK push on your phone. Enter your PIN to complete payment and get instant access.</p>
   </div>
 
-  <!-- LOADING / POLLING VIEW -->
-  <div class="loader" id="loaderView">
-    <div class="spinner"></div>
-    <div class="loader-title">Waiting for payment<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
-    <div class="loader-sub">Check your phone for the M-Pesa prompt and enter your PIN</div>
-    <div class="steps" id="stepList">
-      <div class="step-item done" id="s1"><div class="dot">✓</div><span>STK push sent to your phone</span></div>
-      <div class="step-item active" id="s2"><div class="dot">2</div><span>Waiting for M-Pesa PIN entry</span></div>
-      <div class="step-item" id="s3"><div class="dot">3</div><span>Confirming payment</span></div>
-      <div class="step-item" id="s4"><div class="dot">4</div><span>Activating account</span></div>
+  <!-- POLLING VIEW -->
+  <div id="loaderView" class="loader">
+    <div class="spinner" id="spinEl"></div>
+    <div class="loader-title" id="loaderTitle">Waiting for payment…</div>
+    <div class="loader-sub" id="loaderSub">Check your phone for the M-Pesa prompt and enter your PIN to complete payment</div>
+    <div class="steps">
+      <div class="si done"   id="s1"><div class="dot">✓</div><span>STK push sent to your phone</span></div>
+      <div class="si active" id="s2"><div class="dot">2</div><span>Waiting for M-Pesa PIN entry</span></div>
+      <div class="si"        id="s3"><div class="dot">3</div><span>Confirming payment with Mpesa</span></div>
+      <div class="si"        id="s4"><div class="dot">4</div><span>Activating your account</span></div>
     </div>
-    <button onclick="cancelPayment()" style="margin-top:1.5rem;background:none;border:none;color:var(--muted);font-size:.85rem;cursor:pointer;text-decoration:underline;">Cancel &amp; try again</button>
+    <!-- Manual confirm — shows after 15s -->
+    <div class="manual-box" id="manualBox">
+      <p>✅ <strong>Already entered your PIN?</strong><br>If you completed the M-Pesa payment but are still waiting, tap the button below to access your dashboard immediately.</p>
+      <button class="btn btn-green" id="manualBtn" onclick="manualConfirm()">✅ I Have Paid — Take Me to Dashboard</button>
+      <div class="timer-txt" id="timerTxt"></div>
+    </div>
+    <button onclick="cancelPayment()" class="btn btn-outline">↩ Cancel &amp; try different number</button>
   </div>
-
 </div>
 
 <script>
-let pollInterval  = null;
-let pollCount     = 0;
-const MAX_POLLS   = 100; // 100 × 3s = 5 minutes
-const BASE_DELAY  = 3000; // 3 seconds base polling interval
+let pollInterval = null;
+let manualTimer  = null;
+let pollCount    = 0;
+const POLL_INTERVAL_MS = 2000; // poll every 2 seconds
+const MAX_POLLS        = 90;   // 90 × 2s = 3 minutes max
 
-// Load fee on page load
+// ── Load activation fee ──
 fetch('/api/auth/me').then(r => r.json()).then(d => {
   if (!d.success) { window.location.href = '/login'; return; }
   if (d.user.is_activated) { window.location.href = '/dashboard'; return; }
   const fee = d.settings?.activation_fee || 300;
   document.getElementById('feeDisplay').textContent = 'KES ' + fee;
   document.getElementById('feeBtn').textContent      = fee;
-}).catch(() => window.location.href = '/login');
+}).catch(() => { window.location.href = '/login'; });
 
+// ── Initiate STK Push ──
 async function initiatePayment() {
-  const phoneRaw = document.getElementById('phone').value.trim();
-  if (!phoneRaw || phoneRaw.length < 9) {
-    showAlert('Enter a valid 9-digit M-Pesa number.', 'error');
-    return;
-  }
-
+  const raw = document.getElementById('phone').value.trim();
+  if (!raw || raw.length < 9) { showAlert('Enter a valid 9-digit M-Pesa number.', 'error'); return; }
   const btn = document.getElementById('payBtn');
-  btn.disabled    = true;
-  btn.textContent = 'Sending STK push…';
-
+  btn.disabled = true; btn.textContent = '⏳ Sending STK push…'; clearAlert();
   try {
     const r = await fetch('/api/auth/activate/stk', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ phone: '+254' + phoneRaw })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: '+254' + raw })
     });
     const d = await r.json();
-
     if (d.success) {
-      // Switch to polling view
-      document.getElementById('formView').style.display   = 'none';
-      document.getElementById('loaderView').style.display = 'block';
+      switchToLoader();
       startPolling();
+      startManualTimer(15);
     } else {
       showAlert(d.message || 'Failed to send STK push. Try again.', 'error');
-      btn.disabled    = false;
-      btn.textContent = '🚀 Pay & Activate';
+      btn.disabled = false; btn.textContent = '🚀 Pay & Activate';
     }
-  } catch (e) {
+  } catch {
     showAlert('Network error. Check your connection and try again.', 'error');
-    btn.disabled    = false;
-    btn.textContent = '🚀 Pay & Activate';
+    btn.disabled = false; btn.textContent = '🚀 Pay & Activate';
   }
 }
 
+function switchToLoader() {
+  document.getElementById('formView').style.display   = 'none';
+  document.getElementById('loaderView').style.display = 'block';
+}
+
+// ── Poll every 2 seconds ──
 function startPolling() {
-  pollCount = 0;
-  schedulePoll();
+  pollCount    = 0;
+  pollInterval = setInterval(doPoll, POLL_INTERVAL_MS);
 }
 
-function schedulePoll() {
-  // Aggressive polling after step 3 is marked done (pollCount > 8): every 500ms
-  // Exponential backoff otherwise: start at 3s, increase gradually after 20 polls, cap at 10s
-  const delay = pollCount > 8
-    ? 500
-    : pollCount < 20
-      ? BASE_DELAY
-      : Math.min(BASE_DELAY * Math.pow(1.05, pollCount - 20), 10000);
-  pollInterval = setTimeout(pollStatus, delay);
-}
-
-async function pollStatus() {
+async function doPoll() {
   pollCount++;
-
   // Update step UI
-  if (pollCount > 3)  setStep('s3', 'active');
-  if (pollCount > 8)  setStep('s3', 'done');
-  if (pollCount > 10) setStep('s4', 'active');
-
-  // Show elapsed time hint after 30 polls (~90s)
-  if (pollCount === 30) {
-    document.querySelector('.loader-sub').textContent =
-      'Still waiting… M-Pesa can take up to 5 minutes. Please keep this page open.';
-  }
+  if (pollCount === 3)  { setStep('s3', 'active'); }
+  if (pollCount === 7)  { setStep('s2', 'done'); setStep('s3', 'done'); setStep('s4', 'active'); }
 
   try {
-    const r = await fetch('/api/auth/activate/status');
+    const r = await fetch('/api/auth/activate/status?' + Date.now()); // cache-bust
     const d = await r.json();
+    if (d.activated) { onActivationSuccess(); return; }
+  } catch (e) { console.log('Poll error:', e.message); }
 
-    if (d.activated) {
-      clearTimeout(pollInterval);
-      activationSuccess(); // redirect immediately — no delay
-      return;
-    }
-  } catch (e) {
-    console.error('Poll error:', e);
-  }
-
-  // Timeout after MAX_POLLS
   if (pollCount >= MAX_POLLS) {
-    clearTimeout(pollInterval);
-    cancelPayment();
-    showAlert(
-      'Payment not confirmed within 5 minutes. If you completed the M-Pesa payment, please contact support with your transaction code. Otherwise, try again.',
-      'error'
-    );
-    return;
+    clearInterval(pollInterval);
+    document.getElementById('loaderTitle').textContent = '⏰ Taking longer than expected';
+    document.getElementById('loaderSub').textContent   = 'If you already paid, tap "I Have Paid" below.';
+    document.getElementById('manualBox').style.display = 'block';
   }
-
-  // Schedule next poll
-  schedulePoll();
 }
 
-function activationSuccess() {
-  setStep('s3', 'done');
-  setStep('s4', 'done');
-  document.querySelector('.loader-title').textContent = '🎉 Payment confirmed!';
-  document.querySelector('.loader-sub').innerHTML =
-    'Your account is activated. Redirecting to dashboard…' +
-    '<br><br><a id="dashLink" href="/dashboard" ' +
-    'style="display:inline-block;margin-top:.5rem;padding:.6rem 1.4rem;' +
-    'background:var(--gold);color:#fff;border-radius:8px;font-weight:700;' +
-    'text-decoration:none;font-size:.9rem;">Go to Dashboard →</a>';
-  document.querySelector('.spinner').style.borderTopColor = '#16A34A';
-  // Redirect after 100ms — just enough for the UI to update
-  setTimeout(() => { window.location.href = '/dashboard'; }, 100);
-  // 3-second fallback redirect in case the first one is delayed
-  setTimeout(() => { window.location.href = '/dashboard'; }, 3000);
+// ── Manual confirm fallback ──
+async function manualConfirm() {
+  const btn = document.getElementById('manualBtn');
+  btn.disabled = true; btn.textContent = '⏳ Confirming…';
+  try {
+    const r = await fetch('/api/auth/activate/manual', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }
+    });
+    const d = await r.json();
+    if (d.activated || d.success) { onActivationSuccess(); }
+    else {
+      btn.disabled = false; btn.textContent = '✅ I Have Paid — Take Me to Dashboard';
+      alert(d.message || 'Could not confirm. Please contact support.');
+    }
+  } catch {
+    btn.disabled = false; btn.textContent = '✅ I Have Paid — Take Me to Dashboard';
+    alert('Network error. Try again.');
+  }
+}
+
+// ── Called immediately when activation confirmed ──
+function onActivationSuccess() {
+  clearInterval(pollInterval);
+  clearInterval(manualTimer);
+  // Update UI to show success
+  setStep('s2', 'done'); setStep('s3', 'done'); setStep('s4', 'done');
+  document.getElementById('spinEl').style.border         = '4px solid #BBF7D0';
+  document.getElementById('spinEl').style.borderTopColor = '#16A34A';
+  document.getElementById('loaderTitle').textContent = '🎉 Payment Confirmed!';
+  document.getElementById('loaderSub').textContent   = 'Account activated! Taking you to your dashboard…';
+  document.getElementById('manualBox').style.display  = 'none';
+  // IMMEDIATE redirect — no delay
+  window.location.href = '/dashboard';
+}
+
+// ── Show manual button after N seconds ──
+function startManualTimer(seconds) {
+  let remaining = seconds;
+  document.getElementById('timerTxt').textContent = `"I Have Paid" button appears in ${remaining}s`;
+  manualTimer = setInterval(() => {
+    remaining--;
+    if (remaining <= 0) {
+      clearInterval(manualTimer);
+      document.getElementById('manualBox').style.display = 'block';
+      document.getElementById('timerTxt').textContent    = '';
+    } else {
+      document.getElementById('timerTxt').textContent = `"I Have Paid" button appears in ${remaining}s`;
+    }
+  }, 1000);
+}
+
+function cancelPayment() {
+  clearInterval(pollInterval); clearInterval(manualTimer);
+  document.getElementById('loaderView').style.display = 'none';
+  document.getElementById('formView').style.display   = 'block';
+  document.getElementById('manualBox').style.display  = 'none';
+  const btn = document.getElementById('payBtn');
+  btn.disabled = false; btn.textContent = '🚀 Pay & Activate';
+  resetSteps();
+}
+
+function resetSteps() {
+  [['s1','done'],['s2','active'],['s3',''],['s4','']].forEach(([id,state]) => {
+    const el = document.getElementById(id);
+    el.className = 'si' + (state ? ' '+state : '');
+    el.querySelector('.dot').textContent = state === 'done' ? '✓' : id.replace('s','');
+  });
 }
 
 function setStep(id, state) {
   const el = document.getElementById(id);
-  el.classList.remove('active', 'done');
-  el.classList.add(state);
+  el.classList.remove('active','done');
+  if (state) el.classList.add(state);
   if (state === 'done') el.querySelector('.dot').textContent = '✓';
 }
 
-function cancelPayment() {
-  clearTimeout(pollInterval);
-  document.getElementById('loaderView').style.display = 'none';
-  document.getElementById('formView').style.display   = 'block';
-  const btn = document.getElementById('payBtn');
-  btn.disabled    = false;
-  btn.textContent = '🚀 Pay & Activate';
-  // Reset steps
-  ['s1','s2','s3','s4'].forEach((id, i) => {
-    const el = document.getElementById(id);
-    el.classList.remove('active', 'done');
-    el.querySelector('.dot').textContent = String(i + 1);
-  });
-}
-
 function showAlert(msg, type) {
-  const el = document.getElementById('alert');
-  el.textContent   = msg;
-  el.className     = 'alert ' + type;
-  el.style.display = 'block';
+  const e = document.getElementById('alert');
+  e.textContent = msg; e.className = 'alert '+type; e.style.display = 'block';
+}
+function clearAlert() {
+  document.getElementById('alert').style.display = 'none';
 }
 </script>
 </body>
