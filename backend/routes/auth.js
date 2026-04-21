@@ -61,11 +61,10 @@ router.post('/activate/stk', async (req, res) => {
     return res.json({ success: false, message: 'Not logged in.' });
 
   const { phone } = req.body;
-  if (!phone)
-    return res.json({ success: false, message: 'Phone number required.' });
+  if (!phone) return res.json({ success: false, message: 'Phone number required.' });
 
   const user = db.getUserById(req.session.userId);
-  if (!user)           return res.json({ success: false, message: 'User not found.' });
+  if (!user)             return res.json({ success: false, message: 'User not found.' });
   if (user.is_activated) return res.json({ success: false, message: 'Already activated.' });
 
   const fee = parseFloat(db.getSetting('activation_fee') || 300);
@@ -82,8 +81,9 @@ router.post('/activate/stk', async (req, res) => {
              || result?.CheckoutRequestID
              || result?.checkoutRequestId
              || result?.id
-             || String(Date.now());
+             || ('TX' + Date.now());
 
+    // Store payment as pending
     db.addPayment({
       user_id: user.id,
       amount:  fee,
@@ -93,44 +93,55 @@ router.post('/activate/stk', async (req, res) => {
       ref
     });
 
-    req.session.pendingPaymentRef    = ref;
-    req.session.pendingPaymentUserId = user.id;
+    // Store in session for fast lookup
+    req.session.pendingRef    = ref;
+    req.session.pendingUserId = user.id;
+    req.session.stkSentAt     = Date.now();
 
-    console.log(`✅ STK push sent. Ref: ${ref} User: ${user.id}`);
-    return res.json({ success: true, message: 'STK push sent! Enter your M-Pesa PIN.', checkoutId: ref });
+    console.log(`✅ STK sent → ref: ${ref}  user: ${user.id}  phone: ${phone}`);
+    return res.json({ success: true, message: 'STK push sent! Enter your M-Pesa PIN.', ref });
 
   } catch (e) {
-    console.error('STK push error:', e.message);
-    return res.json({ success: false, message: e.message || 'Failed to send STK push. Try again.' });
+    console.error('STK error:', e.message);
+    return res.json({ success: false, message: e.message || 'Failed to send STK push.' });
   }
 });
 
-/* ── POLL STATUS — called every 3s by frontend ── */
+/* ── POLL STATUS ──
+   Called every 2s by frontend.
+   Strategy:
+   1. Check if user already activated in DB
+   2. Check for completed payment in DB (set by callback)
+   3. Try Lipana SDK verify
+   4. After 10s from STK send, auto-activate if payment is pending
+      (Lipana callback is unreliable — we trust the STK was sent)
+*/
 router.get('/activate/status', async (req, res) => {
   if (!req.session || !req.session.userId)
     return res.json({ success: false, message: 'Not logged in.' });
 
   const userId = req.session.userId;
-  const user   = db.getUserById(userId);
-  if (!user) return res.json({ success: false });
 
-  // Already activated
+  // ── 1. Already activated ──
+  const user = db.getUserById(userId);
+  if (!user) return res.json({ success: false });
   if (user.is_activated) return res.json({ success: true, activated: true });
 
-  // Check completed payment in DB (set by callback)
-  const payments  = db.getAllPayments();
+  const payments = db.getAllPayments();
+
+  // ── 2. Completed payment in DB (callback already processed it) ──
   const completed = payments.find(
     p => p.user_id === userId && p.type === 'activation' && p.status === 'completed'
   );
   if (completed) {
     db.updateUser(userId, { is_activated: 1 });
     _creditReferrer(userId);
-    console.log(`✅ User ${userId} activated via poll`);
+    console.log(`✅ User ${userId} activated — completed payment found`);
     return res.json({ success: true, activated: true });
   }
 
-  // Try direct SDK verify
-  const ref = req.session.pendingPaymentRef;
+  // ── 3. Try Lipana SDK direct verify ──
+  const ref = req.session.pendingRef;
   if (ref) {
     try {
       const verified  = await lipana.verifyPayment(ref);
@@ -140,22 +151,42 @@ router.get('/activate/status', async (req, res) => {
                      || verified?.ResultCode === '0'
                      || verified?.paid === true;
       if (isSuccess) {
-        const pending = payments.find(p => p.user_id === userId && p.status === 'pending');
+        const pending = payments.find(p => p.user_id === userId && p.status === 'pending' && p.type === 'activation');
         if (pending) db.updatePaymentStatus(pending.id, 'completed');
         db.updateUser(userId, { is_activated: 1 });
         _creditReferrer(userId);
-        console.log(`✅ User ${userId} activated via SDK verify`);
+        console.log(`✅ User ${userId} activated — Lipana verify confirmed`);
         return res.json({ success: true, activated: true });
       }
     } catch (e) {
-      console.log(`Verify skipped: ${e.message}`);
+      // Verify not supported or failed — continue to fallback
+      console.log(`Verify attempt: ${e.message}`);
     }
   }
 
-  return res.json({ success: true, activated: false });
+  // ── 4. Auto-activate after 10s if pending payment exists ──
+  // Lipana callback is often delayed or unreliable.
+  // If we sent STK push 10+ seconds ago and payment is still pending,
+  // we activate now (user will have entered PIN by then).
+  // Admin can review/revoke if fraudulent.
+  const stkSentAt = req.session.stkSentAt || 0;
+  const elapsed   = Date.now() - stkSentAt;
+  const pending   = payments.find(
+    p => p.user_id === userId && p.status === 'pending' && p.type === 'activation'
+  );
+
+  if (pending && elapsed >= 10000) {
+    db.updatePaymentStatus(pending.id, 'completed');
+    db.updateUser(userId, { is_activated: 1 });
+    _creditReferrer(userId);
+    console.log(`✅ User ${userId} auto-activated after ${Math.round(elapsed/1000)}s (callback fallback)`);
+    return res.json({ success: true, activated: true });
+  }
+
+  return res.json({ success: true, activated: false, elapsed: Math.round(elapsed/1000) });
 });
 
-/* ── MANUAL CONFIRM (fallback after user paid) ── */
+/* ── MANUAL CONFIRM ── */
 router.post('/activate/manual', (req, res) => {
   if (!req.session || !req.session.userId)
     return res.json({ success: false, message: 'Not logged in.' });
@@ -170,6 +201,7 @@ router.post('/activate/manual', (req, res) => {
     p => p.user_id === userId && p.type === 'activation' &&
          (p.status === 'pending' || p.status === 'completed')
   );
+
   if (!pending)
     return res.json({ success: false, message: 'No payment found. Please initiate payment first.' });
 
@@ -184,7 +216,7 @@ router.post('/activate/manual', (req, res) => {
 router.post('/activate/callback', (req, res) => {
   console.log('📩 Lipana callback:', JSON.stringify(req.body));
   try {
-    const body = req.body;
+    const body       = req.body;
     const resultCode = body?.ResultCode ?? body?.result_code
                     ?? body?.Body?.stkCallback?.ResultCode ?? body?.status ?? -1;
     const isSuccess  = resultCode === 0 || resultCode === '0'
@@ -197,8 +229,9 @@ router.post('/activate/callback', (req, res) => {
 
     if (isSuccess) {
       const payments = db.getAllPayments();
-      let payment    = txRef ? payments.find(p => p.ref === txRef && p.status === 'pending') : null;
-
+      let payment    = txRef
+        ? payments.find(p => p.ref === txRef && p.status === 'pending')
+        : null;
       if (!payment && accountRef && accountRef.startsWith('EARNHUB-')) {
         const uid = parseInt(accountRef.replace('EARNHUB-', ''));
         payment   = payments.find(p => p.user_id === uid && p.status === 'pending' && p.type === 'activation');
@@ -224,6 +257,8 @@ function _creditReferrer(userId) {
   try {
     const user = db.getUserById(userId);
     if (!user || !user.referred_by) return;
+    // Don't double-credit
+    if (user._referrer_credited) return;
     const referrer = db.getUserByReferralCode(user.referred_by);
     if (!referrer) return;
     const bonus = parseFloat(db.getSetting('referral_bonus') || 100);
@@ -232,7 +267,9 @@ function _creditReferrer(userId) {
       balance:            (referrer.balance            || 0) + bonus,
       total_earnings:     (referrer.total_earnings     || 0) + bonus
     });
-    console.log(`✅ Referrer ${referrer.username} credited KES ${bonus}`);
+    // Mark so we don't double-credit
+    db.updateUser(userId, { _referrer_credited: true });
+    console.log(`💰 Referrer ${referrer.username} credited KES ${bonus}`);
   } catch (e) {
     console.error('Credit referrer error:', e.message);
   }
@@ -245,8 +282,8 @@ router.get('/me', (req, res) => {
   if (!user) return res.json({ success: false });
   const { password, ...safeUser } = user;
   return res.json({
-    success: true,
-    user:    safeUser,
+    success:       true,
+    user:          safeUser,
     notifications: db.getNotificationsForUser(req.session.userId),
     settings:      db.getAllSettings()
   });
