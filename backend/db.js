@@ -15,7 +15,7 @@ const DEFAULT_DB = {
   settings: {
     activation_fee:   '300',
     site_name:        'EarnHub',
-    referral_bonus:   '50',
+    referral_bonus:   '100',
     min_withdrawal:   '500',
     welcome_bonus:    '0',
     maintenance_mode: 'false'
@@ -25,16 +25,18 @@ const DEFAULT_DB = {
   notifications: [],
   withdrawals:   [],
   payments:      [],
-  _nextId: { users: 1, admins: 1, notifications: 1, withdrawals: 1, payments: 1 }
+  _nextId: { users:1, admins:1, notifications:1, withdrawals:1, payments:1 }
 };
 
 function loadDb() {
   try {
     if (fs.existsSync(DB_FILE)) {
-      const raw = fs.readFileSync(DB_FILE, 'utf8');
+      const raw    = fs.readFileSync(DB_FILE, 'utf8');
       const parsed = JSON.parse(raw);
-      // Merge in any missing _nextId keys
       if (!parsed._nextId) parsed._nextId = { ...DEFAULT_DB._nextId };
+      // Ensure referral_bonus is 100
+      if (!parsed.settings) parsed.settings = { ...DEFAULT_DB.settings };
+      parsed.settings.referral_bonus = '100';
       return parsed;
     }
   } catch (e) {
@@ -51,41 +53,27 @@ function saveDb(data) {
   }
 }
 
-// ── Load DB ──
 let _db = loadDb();
 
-// ── FORCE admin credentials on every startup ──
-// This guarantees the correct password is always in the DB
-// regardless of what was previously stored
-const ADMIN_USER = process.env.ADMIN_USERNAME || 'earnhub_admin';
-const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'EarnHub@2024!';
-
-// Remove ALL existing admins and recreate fresh
-_db.admins = [];
-if (!_db._nextId) _db._nextId = { ...DEFAULT_DB._nextId };
+// Force admin credentials on every startup
+const ADMIN_USER  = process.env.ADMIN_USERNAME || 'earnhub_admin';
+const ADMIN_PASS  = process.env.ADMIN_PASSWORD || 'EarnHub@2024!';
+const freshHash   = bcrypt.hashSync(ADMIN_PASS, 10);
+_db.admins        = [];
 _db._nextId.admins = 1;
-
-const freshHash = bcrypt.hashSync(ADMIN_PASS, 10);
 _db.admins.push({
-  id:         1,
-  username:   ADMIN_USER,
-  password:   freshHash,
+  id: 1, username: ADMIN_USER, password: freshHash,
   created_at: new Date().toISOString()
 });
-
 saveDb(_db);
-
 console.log('====================================');
-console.log('✅ Admin credentials set:');
-console.log(`   Username : ${ADMIN_USER}`);
-console.log(`   Password : ${ADMIN_PASS}`);
-console.log(`   DB file  : ${DB_FILE}`);
+console.log(`✅ Admin → username: "${ADMIN_USER}" password: "${ADMIN_PASS}"`);
+console.log(`✅ DB at: ${DB_FILE}`);
 console.log('====================================');
 
-// ── DB API ──
 const db = {
 
-  // Settings
+  /* ── SETTINGS ── */
   getSetting(key) {
     return _db.settings[key] !== undefined ? _db.settings[key] : null;
   },
@@ -97,54 +85,51 @@ const db = {
     return { ..._db.settings };
   },
   setAllSettings(obj) {
-    for (const [k, v] of Object.entries(obj)) {
-      _db.settings[k] = String(v);
-    }
+    for (const [k, v] of Object.entries(obj)) _db.settings[k] = String(v);
     saveDb(_db);
   },
 
-  // Users
+  /* ── USERS ── */
   getUserById(id) {
     return _db.users.find(u => u.id === parseInt(id)) || null;
   },
   getUserByUsernameOrEmail(val) {
     const v = val.toLowerCase().trim();
     return _db.users.find(u =>
-      u.username.toLowerCase() === v ||
-      u.email.toLowerCase()    === v
+      u.username.toLowerCase() === v || u.email.toLowerCase() === v
     ) || null;
   },
   getUserByReferralCode(code) {
     return _db.users.find(u => u.referral_code === code) || null;
   },
   createUser(data) {
-    const existing = _db.users.find(u =>
+    const exists = _db.users.find(u =>
       u.username.toLowerCase() === data.username.toLowerCase() ||
       u.email.toLowerCase()    === data.email.toLowerCase()
     );
-    if (existing) throw new Error('UNIQUE constraint failed');
+    if (exists) throw new Error('UNIQUE constraint failed');
     const user = {
-      id:                _db._nextId.users++,
-      username:          data.username,
-      email:             data.email,
-      country:           data.country           || 'Kenya',
-      mobile:            data.mobile            || '',
-      password:          data.password,
-      referral_code:     data.referral_code,
-      referred_by:       data.referred_by       || null,
-      is_activated:      0,
-      is_banned:         0,
-      balance:           0,
-      total_earnings:    0,
-      ads_earnings:      0,
-      tiktok_earnings:   0,
-      youtube_earnings:  0,
-      trivia_earnings:   0,
-      articles_earnings: 0,
-      affiliate_earnings:0,
-      agent_bonus:       100,
-      total_withdrawn:   0,
-      created_at:        new Date().toISOString()
+      id:                 _db._nextId.users++,
+      username:           data.username,
+      email:              data.email,
+      country:            data.country           || 'Kenya',
+      mobile:             data.mobile            || '',
+      password:           data.password,
+      referral_code:      data.referral_code,
+      referred_by:        data.referred_by       || null,
+      is_activated:       0,
+      is_banned:          0,
+      balance:            0,
+      total_earnings:     0,
+      ads_earnings:       0,
+      tiktok_earnings:    0,
+      youtube_earnings:   0,
+      trivia_earnings:    0,
+      articles_earnings:  0,
+      affiliate_earnings: 0,
+      agent_bonus:        100,
+      total_withdrawn:    0,
+      created_at:         new Date().toISOString()
     };
     _db.users.push(user);
     saveDb(_db);
@@ -170,7 +155,7 @@ const db = {
     );
   },
 
-  // Admins
+  /* ── ADMINS ── */
   getAdminByUsername(username) {
     if (!username) return null;
     return _db.admins.find(
@@ -178,12 +163,11 @@ const db = {
     ) || null;
   },
 
-  // Notifications
+  /* ── NOTIFICATIONS ── */
   getNotificationsForUser(userId) {
     return _db.notifications
       .filter(n => !n.is_read && (n.is_global || n.user_id === parseInt(userId)))
-      .slice(-15)
-      .reverse();
+      .slice(-15).reverse();
   },
   addNotification(data) {
     _db.notifications.push({
@@ -203,7 +187,7 @@ const db = {
     if (n) { n.is_read = 1; saveDb(_db); }
   },
 
-  // Withdrawals
+  /* ── WITHDRAWALS ── */
   addWithdrawal(data) {
     const w = {
       id:         _db._nextId.withdrawals++,
@@ -221,12 +205,11 @@ const db = {
     return _db.withdrawals.find(w => w.id === parseInt(id)) || null;
   },
   getAllWithdrawals() {
-    return [..._db.withdrawals]
-      .reverse()
-      .map(w => ({
-        ...w,
-        username: (_db.users.find(u => u.id === w.user_id) || {}).username || '?'
-      }));
+    return [..._db.withdrawals].reverse().map(w => ({
+      ...w,
+      username: (_db.users.find(u => u.id === w.user_id) || {}).username || '?',
+      mobile:   (_db.users.find(u => u.id === w.user_id) || {}).mobile   || w.mobile || '?'
+    }));
   },
   updateWithdrawal(id, status) {
     const w = _db.withdrawals.find(w => w.id === parseInt(id));
@@ -234,8 +217,8 @@ const db = {
     return w;
   },
 
-  // Payments
-addPayment(data) {
+  /* ── PAYMENTS ── */
+  addPayment(data) {
     _db.payments.push({
       id:         _db._nextId.payments++,
       user_id:    data.user_id,
@@ -249,19 +232,17 @@ addPayment(data) {
     saveDb(_db);
   },
   getAllPayments() {
-    return [..._db.payments]
-      .reverse()
-      .map(p => ({
-        ...p,
-        username: (_db.users.find(u => u.id === p.user_id) || {}).username || '?'
-      }));
+    return [..._db.payments].reverse().map(p => ({
+      ...p,
+      username: (_db.users.find(u => u.id === p.user_id) || {}).username || '?'
+    }));
   },
   updatePaymentStatus(id, status) {
     const p = _db.payments.find(p => p.id === parseInt(id));
     if (p) { p.status = status; saveDb(_db); }
   },
 
-  // Stats
+  /* ── STATS ── */
   getStats() {
     const totalRevenue = _db.payments
       .filter(p => p.status === 'completed')
