@@ -193,11 +193,21 @@ input::placeholder{color:#CBD5E1;}
       </button>
     </div>
 
-    <!-- Shown after 90s if still pending — info only, NO bypass button -->
+    <!-- Shown after 90s if still pending — info only -->
     <div class="wait-note" id="waitNote" style="display:none;">
       ⏳ Still waiting for Safaricom confirmation.<br>
       If you paid, your account will activate automatically once confirmed.<br>
       <strong>Do not close this page.</strong>
+    </div>
+
+    <!-- Manual fallback — shown after 60s -->
+    <div id="dashBtn" style="display:none;margin-bottom:.6rem;">
+      <a href="/dashboard" class="btn" style="display:block;text-align:center;text-decoration:none;">
+        ✅ Go to Dashboard
+      </a>
+      <p style="font-size:.75rem;color:var(--muted);text-align:center;margin-top:.4rem;">
+        Use this if you already paid and the page hasn't redirected.
+      </p>
     </div>
 
     <button onclick="cancelPayment()" class="btn btn-cancel">
@@ -207,10 +217,26 @@ input::placeholder{color:#CBD5E1;}
 </div>
 
 <script>
-let pollTimer  = null;
-let pollCount  = 0;
-const POLL_MS  = 3000;   // every 3 seconds
-const MAX_WAIT = 100;    // 100 × 3s = 5 minutes max poll
+// ── State ──
+let pollTimer    = null;
+let pollCount    = 0;
+let currentTxId  = null;
+let confirmed    = false;
+
+// ── Multi-phase polling schedule ──
+// Phase 1: every 500ms for first 10s  (polls 1-20)
+// Phase 2: every 1s  for next 30s     (polls 21-50)
+// Phase 3: every 3s  for remaining    (polls 51+)
+// Max total: 5 minutes
+const MAX_ELAPSED_MS = 5 * 60 * 1000;
+let pollStartTime    = 0;
+
+function getPollInterval() {
+  const elapsed = Date.now() - pollStartTime;
+  if (elapsed < 10_000)  return 500;
+  if (elapsed < 40_000)  return 1000;
+  return 3000;
+}
 
 // ── Load fee, check if already activated ──
 fetch('/api/auth/me').then(r => r.json()).then(d => {
@@ -247,6 +273,8 @@ async function startPayment() {
         window.location.href = '/dashboard';
         return;
       }
+      currentTxId = d.transactionId || null;
+      console.log('STK push sent. txId:', currentTxId);
       showLoaderView();
       startPolling();
     } else {
@@ -266,68 +294,103 @@ function showLoaderView() {
   document.getElementById('loaderView').style.display = 'block';
 }
 
-// ── Poll Lipana every 3 seconds ──
+// ── Adaptive polling ──
 function startPolling() {
-  pollCount = 0;
-  pollTimer = setInterval(doPoll, POLL_MS);
+  pollCount     = 0;
+  pollStartTime = Date.now();
+  confirmed     = false;
+  scheduleNextPoll();
+}
+
+function scheduleNextPoll() {
+  if (confirmed) return;
+  const elapsed = Date.now() - pollStartTime;
+  if (elapsed >= MAX_ELAPSED_MS) {
+    onPollTimeout();
+    return;
+  }
+  pollTimer = setTimeout(doPoll, getPollInterval());
+}
+
+function stopPolling() {
+  if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
 }
 
 async function doPoll() {
+  if (confirmed) return;
   pollCount++;
 
   // Update step UI progressively
-  if (pollCount === 3) setStep('s3', 'active');
-  if (pollCount === 7) {
+  const elapsed = Date.now() - pollStartTime;
+  if (elapsed >= 5_000  && elapsed < 6_000)  setStep('s3', 'active');
+  if (elapsed >= 15_000 && elapsed < 16_000) {
     setStep('s2', 'done');
     setStep('s3', 'done');
     setStep('s4', 'active');
   }
 
   // Show "still waiting" note after 90s
-  if (pollCount === 30) {
+  if (elapsed >= 90_000) {
     document.getElementById('waitNote').style.display = 'block';
   }
 
+  // Show manual dashboard button after 60s
+  if (elapsed >= 60_000) {
+    document.getElementById('dashBtn').style.display = 'block';
+  }
+
+  // ── Path 1: poll /activate/status (checks DB + Lipana retrieve) ──
   try {
     const r = await fetch('/api/auth/activate/status?_=' + Date.now());
     const d = await r.json();
 
     if (d.activated) {
-      // ── REAL confirmation received — redirect now ──
       onPaymentConfirmed();
       return;
     }
 
     if (d.failed) {
-      // Payment explicitly failed
       stopPolling();
       onPaymentFailed(d.message);
       return;
     }
-
   } catch (e) {
-    console.log('Poll error (non-fatal):', e.message);
+    console.log('Status poll error (non-fatal):', e.message);
   }
 
-  // Timeout after MAX_WAIT polls
-  if (pollCount >= MAX_WAIT) {
-    stopPolling();
-    document.getElementById('lTitle').textContent = '⏰ Confirmation taking longer than usual';
-    document.getElementById('lSub').textContent   =
-      'Your payment is still being confirmed by Safaricom. ' +
-      'If you paid, your account will activate automatically. ' +
-      'You can safely close this page and come back later.';
-    document.getElementById('waitNote').style.display = 'block';
+  if (confirmed) return;
+
+  // ── Path 2: query Lipana directly via tx-status endpoint ──
+  if (currentTxId) {
+    try {
+      const r2 = await fetch(`/api/auth/activate/tx-status/${currentTxId}?_=` + Date.now());
+      const d2 = await r2.json();
+
+      if (d2.activated) {
+        onPaymentConfirmed();
+        return;
+      }
+
+      if (d2.failed) {
+        stopPolling();
+        onPaymentFailed('Payment was cancelled or failed. Please try again.');
+        return;
+      }
+    } catch (e) {
+      console.log('tx-status poll error (non-fatal):', e.message);
+    }
   }
+
+  if (confirmed) return;
+  scheduleNextPoll();
 }
 
-function stopPolling() {
-  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
-}
-
-// ── Payment confirmed by Lipana ──
+// ── Payment confirmed ──
 function onPaymentConfirmed() {
+  if (confirmed) return;
+  confirmed = true;
   stopPolling();
+
   setStep('s2', 'done');
   setStep('s3', 'done');
   setStep('s4', 'done');
@@ -337,13 +400,17 @@ function onPaymentConfirmed() {
   sp.style.borderTopColor = '#16A34A';
   sp.style.animation      = 'none';
 
-  document.getElementById('lTitle').textContent     = '🎉 Payment Confirmed!';
-  document.getElementById('lSub').textContent       = 'Account activated! Redirecting to your dashboard now…';
+  document.getElementById('lTitle').textContent      = '🎉 Payment Confirmed!';
+  document.getElementById('lSub').textContent        = 'Account activated! Redirecting to your dashboard…';
   document.getElementById('failedBox').style.display = 'none';
   document.getElementById('waitNote').style.display  = 'none';
+  document.getElementById('dashBtn').style.display   = 'block';
 
-  // Redirect immediately — server will allow it because is_activated = 1 in DB
-  window.location.href = '/dashboard';
+  // Redirect immediately
+  setTimeout(() => { window.location.href = '/dashboard'; }, 100);
+
+  // Hard fallback redirect at 3s in case the first one is blocked
+  setTimeout(() => { window.location.replace('/dashboard'); }, 3000);
 }
 
 // ── Payment failed ──
@@ -359,14 +426,34 @@ function onPaymentFailed(msg) {
   document.getElementById('lSub').textContent        = msg || 'The payment was not completed.';
   document.getElementById('failedBox').style.display = 'block';
   document.getElementById('waitNote').style.display  = 'none';
+  document.getElementById('dashBtn').style.display   = 'none';
+
+  if (currentTxId) {
+    console.log('Payment failed. Transaction ID for support:', currentTxId);
+  }
+}
+
+// ── Poll timeout ──
+function onPollTimeout() {
+  stopPolling();
+  document.getElementById('lTitle').textContent = '⏰ Confirmation taking longer than usual';
+  document.getElementById('lSub').textContent   =
+    'Your payment is still being confirmed by Safaricom. ' +
+    'If you paid, your account will activate automatically. ' +
+    'You can safely close this page and come back later.';
+  document.getElementById('waitNote').style.display = 'block';
+  document.getElementById('dashBtn').style.display  = 'block';
 }
 
 function retryPayment() {
   stopPolling();
+  confirmed   = false;
+  currentTxId = null;
   document.getElementById('loaderView').style.display = 'none';
   document.getElementById('formView').style.display   = 'block';
   document.getElementById('failedBox').style.display  = 'none';
   document.getElementById('waitNote').style.display   = 'none';
+  document.getElementById('dashBtn').style.display    = 'none';
   resetSteps();
   const btn = document.getElementById('payBtn');
   btn.disabled = false;
@@ -375,10 +462,13 @@ function retryPayment() {
 
 function cancelPayment() {
   stopPolling();
+  confirmed   = false;
+  currentTxId = null;
   document.getElementById('loaderView').style.display = 'none';
   document.getElementById('formView').style.display   = 'block';
   document.getElementById('failedBox').style.display  = 'none';
   document.getElementById('waitNote').style.display   = 'none';
+  document.getElementById('dashBtn').style.display    = 'none';
   resetSteps();
   const btn = document.getElementById('payBtn');
   btn.disabled = false;
