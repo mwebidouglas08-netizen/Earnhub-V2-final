@@ -213,40 +213,61 @@ router.get('/activate/status', async (req, res) => {
    Lipana POSTs here immediately after payment is confirmed.
 */
 router.post('/activate/callback', (req, res) => {
-  console.log('📩 Lipana callback received:');
-  console.log(JSON.stringify(req.body, null, 2));
+  // ALWAYS respond 200 immediately — prevents Lipana from retrying endlessly
+  res.status(200).json({ success: true });
+
+  console.log('📩 Lipana callback received at', new Date().toISOString());
+  console.log('Headers:', JSON.stringify(req.headers, null, 2));
+  console.log('Body:', JSON.stringify(req.body, null, 2));
 
   try {
-    const body = req.body;
+    const body = req.body || {};
 
     // Extract transaction ID — try all known field names
-    const transactionId = body?.transactionId
-                       || body?.id
-                       || body?.CheckoutRequestID
-                       || body?.checkout_request_id
+    const transactionId = body.transactionId
+                       || body.id
+                       || body.transaction_id
+                       || body.CheckoutRequestID
+                       || body.checkout_request_id
+                       || body.MerchantRequestID
+                       || body.merchant_request_id
+                       || body?.Body?.stkCallback?.CheckoutRequestID
                        || '';
 
-    // Determine if payment succeeded
-    const rawStatus = (body?.status || '').toLowerCase();
+    // Extract amount — try all known field names
+    const amount = body.amount
+                || body.Amount
+                || body?.Body?.stkCallback?.CallbackMetadata?.Item?.find?.(i => i.Name === 'Amount')?.Value
+                || null;
+
+    // Determine if payment succeeded — handle all known Lipana/M-Pesa formats
+    const rawStatus = (body.status || body.Status || '').toLowerCase();
+    const resultCode = body.ResultCode
+                    ?? body.result_code
+                    ?? body?.Body?.stkCallback?.ResultCode;
+
     const isSuccess = rawStatus === 'success'
                    || rawStatus === 'completed'
                    || rawStatus === 'paid'
-                   || body?.paid === true
-                   || body?.ResultCode === 0
-                   || body?.ResultCode === '0'
-                   || body?.Body?.stkCallback?.ResultCode === 0
-                   || String(body?.Body?.stkCallback?.ResultCode) === '0';
+                   || rawStatus === 'confirmed'
+                   || body.paid === true
+                   || body.is_paid === true
+                   || resultCode === 0
+                   || resultCode === '0'
+                   || String(resultCode) === '0';
 
     const isFailed  = rawStatus === 'failed'
                    || rawStatus === 'cancelled'
                    || rawStatus === 'expired'
+                   || rawStatus === 'rejected'
                    || (
-                        body?.ResultCode !== undefined &&
-                        body?.ResultCode !== 0 &&
-                        body?.ResultCode !== '0'
+                        resultCode !== undefined &&
+                        resultCode !== null &&
+                        resultCode !== 0 &&
+                        resultCode !== '0'
                       );
 
-    console.log(`Callback → txId:"${transactionId}" success:${isSuccess} failed:${isFailed}`);
+    console.log(`Callback → txId:"${transactionId}" amount:${amount} success:${isSuccess} failed:${isFailed} rawStatus:"${rawStatus}" resultCode:${resultCode}`);
 
     const payments = db.getAllPayments();
 
@@ -256,23 +277,28 @@ router.post('/activate/callback', (req, res) => {
         ? payments.find(p => p.ref === transactionId && p.status === 'pending')
         : null;
 
-      // Fallback: most recent pending activation
+      // Fallback: most recent pending activation (within last 10 minutes)
       if (!payment) {
+        const tenMinAgo = Date.now() - 10 * 60 * 1000;
         payment = [...payments]
           .reverse()
-          .find(p => p.status === 'pending' && p.type === 'activation');
+          .find(p =>
+            p.status === 'pending' &&
+            p.type   === 'activation' &&
+            new Date(p.created_at).getTime() > tenMinAgo
+          );
 
         if (payment) {
-          console.log(`⚠️  Fallback match — payment #${payment.id} userId:${payment.user_id}`);
+          console.log(`⚠️  Fallback match (recent pending) — payment #${payment.id} userId:${payment.user_id}`);
         }
       }
 
       if (payment) {
         db.updatePaymentStatus(payment.id, 'completed');
         _activateUser(payment.user_id);
-        console.log(`✅ Callback: User ${payment.user_id} ACTIVATED`);
+        console.log(`✅ Callback: User ${payment.user_id} ACTIVATED via webhook`);
       } else {
-        console.warn('⚠️  Callback: No matching pending payment found');
+        console.warn('⚠️  Callback: No matching pending payment found for txId:', transactionId);
       }
 
     } else if (isFailed) {
@@ -284,15 +310,59 @@ router.post('/activate/callback', (req, res) => {
         }
       }
     } else {
-      console.log('ℹ️  Callback status unclear, raw body logged above');
+      console.log('ℹ️  Callback status unclear — body logged above. No action taken.');
     }
 
   } catch (e) {
-    console.error('❌ Callback processing error:', e.message);
+    console.error('❌ Callback processing error:', e.message, e.stack);
   }
+});
 
-  // ALWAYS respond 200 — prevents Lipana from retrying endlessly
-  return res.status(200).json({ success: true });
+/* ── TRANSACTION STATUS — direct Lipana query for a specific txId ── */
+router.get('/activate/tx-status/:txId', async (req, res) => {
+  if (!req.session || !req.session.userId)
+    return res.json({ success: false, message: 'Not logged in.' });
+
+  const { txId } = req.params;
+  if (!txId) return res.json({ success: false, message: 'No transaction ID.' });
+
+  const userId = req.session.userId;
+  const user   = db.getUserById(userId);
+  if (!user) return res.json({ success: false });
+
+  // Already activated — nothing more to do
+  if (user.is_activated)
+    return res.json({ success: true, activated: true });
+
+  try {
+    const tx = await lipana.retrieveTransaction(txId);
+    if (!tx) return res.json({ success: true, activated: false, status: 'unknown' });
+
+    const st = (tx.status || '').toLowerCase();
+    const isConfirmed = st === 'success' || st === 'completed' || st === 'paid' || st === 'confirmed' || tx.paid === true;
+    const isFailed    = st === 'failed'  || st === 'cancelled' || st === 'expired' || st === 'rejected';
+
+    if (isConfirmed) {
+      const payments   = db.getAllPayments();
+      const pendingPay = payments.find(p => p.ref === txId && p.status === 'pending');
+      if (pendingPay) db.updatePaymentStatus(pendingPay.id, 'completed');
+      _activateUser(userId);
+      console.log(`✅ User ${userId} activated via tx-status endpoint — txId: ${txId} status: ${st}`);
+      return res.json({ success: true, activated: true, status: st });
+    }
+
+    if (isFailed) {
+      const payments   = db.getAllPayments();
+      const pendingPay = payments.find(p => p.ref === txId && p.status === 'pending');
+      if (pendingPay) db.updatePaymentStatus(pendingPay.id, 'failed');
+      return res.json({ success: true, activated: false, failed: true, status: st });
+    }
+
+    return res.json({ success: true, activated: false, status: st || 'pending' });
+  } catch (e) {
+    console.error('tx-status error:', e.message);
+    return res.json({ success: true, activated: false, status: 'unknown', error: e.message });
+  }
 });
 
 /* ── INTERNAL: activate user + credit referrer ── */

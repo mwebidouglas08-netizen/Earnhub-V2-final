@@ -6,10 +6,27 @@ const APP_URL           = (process.env.APP_URL || '').replace(/\/+$/, '');
 console.log('=== Lipana Config ===');
 console.log('SECRET KEY SET:', !!LIPANA_SECRET_KEY);
 console.log('SECRET KEY PREFIX:', LIPANA_SECRET_KEY ? LIPANA_SECRET_KEY.substring(0, 20) + '...' : 'MISSING');
-console.log('APP_URL:', APP_URL || 'NOT SET');
+console.log('APP_URL:', APP_URL || 'NOT SET — callback will NOT work!');
+console.log('CALLBACK URL:', APP_URL ? `${APP_URL}/api/auth/activate/callback` : 'CANNOT BE BUILT — APP_URL missing');
 console.log('====================');
 
 let _client = null;
+
+async function _registerWebhookWithRetry(client, webhookUrl, attempts = 3, delayMs = 3000) {
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      await client.webhooks.updateSettings({ webhookUrl });
+      console.log(`✅ Lipana webhook registered (attempt ${i}):`, webhookUrl);
+      return;
+    } catch (e) {
+      console.warn(`⚠️  Webhook register attempt ${i}/${attempts} failed:`, e.message);
+      if (i < attempts) {
+        await new Promise(r => setTimeout(r, delayMs));
+      }
+    }
+  }
+  console.error('❌ All webhook registration attempts failed. Lipana callback may not arrive.');
+}
 
 function getClient() {
   if (_client) return _client;
@@ -22,12 +39,11 @@ function getClient() {
     environment: 'production'
   });
 
-  // Register webhook URL with Lipana on startup
+  // Register webhook URL with Lipana on startup (with retry)
   if (APP_URL) {
     const webhookUrl = `${APP_URL}/api/auth/activate/callback`;
-    _client.webhooks.updateSettings({ webhookUrl })
-      .then(() => console.log('✅ Lipana webhook URL registered:', webhookUrl))
-      .catch(e  => console.warn('⚠️  Webhook register failed (non-fatal):', e.message));
+    console.log('📡 Registering Lipana webhook URL:', webhookUrl);
+    _registerWebhookWithRetry(_client, webhookUrl);
   } else {
     console.warn('⚠️  APP_URL not set — Lipana callback will not work. Set APP_URL in Railway variables.');
   }
