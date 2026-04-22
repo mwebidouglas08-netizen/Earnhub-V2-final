@@ -7,8 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --gold:#E8900A;--gold-light:#FFF3DC;
-  --dark:#0F172A;--body:#F8FAFC;--card:#fff;
+  --gold:#16A34A;--gold-h:#15803D;--gold-light:#F0FDF4;
+  --accent:#E8900A;--dark:#0F172A;--body:#F8FAFC;--card:#fff;
   --border:#E2E8F0;--text:#1E293B;--muted:#64748B;
   --red:#DC2626;--green:#16A34A;
 }
@@ -18,109 +18,50 @@ body{
   font-family:'Plus Jakarta Sans',sans-serif;
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   padding:1rem;
-  background-image:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(232,144,10,.09) 0%,transparent 70%);
+  background-image:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(22,163,74,.08) 0%,transparent 70%);
 }
-.card{
-  background:var(--card);border-radius:22px;
-  padding:2.5rem 2rem;width:100%;max-width:440px;
-  box-shadow:0 8px 40px rgba(0,0,0,.10);
-}
+.card{background:var(--card);border-radius:22px;padding:2.5rem 2rem;width:100%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,.10);}
 .top-icon{text-align:center;font-size:3.2rem;margin-bottom:.9rem;}
 h2{font-weight:800;font-size:1.5rem;text-align:center;margin-bottom:.3rem;color:var(--dark);}
 .sub{text-align:center;color:var(--muted);font-size:.88rem;margin-bottom:1.8rem;}
-/* INFO BOX */
-.info-box{
-  background:var(--gold-light);border:1.5px solid #FDE68A;
-  border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.5rem;
-}
+.info-box{background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.5rem;}
 .irow{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;}
-.irow:last-child{margin-bottom:0;padding-top:.6rem;border-top:1px solid #FDE68A;}
-.ilabel{color:#92400E;font-size:.87rem;font-weight:600;}
-.ival{font-weight:800;color:var(--gold);font-size:1rem;}
-/* FORM */
+.irow:last-child{margin-bottom:0;padding-top:.6rem;border-top:1px solid #BBF7D0;}
+.ilabel{color:#166534;font-size:.87rem;font-weight:600;}
+.ival{font-weight:800;color:var(--green);font-size:1rem;}
 .fg{margin-bottom:1.2rem;}
 label{font-size:.83rem;font-weight:600;margin-bottom:.4rem;display:block;color:var(--text);}
 .ph-row{display:flex;gap:.5rem;}
-.ph-pre{
-  padding:.75rem .9rem;background:#F1F5F9;
-  border:1.5px solid var(--border);border-radius:10px;
-  color:var(--muted);font-size:.9rem;font-weight:700;
-  white-space:nowrap;
-}
-input{
-  width:100%;padding:.75rem 1rem;
-  background:var(--body);border:1.5px solid var(--border);
-  border-radius:10px;color:var(--text);font-size:.9rem;outline:none;
-  transition:border-color .2s;font-family:'Plus Jakarta Sans',sans-serif;
-}
-input:focus{border-color:var(--gold);background:#fff;}
+.ph-pre{padding:.75rem .9rem;background:#F1F5F9;border:1.5px solid var(--border);border-radius:10px;color:var(--muted);font-size:.9rem;font-weight:700;}
+input{width:100%;padding:.75rem 1rem;background:var(--body);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+input:focus{border-color:var(--green);background:#fff;}
 input::placeholder{color:#CBD5E1;}
-/* BUTTONS */
-.btn{
-  width:100%;padding:.9rem;
-  background:var(--gold);color:#fff;font-weight:700;border:none;
-  border-radius:11px;font-size:1rem;cursor:pointer;
-  font-family:'Plus Jakarta Sans',sans-serif;
-  transition:all .2s;margin-top:.3rem;
-}
-.btn:hover{background:#C97D08;transform:translateY(-1px);box-shadow:0 4px 14px rgba(232,144,10,.38);}
+.btn{width:100%;padding:.9rem;background:var(--green);color:#fff;font-weight:700;border:none;border-radius:11px;font-size:1rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;margin-top:.3rem;}
+.btn:hover{background:var(--gold-h);transform:translateY(-1px);box-shadow:0 4px 14px rgba(22,163,74,.35);}
 .btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
-.btn-cancel{
-  background:var(--body)!important;color:var(--muted)!important;
-  border:1.5px solid var(--border)!important;
-  box-shadow:none!important;margin-top:.6rem;
-}
+.btn-cancel{background:var(--body)!important;color:var(--muted)!important;border:1.5px solid var(--border)!important;box-shadow:none!important;margin-top:.6rem;}
 .btn-cancel:hover{color:var(--text)!important;border-color:#94A3B8!important;transform:none!important;}
-/* LOADER */
+.btn-red{background:var(--red)!important;}
+.btn-red:hover{background:#B91C1C!important;}
 .loader{display:none;text-align:center;}
-.spinner{
-  width:56px;height:56px;
-  border:4px solid #E2E8F0;border-top-color:var(--gold);
-  border-radius:50%;animation:spin .75s linear infinite;
-  margin:0 auto 1.1rem;
-}
+.spinner{width:56px;height:56px;border:4px solid #E2E8F0;border-top-color:var(--green);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 1.1rem;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.l-title{font-weight:800;font-size:1.15rem;color:var(--dark);margin-bottom:.4rem;}
+.l-title{font-weight:800;font-size:1.1rem;color:var(--dark);margin-bottom:.4rem;}
 .l-sub{font-size:.85rem;color:var(--muted);line-height:1.72;margin-bottom:1.3rem;}
-/* STEPS */
 .steps{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.3rem;text-align:left;}
-.si{display:flex;align-items:center;gap:.75rem;font-size:.86rem;color:var(--muted);transition:all .3s;}
-.si .dot{
-  width:28px;height:28px;border-radius:50%;
-  background:#F1F5F9;border:1.5px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:.73rem;font-weight:700;flex-shrink:0;transition:all .3s;
-}
+.si{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--muted);transition:all .3s;}
+.si .dot{width:28px;height:28px;border-radius:50%;background:#F1F5F9;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:700;flex-shrink:0;transition:all .3s;}
 .si.done{color:var(--green);}
 .si.done .dot{background:var(--green);border-color:var(--green);color:#fff;}
 .si.active{color:var(--dark);font-weight:700;}
-.si.active .dot{
-  background:var(--gold);border-color:var(--gold);color:#fff;
-  animation:pulse .9s ease-in-out infinite;
-}
+.si.active .dot{background:var(--accent);border-color:var(--accent);color:#fff;animation:pulse .9s ease-in-out infinite;}
 .si.fail{color:var(--red);}
 .si.fail .dot{background:var(--red);border-color:var(--red);color:#fff;}
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
-/* FAILED BOX */
-.failed-box{
-  display:none;
-  background:#FEF2F2;border:1.5px solid #FECACA;
-  border-radius:12px;padding:1.1rem 1.2rem;
-  margin-bottom:.8rem;text-align:left;
-}
-.failed-box p{font-size:.85rem;color:var(--red);margin-bottom:.8rem;line-height:1.65;font-weight:600;}
-/* WAITING NOTE */
-.wait-note{
-  background:#F8FAFC;border:1px solid var(--border);
-  border-radius:10px;padding:.85rem 1rem;
-  font-size:.82rem;color:var(--muted);line-height:1.65;
-  margin-bottom:.8rem;text-align:center;
-}
-/* ALERT */
-.alert{
-  padding:.75rem 1rem;border-radius:10px;
-  font-size:.88rem;margin-bottom:.9rem;display:none;font-weight:600;
-}
+.failed-box{display:none;background:#FEF2F2;border:1.5px solid #FECACA;border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:.8rem;text-align:left;}
+.failed-box p{font-size:.84rem;color:var(--red);margin-bottom:.7rem;line-height:1.65;font-weight:600;}
+.wait-note{display:none;background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;padding:.85rem 1rem;font-size:.82rem;color:#92400E;line-height:1.65;margin-bottom:.8rem;text-align:center;}
+.alert{padding:.75rem 1rem;border-radius:10px;font-size:.88rem;margin-bottom:.9rem;display:none;font-weight:600;}
 .alert.error{background:#FEF2F2;border:1.5px solid #FECACA;color:var(--red);}
 .note{font-size:.78rem;color:var(--muted);text-align:center;margin-top:.9rem;line-height:1.6;}
 </style>
@@ -131,114 +72,64 @@ input::placeholder{color:#CBD5E1;}
   <h2>Activate Your Account</h2>
   <div class="sub">Pay once via M-Pesa to unlock all 10+ earning tools for life</div>
 
-  <!-- ── PAYMENT FORM ── -->
+  <!-- FORM -->
   <div id="formView">
     <div id="alert" class="alert"></div>
     <div class="info-box">
-      <div class="irow">
-        <span class="ilabel">💰 Activation Fee</span>
-        <span class="ival" id="feeDisplay">KES 300</span>
-      </div>
-      <div class="irow">
-        <span class="ilabel">✅ Payment type</span>
-        <span style="color:var(--green);font-size:.85rem;font-weight:700;">One-time · Lifetime Access</span>
-      </div>
-      <div class="irow">
-        <span class="ilabel">🔓 Unlocks</span>
-        <span style="font-size:.84rem;font-weight:600;">All 10+ earning tools</span>
-      </div>
+      <div class="irow"><span class="ilabel">💰 Activation Fee</span><span class="ival" id="feeDisplay">KES 300</span></div>
+      <div class="irow"><span class="ilabel">✅ Type</span><span style="color:var(--green);font-size:.85rem;font-weight:700;">One-time · Lifetime Access</span></div>
+      <div class="irow"><span class="ilabel">🔓 Unlocks</span><span style="font-size:.84rem;font-weight:600;">All 10+ earning tools</span></div>
     </div>
     <div class="fg">
       <label>📞 M-Pesa Phone Number</label>
       <div class="ph-row">
         <div class="ph-pre">+254</div>
-        <input
-          type="tel" id="phone"
-          placeholder="712 345 678"
-          style="flex:1" maxlength="9"
-          inputmode="numeric"
-        />
+        <input type="tel" id="phone" placeholder="712 345 678" style="flex:1" maxlength="9" inputmode="numeric"/>
       </div>
     </div>
     <button class="btn" id="payBtn" onclick="startPayment()">
       🚀 Pay &amp; Activate — KES <span id="feeBtn">300</span>
     </button>
-    <p class="note">
-      An M-Pesa STK push will be sent to your phone.<br>
-      Enter your PIN to complete payment and get instant access to your dashboard.
-    </p>
+    <p class="note">You will receive an M-Pesa STK push prompt on your phone. Enter your PIN — you will be redirected automatically once payment is confirmed.</p>
   </div>
 
-  <!-- ── PAYMENT WAITING / POLLING VIEW ── -->
+  <!-- POLLING / WAITING VIEW -->
   <div id="loaderView" class="loader">
     <div class="spinner" id="spinEl"></div>
     <div class="l-title" id="lTitle">Waiting for payment confirmation…</div>
-    <div class="l-sub"   id="lSub">
-      Check your phone for the M-Pesa prompt and enter your PIN
-    </div>
+    <div class="l-sub"   id="lSub">Check your phone for the M-Pesa STK prompt and enter your PIN</div>
 
     <div class="steps">
       <div class="si done"   id="s1"><div class="dot">✓</div><span>STK push sent to your phone</span></div>
       <div class="si active" id="s2"><div class="dot">2</div><span>Waiting for M-Pesa PIN entry</span></div>
-      <div class="si"        id="s3"><div class="dot">3</div><span>Confirming payment with Safaricom</span></div>
+      <div class="si"        id="s3"><div class="dot">3</div><span>Confirming with Safaricom</span></div>
       <div class="si"        id="s4"><div class="dot">4</div><span>Activating your account</span></div>
     </div>
 
-    <!-- Shown only when payment explicitly fails -->
+    <!-- Only shown when payment explicitly fails -->
     <div class="failed-box" id="failedBox">
-      <p>❌ Payment was cancelled or failed.</p>
-      <p style="font-weight:400;">Possible reasons: wrong PIN, insufficient balance, or STK push timed out.</p>
-      <button class="btn" onclick="retryPayment()" style="margin-top:.3rem;">
-        ↩ Try Again with Different Number
-      </button>
+      <p>❌ Payment was not completed.</p>
+      <p style="font-weight:400;font-size:.82rem;">Possible reasons: incorrect PIN, insufficient M-Pesa balance, or the STK push timed out.</p>
+      <button class="btn btn-red" onclick="retryPayment()" style="margin-top:.5rem;">↩ Try Again</button>
     </div>
 
-    <!-- Shown after 90s if still pending — info only -->
-    <div class="wait-note" id="waitNote" style="display:none;">
-      ⏳ Still waiting for Safaricom confirmation.<br>
-      If you paid, your account will activate automatically once confirmed.<br>
-      <strong>Do not close this page.</strong>
+    <!-- Shown after 90s — info only, no bypass -->
+    <div class="wait-note" id="waitNote">
+      ⏳ Safaricom is still processing your payment.<br>
+      <strong>Do not close this page.</strong> You will be redirected automatically once confirmed.
     </div>
 
-    <!-- Manual fallback — shown after 60s -->
-    <div id="dashBtn" style="display:none;margin-bottom:.6rem;">
-      <a href="/dashboard" class="btn" style="display:block;text-align:center;text-decoration:none;">
-        ✅ Go to Dashboard
-      </a>
-      <p style="font-size:.75rem;color:var(--muted);text-align:center;margin-top:.4rem;">
-        Use this if you already paid and the page hasn't redirected.
-      </p>
-    </div>
-
-    <button onclick="cancelPayment()" class="btn btn-cancel">
-      ↩ Cancel &amp; use a different number
-    </button>
+    <button onclick="cancelPayment()" class="btn btn-cancel">↩ Cancel &amp; use different number</button>
   </div>
 </div>
 
 <script>
-// ── State ──
-let pollTimer    = null;
-let pollCount    = 0;
-let currentTxId  = null;
-let confirmed    = false;
+let pollTimer = null;
+let pollCount = 0;
+const POLL_MS  = 3000;
+const MAX_POLLS = 100; // 100 × 3s = 5 min
 
-// ── Multi-phase polling schedule ──
-// Phase 1: every 500ms for first 10s  (polls 1-20)
-// Phase 2: every 1s  for next 30s     (polls 21-50)
-// Phase 3: every 3s  for remaining    (polls 51+)
-// Max total: 5 minutes
-const MAX_ELAPSED_MS = 5 * 60 * 1000;
-let pollStartTime    = 0;
-
-function getPollInterval() {
-  const elapsed = Date.now() - pollStartTime;
-  if (elapsed < 10_000)  return 500;
-  if (elapsed < 40_000)  return 1000;
-  return 3000;
-}
-
-// ── Load fee, check if already activated ──
+// Load fee & check activation status
 fetch('/api/auth/me').then(r => r.json()).then(d => {
   if (!d.success)          { window.location.href = '/login';     return; }
   if (d.user.is_activated) { window.location.href = '/dashboard'; return; }
@@ -247,264 +138,142 @@ fetch('/api/auth/me').then(r => r.json()).then(d => {
   document.getElementById('feeBtn').textContent      = fee;
 }).catch(() => window.location.href = '/login');
 
-// ── Start payment ──
 async function startPayment() {
   const raw = document.getElementById('phone').value.trim();
   if (!raw || raw.length < 9) {
-    showAlert('Please enter a valid 9-digit M-Pesa number.', 'error');
+    showAlert('Enter a valid 9-digit M-Pesa phone number.', 'error');
     return;
   }
-
   const btn = document.getElementById('payBtn');
-  btn.disabled = true;
-  btn.innerHTML = '⏳ Sending STK push…';
-  clearAlert();
+  btn.disabled = true; btn.innerHTML = '⏳ Sending STK push…'; clearAlert();
 
   try {
     const r = await fetch('/api/auth/activate/stk', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ phone: '+254' + raw })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: '+254' + raw })
     });
     const d = await r.json();
 
     if (d.success) {
-      if (d.alreadyActivated) {
-        window.location.href = '/dashboard';
-        return;
-      }
-      currentTxId = d.transactionId || null;
-      console.log('STK push sent. txId:', currentTxId);
-      showLoaderView();
-      startPolling();
+      if (d.alreadyActivated) { window.location.href = '/dashboard'; return; }
+      showLoader(); startPolling();
     } else {
-      showAlert(d.message || 'Failed to send STK push. Please try again.', 'error');
-      btn.disabled = false;
-      btn.innerHTML = '🚀 Pay &amp; Activate';
+      showAlert(d.message || 'Failed to send STK push. Try again.', 'error');
+      btn.disabled = false; btn.innerHTML = '🚀 Pay &amp; Activate';
     }
   } catch {
-    showAlert('Network error. Please check your connection and try again.', 'error');
-    btn.disabled = false;
-    btn.innerHTML = '🚀 Pay &amp; Activate';
+    showAlert('Network error. Check your connection.', 'error');
+    btn.disabled = false; btn.innerHTML = '🚀 Pay &amp; Activate';
   }
 }
 
-function showLoaderView() {
+function showLoader() {
   document.getElementById('formView').style.display   = 'none';
   document.getElementById('loaderView').style.display = 'block';
 }
 
-// ── Adaptive polling ──
 function startPolling() {
-  pollCount     = 0;
-  pollStartTime = Date.now();
-  confirmed     = false;
-  scheduleNextPoll();
-}
-
-function scheduleNextPoll() {
-  if (confirmed) return;
-  const elapsed = Date.now() - pollStartTime;
-  if (elapsed >= MAX_ELAPSED_MS) {
-    onPollTimeout();
-    return;
-  }
-  pollTimer = setTimeout(doPoll, getPollInterval());
-}
-
-function stopPolling() {
-  if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
+  pollCount = 0;
+  pollTimer = setInterval(doPoll, POLL_MS);
 }
 
 async function doPoll() {
-  if (confirmed) return;
   pollCount++;
+  if (pollCount === 3)  setStep('s3', 'active');
+  if (pollCount === 7)  { setStep('s2','done'); setStep('s3','done'); setStep('s4','active'); }
+  if (pollCount === 30) document.getElementById('waitNote').style.display = 'block';
 
-  // Update step UI progressively
-  const elapsed = Date.now() - pollStartTime;
-  if (elapsed >= 5_000  && elapsed < 6_000)  setStep('s3', 'active');
-  if (elapsed >= 15_000 && elapsed < 16_000) {
-    setStep('s2', 'done');
-    setStep('s3', 'done');
-    setStep('s4', 'active');
-  }
-
-  // Show "still waiting" note after 90s
-  if (elapsed >= 90_000) {
-    document.getElementById('waitNote').style.display = 'block';
-  }
-
-  // Show manual dashboard button after 60s
-  if (elapsed >= 60_000) {
-    document.getElementById('dashBtn').style.display = 'block';
-  }
-
-  // ── Path 1: poll /activate/status (checks DB + Lipana retrieve) ──
   try {
     const r = await fetch('/api/auth/activate/status?_=' + Date.now());
     const d = await r.json();
 
-    if (d.activated) {
-      onPaymentConfirmed();
-      return;
-    }
-
-    if (d.failed) {
-      stopPolling();
-      onPaymentFailed(d.message);
-      return;
-    }
+    if (d.activated) { onConfirmed(); return; }
+    if (d.failed)    { stopPolling(); onFailed(d.message); return; }
   } catch (e) {
-    console.log('Status poll error (non-fatal):', e.message);
+    console.log('Poll error (non-fatal):', e.message);
   }
 
-  if (confirmed) return;
-
-  // ── Path 2: query Lipana directly via tx-status endpoint ──
-  if (currentTxId) {
-    try {
-      const r2 = await fetch(`/api/auth/activate/tx-status/${currentTxId}?_=` + Date.now());
-      const d2 = await r2.json();
-
-      if (d2.activated) {
-        onPaymentConfirmed();
-        return;
-      }
-
-      if (d2.failed) {
-        stopPolling();
-        onPaymentFailed('Payment was cancelled or failed. Please try again.');
-        return;
-      }
-    } catch (e) {
-      console.log('tx-status poll error (non-fatal):', e.message);
-    }
+  if (pollCount >= MAX_POLLS) {
+    stopPolling();
+    document.getElementById('lTitle').textContent = '⏰ Confirmation taking very long';
+    document.getElementById('lSub').textContent   = 'Your payment may still be processing. Please wait or contact support.';
+    document.getElementById('waitNote').style.display = 'block';
   }
-
-  if (confirmed) return;
-  scheduleNextPoll();
 }
 
-// ── Payment confirmed ──
-function onPaymentConfirmed() {
-  if (confirmed) return;
-  confirmed = true;
+function stopPolling() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
+
+function onConfirmed() {
   stopPolling();
-
-  setStep('s2', 'done');
-  setStep('s3', 'done');
-  setStep('s4', 'done');
-
+  setStep('s2','done'); setStep('s3','done'); setStep('s4','done');
   const sp = document.getElementById('spinEl');
-  sp.style.border         = '4px solid #BBF7D0';
-  sp.style.borderTopColor = '#16A34A';
-  sp.style.animation      = 'none';
-
-  document.getElementById('lTitle').textContent      = '🎉 Payment Confirmed!';
-  document.getElementById('lSub').textContent        = 'Account activated! Redirecting to your dashboard…';
-  document.getElementById('failedBox').style.display = 'none';
+  sp.style.border = '4px solid #BBF7D0'; sp.style.borderTopColor = '#16A34A'; sp.style.animation = 'none';
+  document.getElementById('lTitle').textContent = '🎉 Payment Confirmed!';
+  document.getElementById('lSub').textContent   = 'Account activated! Redirecting to your dashboard…';
   document.getElementById('waitNote').style.display  = 'none';
-  document.getElementById('dashBtn').style.display   = 'block';
-
-  // Redirect immediately
-  setTimeout(() => { window.location.href = '/dashboard'; }, 100);
-
-  // Hard fallback redirect at 3s in case the first one is blocked
-  setTimeout(() => { window.location.replace('/dashboard'); }, 3000);
+  document.getElementById('failedBox').style.display = 'none';
+  // Immediate redirect — server will verify is_activated=1
+  window.location.href = '/dashboard';
 }
 
-// ── Payment failed ──
-function onPaymentFailed(msg) {
+function onFailed(msg) {
   setStep('s2', 'fail');
-
   const sp = document.getElementById('spinEl');
-  sp.style.border         = '4px solid #FECACA';
-  sp.style.borderTopColor = '#DC2626';
-  sp.style.animation      = 'none';
-
-  document.getElementById('lTitle').textContent      = '❌ Payment Failed';
+  sp.style.border = '4px solid #FECACA'; sp.style.borderTopColor = '#DC2626'; sp.style.animation = 'none';
+  document.getElementById('lTitle').textContent      = '❌ Payment Not Completed';
   document.getElementById('lSub').textContent        = msg || 'The payment was not completed.';
   document.getElementById('failedBox').style.display = 'block';
   document.getElementById('waitNote').style.display  = 'none';
-  document.getElementById('dashBtn').style.display   = 'none';
-
-  if (currentTxId) {
-    console.log('Payment failed. Transaction ID for support:', currentTxId);
-  }
-}
-
-// ── Poll timeout ──
-function onPollTimeout() {
-  stopPolling();
-  document.getElementById('lTitle').textContent = '⏰ Confirmation taking longer than usual';
-  document.getElementById('lSub').textContent   =
-    'Your payment is still being confirmed by Safaricom. ' +
-    'If you paid, your account will activate automatically. ' +
-    'You can safely close this page and come back later.';
-  document.getElementById('waitNote').style.display = 'block';
-  document.getElementById('dashBtn').style.display  = 'block';
 }
 
 function retryPayment() {
   stopPolling();
-  confirmed   = false;
-  currentTxId = null;
   document.getElementById('loaderView').style.display = 'none';
   document.getElementById('formView').style.display   = 'block';
   document.getElementById('failedBox').style.display  = 'none';
   document.getElementById('waitNote').style.display   = 'none';
-  document.getElementById('dashBtn').style.display    = 'none';
   resetSteps();
   const btn = document.getElementById('payBtn');
-  btn.disabled = false;
-  btn.innerHTML = '🚀 Pay &amp; Activate';
+  btn.disabled = false; btn.innerHTML = '🚀 Pay &amp; Activate';
 }
 
 function cancelPayment() {
   stopPolling();
-  confirmed   = false;
-  currentTxId = null;
   document.getElementById('loaderView').style.display = 'none';
   document.getElementById('formView').style.display   = 'block';
   document.getElementById('failedBox').style.display  = 'none';
   document.getElementById('waitNote').style.display   = 'none';
-  document.getElementById('dashBtn').style.display    = 'none';
   resetSteps();
   const btn = document.getElementById('payBtn');
-  btn.disabled = false;
-  btn.innerHTML = '🚀 Pay &amp; Activate';
+  btn.disabled = false; btn.innerHTML = '🚀 Pay &amp; Activate';
 }
 
 function resetSteps() {
-  [['s1','done'],['s2','active'],['s3',''],['s4','']].forEach(([id, st]) => {
+  [['s1','done'],['s2','active'],['s3',''],['s4','']].forEach(([id,st]) => {
     const el = document.getElementById(id);
-    el.className = 'si' + (st ? ' ' + st : '');
-    el.querySelector('.dot').textContent = st === 'done' ? '✓' : id.replace('s', '');
+    el.className = 'si' + (st ? ' '+st : '');
+    el.querySelector('.dot').textContent = st==='done'?'✓':id.replace('s','');
   });
   const sp = document.getElementById('spinEl');
-  sp.style.border         = '4px solid #E2E8F0';
-  sp.style.borderTopColor = 'var(--gold, #E8900A)';
-  sp.style.animation      = 'spin .75s linear infinite';
+  sp.style.border = '4px solid #E2E8F0'; sp.style.borderTopColor = '#16A34A';
+  sp.style.animation = 'spin .75s linear infinite';
   document.getElementById('lTitle').textContent = 'Waiting for payment confirmation…';
-  document.getElementById('lSub').textContent   = 'Check your phone for the M-Pesa prompt and enter your PIN';
+  document.getElementById('lSub').textContent   = 'Check your phone for the M-Pesa STK prompt and enter your PIN';
 }
 
 function setStep(id, state) {
   const el = document.getElementById(id);
-  el.classList.remove('active', 'done', 'fail');
+  el.classList.remove('active','done','fail');
   if (state) el.classList.add(state);
-  const dot = el.querySelector('.dot');
-  if (state === 'done') dot.textContent = '✓';
-  else if (state === 'fail') dot.textContent = '✕';
+  if (state==='done') el.querySelector('.dot').textContent = '✓';
+  if (state==='fail') el.querySelector('.dot').textContent = '✕';
 }
 
 function showAlert(msg, type) {
   const e = document.getElementById('alert');
   e.textContent = msg; e.className = 'alert ' + type; e.style.display = 'block';
 }
-function clearAlert() {
-  document.getElementById('alert').style.display = 'none';
-}
+function clearAlert() { document.getElementById('alert').style.display = 'none'; }
 </script>
 </body>
 </html>
