@@ -7,15 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --gold:#E8900A;--gold-light:#FFF3DC;--green:#16A34A;
-  --dark:#0F172A;--card:#fff;--border:#E2E8F0;
-  --text:#1E293B;--muted:#64748B;
-  --shadow:0 4px 24px rgba(0,0,0,.09);
-  --shadow-lg:0 12px 48px rgba(0,0,0,.18);
+  --green:#16A34A;--green-h:#15803D;--green-light:#F0FDF4;--green-mid:#22C55E;
+  --gold:#E8900A;--gold-light:#FFF3DC;
+  --dark:#0F172A;--card:#fff;--body:#F8FAFC;
+  --border:#E2E8F0;--text:#1E293B;--muted:#64748B;
+  --shadow:0 4px 24px rgba(0,0,0,.08);
+  --shadow-lg:0 16px 50px rgba(0,0,0,.14);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:#F8FAFC;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden;}
+body{background:var(--body);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
 
 /* ── NAV ── */
@@ -26,191 +27,115 @@ nav{
   background:rgba(255,255,255,.97);
   backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
-  box-shadow:0 1px 12px rgba(0,0,0,.07);
+  box-shadow:0 1px 10px rgba(0,0,0,.06);
 }
 .logo{font-size:1.6rem;font-weight:800;color:var(--dark);letter-spacing:-1px;}
-.logo span{color:var(--gold);}
+.logo span{color:var(--green);}
 .nav-cta{display:flex;gap:.6rem;align-items:center;}
 .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.3rem;border-radius:9px;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;border:none;font-family:'Plus Jakarta Sans',sans-serif;}
 .btn-outline{border:1.5px solid var(--border);color:var(--text);background:#fff;}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
-.btn-gold{background:var(--gold);color:#fff;}
-.btn-gold:hover{background:#C97D08;transform:translateY(-1px);box-shadow:0 4px 14px rgba(232,144,10,.4);}
+.btn-outline:hover{border-color:var(--green);color:var(--green);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-green:hover{background:var(--green-h);transform:translateY(-1px);box-shadow:0 4px 14px rgba(22,163,74,.35);}
 .btn-lg{padding:.8rem 2rem;font-size:1rem;border-radius:11px;}
 .btn-xl{padding:1rem 2.4rem;font-size:1.05rem;border-radius:12px;}
-.btn-ghost{
-  background:rgba(255,255,255,.15);
-  color:#fff;
-  border:1.5px solid rgba(255,255,255,.3);
-  backdrop-filter:blur(8px);
-}
-.btn-ghost:hover{background:rgba(255,255,255,.25);transform:translateY(-1px);}
+.btn-white{background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.35);}
+.btn-white:hover{background:rgba(255,255,255,.25);transform:translateY(-1px);}
 
-/* ── HERO ──
-   Image: vibrant woman using smartphone with money/success theme
-   Source: Unsplash — free to use, no attribution required commercially
-*/
+/* ── HERO ── */
 .hero{
   min-height:100vh;
   position:relative;
   display:flex;
   align-items:center;
   overflow:hidden;
-
-  /* HD background image — woman with phone, financial success, bright & engaging */
+  /* HD image: happy African woman with smartphone — finance/success theme */
   background:
     linear-gradient(
-      105deg,
-      rgba(5,8,20,.88) 0%,
-      rgba(10,18,45,.78) 38%,
-      rgba(15,25,55,.55) 62%,
-      rgba(232,144,10,.20) 100%
+      115deg,
+      rgba(5,40,20,.90) 0%,
+      rgba(10,60,30,.82) 35%,
+      rgba(15,80,40,.65) 60%,
+      rgba(22,163,74,.22) 100%
     ),
-    url('https://images.unsplash.com/photo-1607863680198-23d4b2565df0?w=1920&q=90&auto=format&fit=crop&crop=focalpoint&fp-x=0.6&fp-y=0.4')
+    url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1920&q=90&auto=format&fit=crop&crop=focalpoint&fp-x=0.65&fp-y=0.35')
     center center / cover no-repeat;
-
-  padding: 8rem 5% 5rem;
+  padding:8rem 5% 5rem;
 }
-
-/* Subtle animated radial glow */
-.hero::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:radial-gradient(ellipse 55% 70% at 72% 45%, rgba(232,144,10,.12) 0%, transparent 65%);
-  pointer-events:none;
+.hero::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 50% 75% at 72% 45%,rgba(22,163,74,.10) 0%,transparent 65%);
   z-index:1;
 }
-
-.hero-inner{
-  position:relative;
-  z-index:2;
-  max-width:660px;
-}
-
+.hero-inner{position:relative;z-index:2;max-width:660px;}
 .hero-badge{
   display:inline-flex;align-items:center;gap:.5rem;
-  background:rgba(232,144,10,.18);
-  border:1px solid rgba(232,144,10,.45);
-  border-radius:50px;
-  padding:.42rem 1.1rem;
-  font-size:.78rem;color:#FBBF24;font-weight:700;
+  background:rgba(22,163,74,.20);
+  border:1px solid rgba(22,163,74,.45);
+  border-radius:50px;padding:.42rem 1.1rem;
+  font-size:.78rem;color:#86EFAC;font-weight:700;
   margin-bottom:1.7rem;
   backdrop-filter:blur(10px);
-  letter-spacing:.2px;
 }
-
 .hero h1{
-  font-size:clamp(2.5rem,5.5vw,4.4rem);
-  font-weight:800;
-  line-height:1.07;
-  letter-spacing:-2.5px;
-  color:#fff;
-  margin-bottom:1.3rem;
+  font-size:clamp(2.5rem,5.5vw,4.4rem);font-weight:800;
+  line-height:1.07;letter-spacing:-2.5px;color:#fff;margin-bottom:1.3rem;
 }
 .hero h1 .hl{
   display:block;
-  background:linear-gradient(90deg,#FBBF24,#F59E0B);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
+  background:linear-gradient(90deg,#86EFAC,#22C55E);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-
-.hero-desc{
-  font-size:1.1rem;
-  color:rgba(255,255,255,.78);
-  line-height:1.8;
-  margin-bottom:2.5rem;
-  max-width:530px;
-}
-.hero-desc strong{color:#FBBF24;}
-
-.hero-btns{
-  display:flex;gap:1rem;flex-wrap:wrap;
-  margin-bottom:3.5rem;
-}
-
+.hero-desc{font-size:1.08rem;color:rgba(255,255,255,.80);line-height:1.80;margin-bottom:2.5rem;max-width:530px;}
+.hero-desc strong{color:#86EFAC;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem;}
 /* Stats panel */
 .hero-stats{
   display:flex;
-  background:rgba(255,255,255,.08);
+  background:rgba(255,255,255,.09);
   backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.16);
   border-radius:18px;
-  overflow:hidden;
-  max-width:560px;
+  overflow:hidden;max-width:560px;
 }
-.hstat{
-  flex:1;
-  padding:1.1rem 1.4rem;
-  border-right:1px solid rgba(255,255,255,.1);
-}
+.hstat{flex:1;padding:1.1rem 1.4rem;border-right:1px solid rgba(255,255,255,.1);}
 .hstat:last-child{border-right:none;}
 .hstat-n{
-  font-size:1.65rem;font-weight:800;
-  background:linear-gradient(135deg,#FBBF24,#F59E0B);
+  font-size:1.6rem;font-weight:800;line-height:1;
+  background:linear-gradient(135deg,#86EFAC,#22C55E);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  line-height:1;
 }
-.hstat-l{font-size:.71rem;color:rgba(255,255,255,.58);margin-top:.3rem;font-weight:500;}
-
-/* Floating card — desktop only */
+.hstat-l{font-size:.71rem;color:rgba(255,255,255,.58);margin-top:.3rem;}
+/* Floating card */
 .float-card{
-  position:absolute;
-  z-index:3;
-  right:6%;
-  top:50%;
-  transform:translateY(-50%);
-  background:rgba(255,255,255,.97);
-  border-radius:20px;
-  padding:1.5rem 1.6rem;
-  box-shadow:0 24px 80px rgba(0,0,0,.30);
-  min-width:210px;
-  display:flex;
-  flex-direction:column;
-  gap:.9rem;
+  position:absolute;z-index:3;right:6%;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,.97);border-radius:20px;
+  padding:1.5rem 1.6rem;box-shadow:0 24px 80px rgba(0,0,0,.28);
+  min-width:210px;display:flex;flex-direction:column;gap:.9rem;
 }
 .fc-row{display:flex;align-items:center;gap:.8rem;}
-.fc-ico{
-  width:40px;height:40px;border-radius:11px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.2rem;flex-shrink:0;
-}
-.ico-green{background:#F0FDF4;}
-.ico-gold{background:#FFF3DC;}
-.ico-blue{background:#EFF6FF;}
-.fc-lbl{font-size:.71rem;color:var(--muted);margin-bottom:.1rem;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
+.fc-ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.ico-g{background:#F0FDF4;} .ico-o{background:#FFF3DC;} .ico-b{background:#EFF6FF;}
+.fc-lbl{font-size:.7rem;color:var(--muted);margin-bottom:.1rem;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
 .fc-val{font-size:1.05rem;font-weight:800;color:var(--dark);}
-.fc-divider{height:1px;background:var(--border);}
+.fc-div{height:1px;background:var(--border);}
 .live-row{display:flex;align-items:center;gap:.5rem;}
-.live-dot{
-  width:8px;height:8px;border-radius:50%;background:var(--green);
-  animation:livepulse 1.6s ease-in-out infinite;
-}
-@keyframes livepulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.3);}}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:livepulse 1.6s ease-in-out infinite;}
+@keyframes livepulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(1.3);}}
 .live-lbl{font-size:.74rem;font-weight:700;color:var(--green);}
-
-/* Scroll indicator */
+/* Scroll */
 .scroll-hint{
-  position:absolute;bottom:2.5rem;left:50%;
-  transform:translateX(-50%);
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
   display:flex;flex-direction:column;align-items:center;gap:.35rem;
-  color:rgba(255,255,255,.38);font-size:.73rem;
-  animation:scrollbob 2.2s ease-in-out infinite;
-  z-index:2;
+  color:rgba(255,255,255,.35);font-size:.73rem;
+  animation:bob 2.2s ease-in-out infinite;z-index:2;
 }
-@keyframes scrollbob{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(9px);}}
-.scroll-arrow{font-size:1.1rem;}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(9px);}}
 
 /* ── SECTIONS ── */
 section{padding:5.5rem 5%;}
 .container{max-width:1180px;margin:0 auto;}
-.sec-tag{
-  display:inline-flex;align-items:center;gap:.4rem;
-  background:var(--gold-light);border-radius:50px;
-  padding:.3rem .9rem;font-size:.75rem;color:var(--gold);font-weight:700;
-  margin-bottom:.9rem;
-}
+.sec-tag{display:inline-flex;align-items:center;gap:.4rem;background:var(--green-light);border-radius:50px;padding:.3rem .9rem;font-size:.75rem;color:var(--green);font-weight:700;margin-bottom:.9rem;}
 .sec-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-1.2px;color:var(--dark);margin-bottom:.9rem;}
 .sec-sub{color:var(--muted);font-size:1rem;line-height:1.78;max-width:520px;}
 .text-center{text-align:center;}
@@ -218,308 +143,185 @@ section{padding:5.5rem 5%;}
 
 /* ── FEATURES ── */
 .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem;margin-top:3rem;}
-.feat-card{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:18px;padding:2rem;transition:all .22s;box-shadow:var(--shadow);
-}
-.feat-card:hover{transform:translateY(-5px);border-color:#FDE68A;box-shadow:var(--shadow-lg);}
-.feat-icon{width:52px;height:52px;border-radius:14px;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1.1rem;}
-.feat-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem;color:var(--dark);}
+.feat-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:2rem;transition:all .22s;box-shadow:var(--shadow);}
+.feat-card:hover{transform:translateY(-5px);border-color:#BBF7D0;box-shadow:var(--shadow-lg);}
+.feat-icon{width:52px;height:52px;border-radius:14px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1.1rem;}
+.feat-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem;}
 .feat-card p{font-size:.88rem;color:var(--muted);line-height:1.65;}
 
 /* ── HOW IT WORKS ── */
 .how-bg{
   background:
-    linear-gradient(135deg, rgba(5,8,20,.95) 0%, rgba(12,28,75,.93) 100%),
+    linear-gradient(135deg,rgba(5,40,20,.95) 0%,rgba(10,70,35,.93) 100%),
     url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80&auto=format&fit=crop')
     center/cover no-repeat;
 }
 .how-bg .sec-title{color:#fff;}
-.how-bg .sec-sub{color:#94A3B8;}
-.how-bg .sec-tag{background:rgba(232,144,10,.15);color:#FBBF24;border:1px solid rgba(232,144,10,.35);}
+.how-bg .sec-sub{color:#86EFAC;}
+.how-bg .sec-tag{background:rgba(22,163,74,.18);color:#86EFAC;border:1px solid rgba(22,163,74,.4);}
 .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;margin-top:3.2rem;}
-.step-card{
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
-  border-radius:18px;padding:2rem;transition:all .22s;
-}
-.step-card:hover{background:rgba(255,255,255,.08);transform:translateY(-3px);}
-.step-num{
-  width:46px;height:46px;border-radius:12px;
-  background:linear-gradient(135deg,#E8900A,#F59E0B);
-  color:#fff;display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:1.2rem;margin-bottom:1.2rem;
-  box-shadow:0 4px 14px rgba(232,144,10,.4);
-}
+.step-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:2rem;transition:all .22s;}
+.step-card:hover{background:rgba(255,255,255,.09);}
+.step-num{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;margin-bottom:1.2rem;box-shadow:0 4px 14px rgba(22,163,74,.4);}
 .step-card h4{color:#fff;font-weight:700;font-size:1rem;margin-bottom:.5rem;}
-.step-card p{color:#94A3B8;font-size:.87rem;line-height:1.65;}
+.step-card p{color:#86EFAC;font-size:.87rem;line-height:1.65;}
 
 /* ── TOOLS ── */
-.tools-bg{background:#F1F5F9;}
+.tools-bg{background:#F0FDF4;}
 .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:1rem;margin-top:3rem;}
-.tool-card{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:14px;padding:1.3rem 1rem;text-align:center;
-  transition:all .22s;box-shadow:var(--shadow);cursor:default;
-}
-.tool-card:hover{border-color:#FDE68A;background:var(--gold-light);transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.tool-card{background:var(--card);border:1.5px solid #BBF7D0;border-radius:14px;padding:1.3rem 1rem;text-align:center;transition:all .22s;box-shadow:var(--shadow);}
+.tool-card:hover{border-color:var(--green);background:var(--green-light);transform:translateY(-4px);box-shadow:var(--shadow-lg);}
 .tool-card .em{font-size:2rem;margin-bottom:.5rem;}
 .tool-card p{font-size:.82rem;font-weight:700;color:var(--dark);}
 
 /* ── REFERRAL ── */
 .ref-section{
   background:
-    linear-gradient(135deg, rgba(5,8,20,.96) 0%, rgba(10,25,70,.94) 100%),
+    linear-gradient(135deg,rgba(5,40,20,.96) 0%,rgba(10,70,35,.94) 100%),
     url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1400&q=80&auto=format&fit=crop')
     center/cover no-repeat;
 }
 .ref-inner{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:center;}
-.ref-text .sec-tag{background:rgba(232,144,10,.15);color:#FBBF24;border:1px solid rgba(232,144,10,.35);}
+.ref-text .sec-tag{background:rgba(22,163,74,.18);color:#86EFAC;border:1px solid rgba(22,163,74,.4);}
 .ref-text .sec-title{color:#fff;}
-.ref-text .sec-sub{color:#94A3B8;margin-bottom:2rem;}
+.ref-text .sec-sub{color:#86EFAC;margin-bottom:2rem;}
 .ref-steps{display:flex;flex-direction:column;gap:1.1rem;}
 .ref-step{display:flex;align-items:flex-start;gap:1rem;}
-.rsn{
-  width:36px;height:36px;border-radius:10px;flex-shrink:0;
-  background:linear-gradient(135deg,#E8900A,#F59E0B);
-  color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;
-}
+.rsn{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;}
 .rst h4{color:#fff;font-size:.97rem;font-weight:700;margin-bottom:.2rem;}
-.rst p{color:#94A3B8;font-size:.85rem;line-height:1.6;}
-.ref-card{
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:22px;padding:2.2rem;
-}
+.rst p{color:#86EFAC;font-size:.85rem;line-height:1.6;}
+.ref-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:2.2rem;}
 .ref-card h3{color:#fff;font-size:1.1rem;font-weight:800;margin-bottom:.3rem;}
-.ref-card .rc-sub{color:#94A3B8;font-size:.85rem;margin-bottom:1.5rem;}
-.ref-earn-box{
-  background:linear-gradient(135deg,rgba(232,144,10,.15),rgba(245,158,11,.08));
-  border:1px solid rgba(232,144,10,.35);
-  border-radius:16px;padding:1.4rem;text-align:center;margin-bottom:1.2rem;
-}
-.rea{font-size:3rem;font-weight:800;color:#FBBF24;line-height:1;}
+.ref-card .rc-sub{color:#86EFAC;font-size:.85rem;margin-bottom:1.5rem;}
+.ref-earn-box{background:rgba(22,163,74,.15);border:1px solid rgba(22,163,74,.4);border-radius:16px;padding:1.4rem;text-align:center;margin-bottom:1.2rem;}
+.rea{font-size:3rem;font-weight:800;color:#86EFAC;line-height:1;}
 .rel{color:rgba(255,255,255,.55);font-size:.82rem;margin-top:.35rem;}
 .rbl{display:flex;flex-direction:column;gap:.55rem;}
-.rbi{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:.65rem .95rem;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:10px;
-}
-.rbi span{color:#94A3B8;font-size:.83rem;}
-.rbi strong{color:#FBBF24;font-size:.92rem;}
+.rbi{display:flex;justify-content:space-between;align-items:center;padding:.65rem .95rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;}
+.rbi span{color:#86EFAC;font-size:.83rem;}
+.rbi strong{color:#fff;font-size:.92rem;}
 @media(max-width:800px){.ref-inner{grid-template-columns:1fr;gap:2.5rem;}.float-card{display:none;}}
 
 /* ── TESTIMONIALS ── */
 .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem;margin-top:3rem;}
-.testi-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:1.9rem;box-shadow:var(--shadow);transition:all .22s;}
-.testi-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
-.stars{color:#FBBF24;font-size:1rem;margin-bottom:.9rem;}
+.testi-card{background:var(--card);border:1.5px solid #BBF7D0;border-radius:18px;padding:1.9rem;box-shadow:var(--shadow);transition:all .22s;}
+.testi-card:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:var(--shadow-lg);}
+.stars{color:var(--gold);font-size:1rem;margin-bottom:.9rem;}
 .testi-text{font-size:.9rem;color:var(--muted);line-height:1.72;margin-bottom:1.3rem;font-style:italic;}
 .testi-author{display:flex;align-items:center;gap:.8rem;}
-.tav{width:42px;height:42px;border-radius:50%;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--gold);font-size:.95rem;}
+.tav{width:42px;height:42px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--green);}
 .tname{font-weight:700;font-size:.9rem;color:var(--dark);}
 .tloc{font-size:.75rem;color:var(--muted);}
 
 /* ── CTA ── */
 .cta-section{
   background:
-    linear-gradient(135deg, rgba(5,8,20,.91) 0%, rgba(232,144,10,.28) 100%),
+    linear-gradient(135deg,rgba(5,40,20,.92) 0%,rgba(22,163,74,.30) 100%),
     url('https://images.unsplash.com/photo-1556742212-5b321f3c261b?w=1600&q=85&auto=format&fit=crop')
     center/cover no-repeat;
   padding:6rem 5%;text-align:center;
 }
 .cta-section h2{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800;color:#fff;letter-spacing:-1.5px;margin-bottom:.9rem;}
-.cta-section p{color:rgba(255,255,255,.70);margin-bottom:2.5rem;font-size:1.05rem;}
+.cta-section p{color:rgba(255,255,255,.72);margin-bottom:2.5rem;font-size:1.05rem;}
 .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
 
 /* ── FOOTER ── */
-footer{
-  background:var(--dark);padding:2.5rem 5%;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
-}
+footer{background:var(--dark);padding:2.5rem 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
 .footer-logo{font-size:1.3rem;font-weight:800;color:#fff;}
-.footer-logo span{color:var(--gold);}
+.footer-logo span{color:var(--green);}
 .footer-links{display:flex;gap:1.5rem;}
 .footer-links a{color:#64748B;font-size:.85rem;transition:color .2s;}
-.footer-links a:hover{color:var(--gold);}
+.footer-links a:hover{color:var(--green);}
 footer p{color:#475569;font-size:.82rem;}
 
 @media(max-width:900px){.float-card{display:none;}}
-@media(max-width:600px){
-  nav{padding:.8rem 1.2rem;}
-  .hero{padding:7rem 5% 4rem;background-attachment:scroll;}
-  .hero h1{letter-spacing:-1.5px;}
-  .hero-stats{max-width:100%;}
-  .hstat{padding:.85rem 1rem;}
-  .hstat-n{font-size:1.3rem;}
-  .btn-xl{padding:.88rem 1.7rem;font-size:.97rem;}
-}
+@media(max-width:600px){nav{padding:.8rem 1.2rem;}.hero{padding:7rem 5% 4rem;background-attachment:scroll;}.hero-stats{max-width:100%;}.btn-xl{padding:.88rem 1.7rem;font-size:.97rem;}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="logo">Earn<span>Hub</span></div>
   <div class="nav-cta">
     <a href="/login"    class="btn btn-outline">Sign In</a>
-    <a href="/register" class="btn btn-gold">Get Started →</a>
+    <a href="/register" class="btn btn-green">Get Started →</a>
   </div>
 </nav>
 
-<!-- ── HERO ── -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-badge">🌍 Trusted by 10,000+ earners across Kenya &amp; East Africa</div>
-    <h1>
-      Your Gateway to<br>
-      <span class="hl">Online Earnings</span>
-    </h1>
+    <h1>Your Gateway to<br><span class="hl">Online Earnings</span></h1>
     <p class="hero-desc">
       Earn money through ads, TikTok, YouTube, trivia, articles, and affiliate referrals.
       Earn <strong>KES 100</strong> for every friend you refer.
-      Withdraw via M-Pesa anytime, any day.
+      Withdraw via M-Pesa anytime.
     </p>
     <div class="hero-btns">
-      <a href="/register" class="btn btn-gold btn-xl">🚀 Start Earning Free</a>
-      <a href="#how"      class="btn btn-ghost btn-lg">How It Works ↓</a>
+      <a href="/register" class="btn btn-green btn-xl">🚀 Start Earning Free</a>
+      <a href="#how"      class="btn btn-white btn-lg">How It Works ↓</a>
     </div>
     <div class="hero-stats">
-      <div class="hstat">
-        <div class="hstat-n">10K+</div>
-        <div class="hstat-l">Active Earners</div>
-      </div>
-      <div class="hstat">
-        <div class="hstat-n">KES 100</div>
-        <div class="hstat-l">Per Referral</div>
-      </div>
-      <div class="hstat">
-        <div class="hstat-n">KES 300</div>
-        <div class="hstat-l">One-Time Fee</div>
-      </div>
-      <div class="hstat">
-        <div class="hstat-n">10+</div>
-        <div class="hstat-l">Earning Tools</div>
-      </div>
+      <div class="hstat"><div class="hstat-n">10K+</div><div class="hstat-l">Active Earners</div></div>
+      <div class="hstat"><div class="hstat-n">KES 100</div><div class="hstat-l">Per Referral</div></div>
+      <div class="hstat"><div class="hstat-n">KES 300</div><div class="hstat-l">One-Time Fee</div></div>
+      <div class="hstat"><div class="hstat-n">10+</div><div class="hstat-l">Earning Tools</div></div>
     </div>
   </div>
-
-  <!-- Floating earnings card (desktop) -->
+  <!-- Floating stats card (desktop) -->
   <div class="float-card">
-    <div class="fc-row">
-      <div class="fc-ico ico-green">💸</div>
-      <div>
-        <div class="fc-lbl">Today's Payouts</div>
-        <div class="fc-val">KES 52,400</div>
-      </div>
-    </div>
-    <div class="fc-divider"></div>
-    <div class="fc-row">
-      <div class="fc-ico ico-gold">👥</div>
-      <div>
-        <div class="fc-lbl">New Referrals Today</div>
-        <div class="fc-val">143 Members</div>
-      </div>
-    </div>
-    <div class="fc-divider"></div>
-    <div class="fc-row">
-      <div class="fc-ico ico-blue">📱</div>
-      <div>
-        <div class="fc-lbl">M-Pesa Withdrawals</div>
-        <div class="fc-val">238 Today</div>
-      </div>
-    </div>
-    <div class="fc-divider"></div>
-    <div class="live-row">
-      <div class="live-dot"></div>
-      <div class="live-lbl">LIVE — Updating now</div>
-    </div>
+    <div class="fc-row"><div class="fc-ico ico-g">💸</div><div><div class="fc-lbl">Today's Payouts</div><div class="fc-val">KES 52,400</div></div></div>
+    <div class="fc-div"></div>
+    <div class="fc-row"><div class="fc-ico ico-o">👥</div><div><div class="fc-lbl">New Referrals Today</div><div class="fc-val">143 Members</div></div></div>
+    <div class="fc-div"></div>
+    <div class="fc-row"><div class="fc-ico ico-b">📱</div><div><div class="fc-lbl">M-Pesa Withdrawals</div><div class="fc-val">238 Today</div></div></div>
+    <div class="fc-div"></div>
+    <div class="live-row"><div class="live-dot"></div><div class="live-lbl">LIVE — Updating now</div></div>
   </div>
-
-  <div class="scroll-hint">
-    <div class="scroll-arrow">↓</div>
-    Scroll to explore
-  </div>
+  <div class="scroll-hint"><span>↓</span>Scroll to explore</div>
 </section>
 
-<!-- ── FEATURES ── -->
+<!-- FEATURES -->
 <section>
   <div class="container">
     <div class="sec-tag">✨ Why EarnHub</div>
     <h2 class="sec-title">Everything you need<br>to earn online</h2>
     <p class="sec-sub">Multiple income streams built for Kenya and East Africa, with instant M-Pesa payouts and a powerful referral system.</p>
     <div class="features-grid">
-      <div class="feat-card">
-        <div class="feat-icon">💰</div>
-        <h3>Multiple Income Streams</h3>
-        <p>Earn from ads, social media, games, articles and more — all from one powerful dashboard, every single day.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">👥</div>
-        <h3>KES 100 Per Referral</h3>
-        <p>Share your unique referral link. Every friend who activates earns you KES 100 — credited to your balance instantly.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">📱</div>
-        <h3>Instant M-Pesa Payouts</h3>
-        <p>Withdraw your earnings directly to your M-Pesa wallet within 24 hours. Fast, reliable, and secure.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🎰</div>
-        <h3>Spin &amp; Win Games</h3>
-        <p>Play daily spin games and Aviator predictions for bonus earnings on top of your regular daily income.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">📊</div>
-        <h3>Real-Time Dashboard</h3>
-        <p>Track all your earnings, referrals, and withdrawals live in one beautiful, easy-to-use dashboard.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🔒</div>
-        <h3>Safe &amp; Secure</h3>
-        <p>Your money and data are protected with industry-standard security. Withdraw with full confidence every time.</p>
-      </div>
+      <div class="feat-card"><div class="feat-icon">💰</div><h3>Multiple Income Streams</h3><p>Earn from ads, social media, games, articles and more — all from one powerful dashboard daily.</p></div>
+      <div class="feat-card"><div class="feat-icon">👥</div><h3>KES 100 Per Referral</h3><p>Share your unique link. Every friend who activates earns you KES 100 — credited instantly to your balance.</p></div>
+      <div class="feat-card"><div class="feat-icon">📱</div><h3>Instant M-Pesa Payouts</h3><p>Withdraw your earnings directly to M-Pesa within 24 hours. Fast, reliable, secure.</p></div>
+      <div class="feat-card"><div class="feat-icon">🎰</div><h3>Spin &amp; Win Games</h3><p>Play daily spin games and Aviator predictions for bonus earnings on top of your regular income.</p></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><h3>Real-Time Dashboard</h3><p>Track all your earnings, referrals, and withdrawals live in one beautiful easy-to-use dashboard.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><h3>Safe &amp; Secure</h3><p>Your money and data protected with industry-standard security. Withdraw with full confidence.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ── HOW IT WORKS ── -->
+<!-- HOW IT WORKS -->
 <section class="how-bg" id="how">
   <div class="container">
     <div class="text-center">
       <div class="sec-tag">⚡ How It Works</div>
       <h2 class="sec-title">Start earning in 3 steps</h2>
-      <p class="sec-sub">Simple, fast, and designed for everyone — no technical experience needed.</p>
+      <p class="sec-sub">Simple, fast, designed for everyone — no experience required.</p>
     </div>
     <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-num">1</div>
-        <h4>Create Free Account</h4>
-        <p>Sign up with your username, email, and M-Pesa number in under 2 minutes. Completely free.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">2</div>
-        <h4>Activate — KES 300</h4>
-        <p>Pay a one-time fee via M-Pesa STK push. Get instant lifetime access to all 10+ earning tools.</p>
-      </div>
-      <div class="step-card">
-        <div class="step-num">3</div>
-        <h4>Earn &amp; Withdraw</h4>
-        <p>Access all tools and withdraw to M-Pesa anytime. Refer friends and earn KES 100 per activation.</p>
-      </div>
+      <div class="step-card"><div class="step-num">1</div><h4>Create Free Account</h4><p>Sign up with your username, email, and M-Pesa number in under 2 minutes. Completely free.</p></div>
+      <div class="step-card"><div class="step-num">2</div><h4>Activate — KES 300</h4><p>Pay a one-time fee via M-Pesa STK push. Get instant lifetime access to all 10+ earning tools.</p></div>
+      <div class="step-card"><div class="step-num">3</div><h4>Earn &amp; Withdraw</h4><p>Access all tools and withdraw to M-Pesa anytime. Refer friends and earn KES 100 per activation.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ── EARNING TOOLS ── -->
+<!-- TOOLS -->
 <section class="tools-bg">
   <div class="container">
     <div class="text-center">
       <div class="sec-tag">🛠️ Earning Tools</div>
       <h2 class="sec-title">10+ Ways to Earn</h2>
-      <p class="sec-sub">A growing collection of powerful tools to maximize your daily income potential.</p>
+      <p class="sec-sub">A growing collection of powerful tools to maximize your daily income.</p>
     </div>
     <div class="tools-grid">
       <div class="tool-card"><div class="em">📺</div><p>YouTube Earn</p></div>
@@ -538,36 +340,24 @@ footer p{color:#475569;font-size:.82rem;}
   </div>
 </section>
 
-<!-- ── REFERRAL SECTION ── -->
+<!-- REFERRAL -->
 <section class="ref-section">
   <div class="container">
     <div class="ref-inner">
       <div class="ref-text">
         <div class="sec-tag">👥 Referral Program</div>
         <h2 class="sec-title">Earn KES 100<br>per referral</h2>
-        <p class="sec-sub">Share your unique link. Every time a friend activates, KES 100 is instantly added to your withdrawable balance. No cap — refer as many people as you want.</p>
+        <p class="sec-sub">Share your unique link. Every time a friend activates, KES 100 is instantly added to your withdrawable balance. No cap — refer as many as you want.</p>
         <div class="ref-steps">
-          <div class="ref-step">
-            <div class="rsn">1</div>
-            <div class="rst"><h4>Get your referral link</h4><p>Your unique referral link is in your dashboard after you activate.</p></div>
-          </div>
-          <div class="ref-step">
-            <div class="rsn">2</div>
-            <div class="rst"><h4>Share everywhere</h4><p>Send via WhatsApp, Facebook, Instagram, or any platform you use.</p></div>
-          </div>
-          <div class="ref-step">
-            <div class="rsn">3</div>
-            <div class="rst"><h4>Earn KES 100 instantly</h4><p>When your referral pays the activation fee, KES 100 hits your balance right away.</p></div>
-          </div>
+          <div class="ref-step"><div class="rsn">1</div><div class="rst"><h4>Get your referral link</h4><p>Your unique link is in your dashboard after activation.</p></div></div>
+          <div class="ref-step"><div class="rsn">2</div><div class="rst"><h4>Share everywhere</h4><p>Send via WhatsApp, Facebook, Instagram — anywhere online.</p></div></div>
+          <div class="ref-step"><div class="rsn">3</div><div class="rst"><h4>Earn KES 100 instantly</h4><p>When your referral activates, KES 100 hits your balance immediately.</p></div></div>
         </div>
       </div>
       <div class="ref-card">
         <h3>💰 Referral Earnings</h3>
-        <p class="rc-sub">No limits — earn from every person you refer</p>
-        <div class="ref-earn-box">
-          <div class="rea">KES 100</div>
-          <div class="rel">Per successful referral activation</div>
-        </div>
+        <p class="rc-sub">No limits — earn from everyone you refer</p>
+        <div class="ref-earn-box"><div class="rea">KES 100</div><div class="rel">Per successful referral activation</div></div>
         <div class="rbl">
           <div class="rbi"><span>5 referrals</span><strong>KES 500</strong></div>
           <div class="rbi"><span>10 referrals</span><strong>KES 1,000</strong></div>
@@ -580,7 +370,7 @@ footer p{color:#475569;font-size:.82rem;}
   </div>
 </section>
 
-<!-- ── TESTIMONIALS ── -->
+<!-- TESTIMONIALS -->
 <section>
   <div class="container">
     <div class="text-center">
@@ -589,48 +379,26 @@ footer p{color:#475569;font-size:.82rem;}
       <p class="sec-sub">Real earners, real results from across Kenya and East Africa.</p>
     </div>
     <div class="testi-grid">
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <p class="testi-text">"I've withdrawn over KES 8,000 in my first month! The referral system is incredible — I referred 12 friends and earned KES 1,200 from referrals alone."</p>
-        <div class="testi-author">
-          <div class="tav">JO</div>
-          <div><div class="tname">James Ochieng</div><div class="tloc">📍 Nairobi, Kenya</div></div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <p class="testi-text">"EarnHub is 100% legit! M-Pesa withdrawals arrive fast. I do the YouTube and TikTok tasks every week — it's become a reliable weekly income for me."</p>
-        <div class="testi-author">
-          <div class="tav">AW</div>
-          <div><div class="tname">Amina Wanjiru</div><div class="tloc">📍 Mombasa, Kenya</div></div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <p class="testi-text">"I shared my referral link in my WhatsApp groups and earned KES 3,000 in just two days. This is the best earning platform in Kenya — no doubt!"</p>
-        <div class="testi-author">
-          <div class="tav">BK</div>
-          <div><div class="tname">Brian Kamau</div><div class="tloc">📍 Kisumu, Kenya</div></div>
-        </div>
-      </div>
+      <div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"I've withdrawn over KES 8,000 in my first month! I referred 12 friends and earned KES 1,200 from referrals alone."</p><div class="testi-author"><div class="tav">JO</div><div><div class="tname">James Ochieng</div><div class="tloc">📍 Nairobi, Kenya</div></div></div></div>
+      <div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"EarnHub is 100% legit! M-Pesa withdrawals arrive fast. I do YouTube and TikTok tasks every week — great side income."</p><div class="testi-author"><div class="tav">AW</div><div><div class="tname">Amina Wanjiru</div><div class="tloc">📍 Mombasa, Kenya</div></div></div></div>
+      <div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"I shared my referral link in WhatsApp groups and earned KES 3,000 in two days. Best earning platform in Kenya!"</p><div class="testi-author"><div class="tav">BK</div><div><div class="tname">Brian Kamau</div><div class="tloc">📍 Kisumu, Kenya</div></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- ── CTA ── -->
+<!-- CTA -->
 <section class="cta-section">
   <div class="container">
-    <div class="sec-tag" style="background:rgba(232,144,10,.18);color:#FBBF24;border:1px solid rgba(232,144,10,.38);margin:0 auto 1.3rem;">🚀 Join Today — It's Free</div>
+    <div class="sec-tag" style="background:rgba(22,163,74,.20);color:#86EFAC;border:1px solid rgba(22,163,74,.4);margin:0 auto 1.3rem;">🚀 Join Today — It's Free</div>
     <h2>Join 10,000+ Kenyans<br>earning online today</h2>
     <p>One account. 10+ income streams. KES 100 per referral. Instant M-Pesa payouts.</p>
     <div class="cta-btns">
-      <a href="/register" class="btn btn-gold btn-xl">Create Free Account →</a>
-      <a href="/login"    class="btn btn-ghost btn-lg">Sign In</a>
+      <a href="/register" class="btn btn-green btn-xl">Create Free Account →</a>
+      <a href="/login"    class="btn btn-white btn-lg">Sign In</a>
     </div>
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
 <footer>
   <div class="footer-logo">Earn<span>Hub</span></div>
   <div class="footer-links">
