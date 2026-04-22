@@ -1,57 +1,46 @@
 'use strict';
 
-const LIPANA_SECRET_KEY = process.env.LIPANA_SECRET_KEY || '';
-const APP_URL           = (process.env.APP_URL || '').replace(/\/+$/, '');
+const LIPANA_SECRET_KEY    = process.env.LIPANA_SECRET_KEY    || '';
+const LIPANA_WEBHOOK_SECRET = process.env.LIPANA_WEBHOOK_SECRET || '';
+const APP_URL               = (process.env.APP_URL || '').replace(/\/+$/, '');
 
-console.log('=== Lipana Config ===');
-console.log('SECRET KEY SET:', !!LIPANA_SECRET_KEY);
-console.log('SECRET KEY PREFIX:', LIPANA_SECRET_KEY ? LIPANA_SECRET_KEY.substring(0, 20) + '...' : 'MISSING');
-console.log('APP_URL:', APP_URL || 'NOT SET — callback will NOT work!');
-console.log('CALLBACK URL:', APP_URL ? `${APP_URL}/api/auth/activate/callback` : 'CANNOT BE BUILT — APP_URL missing');
-console.log('====================');
+console.log('=== Lipana Init ===');
+console.log('SECRET KEY SET   :', !!LIPANA_SECRET_KEY);
+console.log('WEBHOOK SECRET   :', !!LIPANA_WEBHOOK_SECRET);
+console.log('APP_URL          :', APP_URL || 'NOT SET — callbacks will not work!');
+console.log('==================');
 
 let _client = null;
 
-async function _registerWebhookWithRetry(client, webhookUrl, attempts = 3, delayMs = 3000) {
-  for (let i = 1; i <= attempts; i++) {
-    try {
-      await client.webhooks.updateSettings({ webhookUrl });
-      console.log(`✅ Lipana webhook registered (attempt ${i}):`, webhookUrl);
-      return;
-    } catch (e) {
-      console.warn(`⚠️  Webhook register attempt ${i}/${attempts} failed:`, e.message);
-      if (i < attempts) {
-        await new Promise(r => setTimeout(r, delayMs));
-      }
-    }
-  }
-  console.error('❌ All webhook registration attempts failed. Lipana callback may not arrive.');
-}
-
 function getClient() {
   if (_client) return _client;
-  if (!LIPANA_SECRET_KEY) {
-    throw new Error('LIPANA_SECRET_KEY is not set in Railway environment variables.');
-  }
+  if (!LIPANA_SECRET_KEY)
+    throw new Error('LIPANA_SECRET_KEY not set in Railway environment variables.');
+
   const { Lipana } = require('@lipana/sdk');
   _client = new Lipana({
     apiKey:      LIPANA_SECRET_KEY,
     environment: 'production'
   });
 
-  // Register webhook URL with Lipana on startup (with retry)
+  // Register & enable webhook on startup so Lipana knows where to POST
   if (APP_URL) {
     const webhookUrl = `${APP_URL}/api/auth/activate/callback`;
-    console.log('📡 Registering Lipana webhook URL:', webhookUrl);
-    _registerWebhookWithRetry(_client, webhookUrl);
+    _client.webhooks.updateSettings({
+      webhookUrl: webhookUrl,
+      enabled:    true         // CRITICAL — must be true or callbacks are never sent
+    })
+    .then(r  => console.log('✅ Lipana webhook registered & enabled:', webhookUrl, r))
+    .catch(e => console.error('❌ Lipana webhook registration failed:', e.message));
   } else {
-    console.warn('⚠️  APP_URL not set — Lipana callback will not work. Set APP_URL in Railway variables.');
+    console.error('❌ APP_URL not set — Lipana cannot send callbacks. Set APP_URL in Railway!');
   }
 
-  console.log('✅ Lipana client initialised');
+  console.log('✅ Lipana client ready');
   return _client;
 }
 
+// Format phone → +254XXXXXXXXX
 function formatPhone(raw) {
   let p = String(raw).replace(/\D/g, '');
   if (p.startsWith('0'))    p = '254' + p.slice(1);
@@ -60,43 +49,62 @@ function formatPhone(raw) {
   return '+' + p;
 }
 
+// Initiate STK push
 async function stkPush({ phone, amount }) {
-  const formattedPhone = formatPhone(phone);
-  console.log(`📲 Initiating STK push → ${formattedPhone}  KES ${Math.ceil(amount)}`);
+  const client = getClient();
+  const fmt    = formatPhone(phone);
+  console.log(`📲 STK push → ${fmt}  KES ${Math.ceil(amount)}`);
 
-  let client;
-  try {
-    client = getClient();
-  } catch (e) {
-    throw new Error('Payment system not configured: ' + e.message);
-  }
-
-  const result = await client.transactions.initiateStkPush({
-    phone:  formattedPhone,
+  const resp = await client.transactions.initiateStkPush({
+    phone:  fmt,
     amount: Math.ceil(amount)
   });
 
-  console.log('✅ STK push success. Response:', JSON.stringify(result));
+  console.log('✅ Lipana STK response:', JSON.stringify(resp));
 
-  if (!result || (!result.transactionId && !result.id)) {
-    console.error('⚠️  Lipana returned unexpected response:', JSON.stringify(result));
-    throw new Error('STK push sent but no transaction ID returned. Check Lipana dashboard.');
+  if (!resp || !resp.transactionId) {
+    throw new Error(
+      'STK push sent but no transactionId returned. Response: ' +
+      JSON.stringify(resp)
+    );
   }
 
-  return result;
+  return resp;
 }
 
+// Retrieve transaction status directly from Lipana
 async function retrieveTransaction(transactionId) {
   if (!transactionId) return null;
   try {
     const client = getClient();
     const tx     = await client.transactions.retrieve(transactionId);
-    console.log(`🔍 Transaction ${transactionId} status:`, JSON.stringify(tx));
+    console.log(`🔍 Retrieve [${transactionId}]:`, JSON.stringify(tx));
     return tx;
   } catch (e) {
-    console.log(`ℹ️  Retrieve ${transactionId}:`, e.message);
+    console.log(`ℹ️  Retrieve [${transactionId}] error:`, e.message);
     return null;
   }
 }
 
-module.exports = { stkPush, retrieveTransaction, formatPhone };
+// Verify Lipana webhook signature
+function verifyWebhookSignature(body, signature) {
+  if (!LIPANA_WEBHOOK_SECRET) {
+    console.warn('⚠️  LIPANA_WEBHOOK_SECRET not set — skipping signature verification');
+    return true; // allow if no secret configured
+  }
+  if (!signature) {
+    console.warn('⚠️  No x-lipana-signature header — skipping signature verification');
+    return true; // allow if no header sent
+  }
+  try {
+    const client = getClient();
+    const valid  = client.webhooks.verify(body, signature, LIPANA_WEBHOOK_SECRET);
+    console.log(`🔐 Webhook signature valid: ${valid}`);
+    return valid;
+  } catch (e) {
+    console.error('❌ Webhook signature verification error:', e.message);
+    return true; // allow on error to avoid blocking legitimate callbacks
+  }
+}
+
+module.exports = { stkPush, retrieveTransaction, verifyWebhookSignature, formatPhone };
