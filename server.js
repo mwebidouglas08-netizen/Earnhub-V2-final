@@ -1,98 +1,131 @@
 'use strict';
-const express    = require('express');
-const session    = require('express-session');
+const express      = require('express');
+const session      = require('express-session');
 const cookieParser = require('cookie-parser');
-const path       = require('path');
-const fs         = require('fs');
+const path         = require('path');
 
-/* ─── Init DB early so it doesn't fail mid-request ─── */
-const db = require('./backend/db');
-
-const app  = express();
-const PORT = parseInt(process.env.PORT || '3000', 10);
+const PORT  = parseInt(process.env.PORT || '3000', 10);
 const PAGES = path.join(__dirname, 'public', 'pages');
 
-/* ─── Core middleware ─── */
+const app = express();
+
+// ── Health check — MUST be first, no dependencies ──
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'ok', app: 'EarnHub', ts: Date.now() });
+});
+
+// ── Core middleware ──
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({
-  // Using memory store - sessions are stored in RAM
-  // For production with persistence, consider adding a session store package
-  secret: process.env.SESSION_SECRET || 'earnhub_s3cr3t_k3y_2024_xK9mPqRt',
-  resave: false,
+  secret:            process.env.SESSION_SECRET || 'earnhub_s3cr3t_2024_xK9mPqRt',
+  resave:            false,
   saveUninitialized: false,
-  rolling: true,
+  rolling:           true,
   cookie: {
-    secure: false,
+    secure:   false,
     httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000
+    maxAge:   7 * 24 * 60 * 60 * 1000
   }
 }));
 
-/* ─── Static assets ─── */
+// ── Static ──
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
-/* ─── API routes ─── */
+// ── Init DB ──
+try {
+  require('./backend/db');
+  console.log('✅ DB initialised');
+} catch (e) {
+  console.error('❌ DB init error:', e.message);
+}
+
+// ── API Routes ──
 app.use('/api/auth',  require('./backend/routes/auth'));
 app.use('/api/admin', require('./backend/routes/admin'));
 app.use('/api/user',  require('./backend/routes/user'));
 
-/* ─── Health check — MUST return 200 quickly for Railway ─── */
-app.get('/health', (_req, res) => res.status(200).json({ status: 'ok', app: 'EarnHub', ts: Date.now() }));
+// ── Page helper ──
+const send = (f) => (_req, res) => res.sendFile(path.join(PAGES, f));
 
-/* ─── Frontend page helpers ─── */
-const sendPage = (file) => (_req, res) => res.sendFile(path.join(PAGES, file));
+// ── Public pages ──
+app.get('/',         send('index.html'));
+app.get('/login',    send('login.html'));
+app.get('/register', send('register.html'));
 
-/* ─── Public routes ─── */
-app.get('/',          sendPage('index.html'));
-app.get('/login',     sendPage('login.html'));
-app.get('/register',  sendPage('register.html'));
-
-/* ─── Protected user routes ─── */
+// ── Activate — only for logged-in, non-activated users ──
 app.get('/activate', (req, res) => {
-  if (!req.session.userId) return res.redirect('/login');
-  return res.sendFile(path.join(PAGES, 'activate.html'));
+  if (!req.session || !req.session.userId) return res.redirect('/login');
+  try {
+    const db   = require('./backend/db');
+    const user = db.getUserById(req.session.userId);
+    if (!user)             return res.redirect('/login');
+    if (user.is_banned)    { req.session.destroy(); return res.redirect('/login'); }
+    if (user.is_activated) return res.redirect('/dashboard'); // already paid, skip activate
+    return res.sendFile(path.join(PAGES, 'activate.html'));
+  } catch (e) {
+    return res.redirect('/login');
+  }
 });
 
+// ── Dashboard — STRICT: only for activated, non-banned users ──
 app.get('/dashboard', (req, res) => {
-  if (!req.session.userId) return res.redirect('/login');
-  const user = db.getUserById(req.session.userId);
-  if (!user || user.is_banned) { req.session.destroy(); return res.redirect('/login'); }
-  if (!user.is_activated) return res.redirect('/activate');
-  return res.sendFile(path.join(PAGES, 'dashboard.html'));
+  // No session → login
+  if (!req.session || !req.session.userId) return res.redirect('/login');
+  try {
+    const db   = require('./backend/db');
+    const user = db.getUserById(req.session.userId);
+
+    // No user found
+    if (!user) { req.session.destroy(); return res.redirect('/login'); }
+
+    // Banned user
+    if (user.is_banned) { req.session.destroy(); return res.redirect('/login'); }
+
+    // NOT ACTIVATED — send back to activate page, no matter what
+    if (!user.is_activated) {
+      console.log(`🚫 User ${user.id} (${user.username}) tried to access dashboard without activation`);
+      return res.redirect('/activate');
+    }
+
+    // All good — serve dashboard
+    return res.sendFile(path.join(PAGES, 'dashboard.html'));
+
+  } catch (e) {
+    console.error('Dashboard route error:', e.message);
+    return res.redirect('/login');
+  }
 });
 
-/* ─── Admin routes — hidden from frontend ─── */
+// ── Admin routes (hidden from frontend) ──
 app.get('/admin',           (_req, res) => res.redirect('/admin/login'));
-app.get('/admin/login',     sendPage('admin-login.html'));
+app.get('/admin/login',     send('admin-login.html'));
 app.get('/admin/dashboard', (req, res) => {
-  if (!req.session.adminId) return res.redirect('/admin/login');
+  if (!req.session || !req.session.adminId) return res.redirect('/admin/login');
   return res.sendFile(path.join(PAGES, 'admin-dashboard.html'));
 });
 
-/* ─── 404 ─── */
+// ── 404 ──
 app.use((_req, res) => {
-  res.status(404).send(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>404 - EarnHub</title>
-  <style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#0A0F1E;color:#E8EAF0;font-family:sans-serif;
-  display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;}
-  h1{font-size:5rem;color:#F5C518;}p{color:#6B7280;margin:1rem 0;}a{color:#F5C518;}</style></head>
-  <body><div><h1>404</h1><p>Page not found</p><a href="/">← Back to EarnHub</a></div></body></html>`);
+  res.status(404).sendFile(path.join(PAGES, '404.html'));
 });
 
-/* ─── Global error handler ─── */
+// ── Error handler ──
 app.use((err, _req, res, _next) => {
-  console.error('Unhandled error:', err.stack || err.message);
-  res.status(500).json({ success: false, message: 'Server error. Please try again.' });
+  console.error('Server error:', err.message);
+  res.status(500).json({ success: false, message: 'Server error.' });
 });
 
-/* ─── Start server ─── */
+// ── Start — MUST bind 0.0.0.0 for Railway ──
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 EarnHub is live on port ${PORT}`);
-  console.log(`🌐 http://localhost:${PORT}`);
-  console.log(`🔐 Admin: http://localhost:${PORT}/admin/login`);
+  console.log('================================');
+  console.log(`🚀 EarnHub running on port ${PORT}`);
+  console.log(`💚 Health:    http://localhost:${PORT}/health`);
+  console.log(`🌐 App:       http://localhost:${PORT}`);
+  console.log(`🔐 Admin:     http://localhost:${PORT}/admin/login`);
+  console.log('================================');
 });
 
-/* ─── Handle uncaught errors gracefully ─── */
-process.on('uncaughtException', (err) => { console.error('Uncaught Exception:', err.message); });
-process.on('unhandledRejection', (reason) => { console.error('Unhandled Rejection:', reason); });
+process.on('uncaughtException',  e => console.error('Uncaught:', e.message));
+process.on('unhandledRejection', r => console.error('Rejection:', r));
