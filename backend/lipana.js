@@ -47,10 +47,12 @@ async function retrieveTransaction(txId) {
   try {
     const client = getClient();
     const tx     = await client.transactions.retrieve(txId);
-    console.log(`🔍 Retrieve [${txId}]:`, JSON.stringify(tx));
+    const st     = (tx?.status || '').toLowerCase();
+    const paid   = tx?.paid === true;
+    console.log(`🔍 Retrieve [${txId}]: status="${st}" paid=${paid} full=${JSON.stringify(tx)}`);
     return tx;
   } catch (e) {
-    console.log(`ℹ️  Retrieve [${txId}]:`, e.message);
+    console.log(`ℹ️  Retrieve [${txId}] error:`, e.message);
     return null;
   }
 }
