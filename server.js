@@ -8,12 +8,12 @@ const PORT  = parseInt(process.env.PORT || '3000', 10);
 const PAGES = path.join(__dirname, 'public', 'pages');
 const app   = express();
 
-/* ── Health check — always first ── */
-app.get('/health', (_req, res) =>
-  res.status(200).json({ status: 'ok', app: 'EarnHub', ts: Date.now() })
-);
+// ── Health check FIRST — before everything ──
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'ok', app: 'EarnHub', ts: Date.now() });
+});
 
-/* ── Middleware ── */
+// ── Middleware ──
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -27,16 +27,16 @@ app.use(session({
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
-/* ── DB ── */
+// ── DB ──
 try { require('./backend/db'); console.log('✅ DB ready'); }
 catch (e) { console.error('❌ DB error:', e.message); }
 
-/* ── API ── */
+// ── API ──
 app.use('/api/auth',  require('./backend/routes/auth'));
 app.use('/api/admin', require('./backend/routes/admin'));
 app.use('/api/user',  require('./backend/routes/user'));
 
-/* ── Helpers ── */
+// ── Pages ──
 const page    = (f) => (_req, res) => res.sendFile(path.join(PAGES, f));
 const getUser = (req) => {
   try {
@@ -45,26 +45,23 @@ const getUser = (req) => {
   } catch { return null; }
 };
 
-/* ── Public ── */
 app.get('/',         page('index.html'));
 app.get('/login',    page('login.html'));
 app.get('/register', page('register.html'));
 
-/* ── Activate ── */
 app.get('/activate', (req, res) => {
   const u = getUser(req);
-  if (!u)          return res.redirect('/login');
-  if (u.is_banned) { req.session.destroy(); return res.redirect('/login'); }
-  if (u.is_activated) return res.redirect('/dashboard'); // already paid
+  if (!u)             return res.redirect('/login');
+  if (u.is_banned)    { req.session.destroy(); return res.redirect('/login'); }
+  if (u.is_activated) return res.redirect('/dashboard');
   return res.sendFile(path.join(PAGES, 'activate.html'));
 });
 
-/* ── Dashboard — HARD GATE ── */
 app.get('/dashboard', (req, res) => {
   if (!req.session?.userId) return res.redirect('/login');
   const u = getUser(req);
-  if (!u)          { req.session.destroy(); return res.redirect('/login'); }
-  if (u.is_banned) { req.session.destroy(); return res.redirect('/login'); }
+  if (!u)             { req.session.destroy(); return res.redirect('/login'); }
+  if (u.is_banned)    { req.session.destroy(); return res.redirect('/login'); }
   if (!u.is_activated) {
     console.log(`🚫 User ${u.id} blocked from /dashboard — not activated`);
     return res.redirect('/activate');
@@ -72,7 +69,6 @@ app.get('/dashboard', (req, res) => {
   return res.sendFile(path.join(PAGES, 'dashboard.html'));
 });
 
-/* ── Admin ── */
 app.get('/admin',           (_req, res) => res.redirect('/admin/login'));
 app.get('/admin/login',     page('admin-login.html'));
 app.get('/admin/dashboard', (req, res) => {
@@ -80,16 +76,12 @@ app.get('/admin/dashboard', (req, res) => {
   return res.sendFile(path.join(PAGES, 'admin-dashboard.html'));
 });
 
-/* ── 404 ── */
 app.use((_req, res) => res.status(404).sendFile(path.join(PAGES, '404.html')));
-
-/* ── Error ── */
 app.use((err, _req, res, _next) => {
   console.error('Server error:', err.message);
   res.status(500).json({ success: false, message: 'Server error.' });
 });
 
-/* ── Start ── */
 app.listen(PORT, '0.0.0.0', () => {
   console.log('================================');
   console.log(`🚀 EarnHub on port ${PORT}`);
