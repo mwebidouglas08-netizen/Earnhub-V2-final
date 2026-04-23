@@ -3,7 +3,9 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const db     = require('../db');
-const lipana = require('../lipana');
+
+// Lazy-load lipana so SDK crash never kills server startup
+function getLipana() { return require('../lipana'); }
 
 router.post('/register', (req, res) => {
   const { username, email, country, mobile, password, confirm_password, referral } = req.body;
@@ -51,17 +53,18 @@ router.post('/activate/stk', async (req, res) => {
   if (user.is_activated) return res.json({ success: true, alreadyActivated: true });
   const fee = parseFloat(db.getSetting('activation_fee') || 300);
   try {
+    const lipana = getLipana();
     const result = await lipana.stkPush({ phone, amount: fee });
     const txId   = result.transactionId;
+    // Cancel old pending payments
     db.getAllPayments().forEach(p => {
       if (p.user_id === user.id && p.status === 'pending' && p.type === 'activation')
         db.updatePaymentStatus(p.id, 'cancelled');
     });
     db.addPayment({ user_id: user.id, amount: fee, phone, type: 'activation', status: 'pending', ref: txId });
-    req.session.pendingTxId   = txId;
-    req.session.pendingUserId = user.id;
-    req.session.stkSentAt     = Date.now();
-    console.log(`✅ STK saved → txId:${txId} userId:${user.id}`);
+    req.session.pendingTxId  = txId;
+    req.session.stkSentAt    = Date.now();
+    console.log(`✅ STK sent → txId:${txId} userId:${user.id}`);
     return res.json({ success: true, transactionId: txId, message: 'STK push sent! Enter your M-Pesa PIN.' });
   } catch (e) {
     console.error('❌ STK error:', e.message);
@@ -76,45 +79,47 @@ router.get('/activate/status', async (req, res) => {
   if (!user) return res.json({ success: false });
   if (user.is_activated) return res.json({ success: true, activated: true });
   const payments = db.getAllPayments();
+  // Check if callback already completed payment
   const completed = payments.find(p => p.user_id === userId && p.type === 'activation' && p.status === 'completed');
   if (completed) { _activateUser(userId); return res.json({ success: true, activated: true }); }
+  // Ask Lipana directly
   const txId = req.session.pendingTxId;
   if (txId) {
-    const tx = await lipana.retrieveTransaction(txId);
-    if (tx) {
-      const st      = (tx.status || '').toLowerCase();
-      const success = st === 'success' || st === 'completed' || st === 'paid' || tx.paid === true;
-      const failed  = st === 'failed'  || st === 'cancelled' || st === 'expired';
-      if (success) {
-        const p = payments.find(q => q.ref === txId && q.status === 'pending');
-        if (p) db.updatePaymentStatus(p.id, 'completed');
-        _activateUser(userId);
-        return res.json({ success: true, activated: true });
+    try {
+      const lipana = getLipana();
+      const tx     = await lipana.retrieveTransaction(txId);
+      if (tx) {
+        const st      = (tx.status || '').toLowerCase();
+        const success = st === 'success' || st === 'completed' || st === 'paid' || tx.paid === true;
+        const failed  = st === 'failed'  || st === 'cancelled' || st === 'expired';
+        if (success) {
+          const p = payments.find(q => q.ref === txId && q.status === 'pending');
+          if (p) db.updatePaymentStatus(p.id, 'completed');
+          _activateUser(userId);
+          return res.json({ success: true, activated: true });
+        }
+        if (failed) {
+          const p = payments.find(q => q.ref === txId && q.status === 'pending');
+          if (p) db.updatePaymentStatus(p.id, 'failed');
+          return res.json({ success: true, activated: false, failed: true, message: 'Payment failed or was cancelled.' });
+        }
       }
-      if (failed) {
-        const p = payments.find(q => q.ref === txId && q.status === 'pending');
-        if (p) db.updatePaymentStatus(p.id, 'failed');
-        return res.json({ success: true, activated: false, failed: true, message: 'Payment failed or was cancelled.' });
-      }
-    }
+    } catch (e) { console.log('Retrieve error:', e.message); }
   }
   return res.json({ success: true, activated: false });
 });
 
-// Manual access after 3 minutes — only if STK was actually sent
+// Manual access after delay — only if STK was actually sent
 router.post('/activate/manual', (req, res) => {
   if (!req.session?.userId) return res.json({ success: false, message: 'Not logged in.' });
   const userId = req.session.userId;
   const user   = db.getUserById(userId);
   if (!user)             return res.json({ success: false, message: 'User not found.' });
   if (user.is_activated) return res.json({ success: true, activated: true });
-  const payments = db.getAllPayments();
-  const hasPaid  = payments.find(p => p.user_id === userId && p.type === 'activation' && (p.status === 'pending' || p.status === 'completed'));
-  if (!hasPaid)
-    return res.json({ success: false, message: 'No payment initiated. Please start the STK push first.' });
+  const hasPaid = db.getAllPayments().find(p => p.user_id === userId && p.type === 'activation' && (p.status === 'pending' || p.status === 'completed'));
+  if (!hasPaid) return res.json({ success: false, message: 'No payment found. Please initiate STK push first.' });
   if (hasPaid.status !== 'completed') db.updatePaymentStatus(hasPaid.id, 'completed');
   _activateUser(userId);
-  console.log(`✅ Manual access: user ${userId}`);
   return res.json({ success: true, activated: true, message: 'Account activated!' });
 });
 
@@ -126,16 +131,17 @@ router.post('/activate/callback', (req, res) => {
     const rawStatus = (body?.status || '').toLowerCase();
     const isSuccess = rawStatus === 'success' || rawStatus === 'completed' || rawStatus === 'paid'
                    || body?.paid === true || body?.ResultCode === 0 || body?.ResultCode === '0'
-                   || body?.Body?.stkCallback?.ResultCode === 0 || String(body?.Body?.stkCallback?.ResultCode) === '0';
-    const isFailed  = rawStatus === 'failed' || rawStatus === 'cancelled' || rawStatus === 'expired'
-                   || (body?.ResultCode !== undefined && body?.ResultCode !== 0 && body?.ResultCode !== '0' && body?.Body === undefined);
-    console.log(`Callback → txId:"${txId}" isSuccess:${isSuccess} isFailed:${isFailed}`);
-    const payments = db.getAllPayments();
+                   || body?.Body?.stkCallback?.ResultCode === 0;
+    const isFailed  = rawStatus === 'failed' || rawStatus === 'cancelled' || rawStatus === 'expired';
+    const payments  = db.getAllPayments();
     if (isSuccess) {
       let payment = txId ? payments.find(p => p.ref === txId && p.status === 'pending') : null;
       if (!payment) payment = [...payments].reverse().find(p => p.status === 'pending' && p.type === 'activation');
-      if (payment) { db.updatePaymentStatus(payment.id, 'completed'); _activateUser(payment.user_id); console.log(`✅ Callback: User ${payment.user_id} ACTIVATED`); }
-      else console.warn('⚠️  No pending payment found');
+      if (payment) {
+        db.updatePaymentStatus(payment.id, 'completed');
+        _activateUser(payment.user_id);
+        console.log(`✅ Callback: User ${payment.user_id} ACTIVATED`);
+      }
     } else if (isFailed && txId) {
       const p = payments.find(q => q.ref === txId && q.status === 'pending');
       if (p) db.updatePaymentStatus(p.id, 'failed');
@@ -150,13 +156,26 @@ function _activateUser(userId) {
     if (!user || user.is_activated) return;
     db.updateUser(userId, { is_activated: 1 });
     console.log(`✅ User ${userId} (${user.username}) ACTIVATED`);
+    // Credit referrer KES 100 immediately
     if (user.referred_by && !user._referrer_credited) {
       const ref = db.getUserByReferralCode(user.referred_by);
       if (ref) {
         const bonus = parseFloat(db.getSetting('referral_bonus') || 100);
-        db.updateUser(ref.id, { affiliate_earnings: (ref.affiliate_earnings||0)+bonus, balance: (ref.balance||0)+bonus, total_earnings: (ref.total_earnings||0)+bonus });
+        db.updateUser(ref.id, {
+          affiliate_earnings: (ref.affiliate_earnings || 0) + bonus,
+          balance:            (ref.balance            || 0) + bonus,
+          total_earnings:     (ref.total_earnings     || 0) + bonus
+        });
         db.updateUser(userId, { _referrer_credited: true });
-        console.log(`💰 Referrer "${ref.username}" +KES ${bonus}`);
+        console.log(`💰 Referrer "${ref.username}" credited KES ${bonus} — affiliate_earnings now ${(ref.affiliate_earnings||0)+bonus}`);
+        // Send notification to referrer
+        db.addNotification({
+          user_id:   ref.id,
+          title:     '💰 Referral Commission Earned!',
+          message:   `${user.username} activated using your link. KES ${bonus} added to your affiliate earnings and balance!`,
+          type:      'success',
+          is_global: false
+        });
       }
     }
   } catch (e) { console.error('_activateUser error:', e.message); }
@@ -167,7 +186,12 @@ router.get('/me', (req, res) => {
   const user = db.getUserById(req.session.userId);
   if (!user) return res.json({ success: false });
   const { password, ...safe } = user;
-  return res.json({ success: true, user: safe, notifications: db.getNotificationsForUser(req.session.userId), settings: db.getAllSettings() });
+  return res.json({
+    success:       true,
+    user:          safe,
+    notifications: db.getNotificationsForUser(req.session.userId),
+    settings:      db.getAllSettings()
+  });
 });
 
 router.post('/notification/read/:id', (req, res) => {
