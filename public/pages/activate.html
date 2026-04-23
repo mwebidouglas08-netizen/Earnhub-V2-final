@@ -107,8 +107,10 @@ input::placeholder{color:#CBD5E1;}
 </div>
 
 <script>
-let pt=null, pc=0;
-const PINT=3000, PMAX=100;
+let _pollTimer = null;
+let _pollCount = 0;
+let _startTime = 0;
+const TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
 fetch('/api/auth/me').then(r=>r.json()).then(d=>{
   if(!d.success){window.location.href='/login';return;}
@@ -131,7 +133,8 @@ async function startPayment(){
     const d=await r.json();
     if(d.success){
       if(d.alreadyActivated){window.location.href='/dashboard';return;}
-      showLoader();startPoll();
+      showLoader();
+      startPoll();
     }else{
       alert2(d.message||'STK push failed. Please try again.','error');
       btn.disabled=false;btn.innerHTML='🚀 Pay &amp; Activate';
@@ -147,47 +150,96 @@ function showLoader(){
   document.getElementById('loaderView').style.display='block';
 }
 
+/* ── Adaptive polling schedule ──
+ *   0–15 s  → every 500 ms  (aggressive: catches fast payments)
+ *  15–60 s  → every 1 000 ms
+ *  60–300 s → every 3 000 ms
+ * Redirect ONLY when backend returns activated:true (Lipana confirmed).
+ */
+function getInterval(){
+  const elapsed = Date.now() - _startTime;
+  if(elapsed < 15000) return 500;
+  if(elapsed < 60000) return 1000;
+  return 3000;
+}
+
 function startPoll(){
-  pc=0;pt=setInterval(doPoll,PINT);
+  _pollCount = 0;
+  _startTime = Date.now();
+  schedulePoll();
+}
+
+function schedulePoll(){
+  if(_pollTimer) clearTimeout(_pollTimer);
+  _pollTimer = setTimeout(doPoll, getInterval());
+}
+
+function stopPoll(){
+  if(_pollTimer){ clearTimeout(_pollTimer); _pollTimer=null; }
 }
 
 async function doPoll(){
-  pc++;
-  if(pc===3) setStep('s3','active');
-  if(pc===7){setStep('s2','done');setStep('s3','done');setStep('s4','active');}
-  if(pc===30) document.getElementById('waitNote').style.display='block';
+  _pollCount++;
+  const elapsed = Date.now() - _startTime;
+
+  // Update step indicators based on elapsed time
+  if(elapsed >= 5000)  setStep('s3','active');
+  if(elapsed >= 20000){ setStep('s2','done'); setStep('s3','done'); setStep('s4','active'); }
+  if(elapsed >= 30000) document.getElementById('waitNote').style.display='block';
+
+  // Hard timeout after 5 minutes
+  if(elapsed >= TIMEOUT_MS){
+    stopPoll();
+    document.getElementById('ltitle').textContent='⏰ Taking longer than expected';
+    document.getElementById('lsub').textContent='Your payment may still be processing. Contact support if you paid.';
+    document.getElementById('waitNote').style.display='block';
+    return;
+  }
+
   try{
     const r=await fetch('/api/auth/activate/status?_='+Date.now());
     const d=await r.json();
-    if(d.activated){onDone();return;}
-    if(d.failed){stopPoll();onFail(d.message);return;}
-  }catch(e){console.log('poll err:',e.message);}
-  if(pc>=PMAX){
-    stopPoll();
-    document.getElementById('ltitle').textContent='⏰ Taking longer than expected';
-    document.getElementById('lsub').textContent='Your payment may still process. Contact support if you paid.';
-    document.getElementById('waitNote').style.display='block';
-  }
-}
 
-function stopPoll(){if(pt){clearInterval(pt);pt=null;}}
+    if(d.activated){
+      // Lipana confirmed payment — redirect immediately
+      onDone();
+      return;
+    }
+    if(d.failed){
+      stopPoll();
+      onFail(d.message);
+      return;
+    }
+  }catch(e){
+    console.log('poll err:',e.message);
+  }
+
+  // Schedule next poll with adaptive interval
+  schedulePoll();
+}
 
 function onDone(){
   stopPoll();
-  setStep('s2','done');setStep('s3','done');setStep('s4','done');
+  setStep('s2','done'); setStep('s3','done'); setStep('s4','done');
   const sp=document.getElementById('spinEl');
-  sp.style.border='4px solid #BBF7D0';sp.style.borderTopColor='#16A34A';sp.style.animation='none';
+  sp.style.border='4px solid #BBF7D0';
+  sp.style.borderTopColor='#16A34A';
+  sp.style.animation='none';
   document.getElementById('ltitle').textContent='🎉 Payment Confirmed!';
-  document.getElementById('lsub').textContent='Account activated! Redirecting to your dashboard…';
+  document.getElementById('lsub').textContent='Payment verified by Safaricom. Redirecting to your dashboard…';
   document.getElementById('failBox').style.display='none';
   document.getElementById('waitNote').style.display='none';
-  window.location.href='/dashboard';
+  // Redirect within 100 ms; 3-second fallback for any browser delay
+  setTimeout(()=>{ window.location.href='/dashboard'; }, 100);
+  setTimeout(()=>{ window.location.href='/dashboard'; }, 3000);
 }
 
 function onFail(msg){
   setStep('s2','fail');
   const sp=document.getElementById('spinEl');
-  sp.style.border='4px solid #FECACA';sp.style.borderTopColor='#DC2626';sp.style.animation='none';
+  sp.style.border='4px solid #FECACA';
+  sp.style.borderTopColor='#DC2626';
+  sp.style.animation='none';
   document.getElementById('ltitle').textContent='❌ Payment Not Completed';
   document.getElementById('lsub').textContent=msg||'The payment was not completed.';
   document.getElementById('failBox').style.display='block';
@@ -221,17 +273,19 @@ function resetSteps(){
     el.querySelector('.dot').textContent=st==='done'?'✓':id.replace('s','');
   });
   const sp=document.getElementById('spinEl');
-  sp.style.border='4px solid #E2E8F0';sp.style.borderTopColor='#16A34A';sp.style.animation='spin .75s linear infinite';
-  document.getElementById('ltitle').textContent='Waiting for payment confirmation…';
+  sp.style.border='4px solid #E2E8F0';
+  sp.style.borderTopColor='#16A34A';
+  sp.style.animation='spin .75s linear infinite';
+  document.getElementById('ltitle').textContent='Waiting for payment confirmation from Safaricom…';
   document.getElementById('lsub').textContent='Check your phone for the M-Pesa STK prompt and enter your PIN';
 }
 
 function setStep(id,state){
   const el=document.getElementById(id);
   el.classList.remove('active','done','fail');
-  if(state)el.classList.add(state);
-  if(state==='done')el.querySelector('.dot').textContent='✓';
-  if(state==='fail')el.querySelector('.dot').textContent='✕';
+  if(state) el.classList.add(state);
+  if(state==='done') el.querySelector('.dot').textContent='✓';
+  if(state==='fail') el.querySelector('.dot').textContent='✕';
 }
 
 function alert2(msg,type){const e=document.getElementById('alert');e.textContent=msg;e.className='alert '+type;e.style.display='block';}
