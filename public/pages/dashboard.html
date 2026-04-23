@@ -6,157 +6,152 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --gold:#E8900A;--gd:#C97D08;--green:#16A34A;
+  --g:#16A34A;--gh:#15803D;--gl:#F0FDF4;--gm:#22C55E;
+  --gold:#E8900A;--gold-l:#FFF3DC;
   --dark:#0F172A;--dark2:#1E293B;
-  --body:#F1F5F9;--card:#FFFFFF;--card2:#F8FAFC;
+  --body:#F1F5F9;--card:#fff;--card2:#F8FAFC;
   --border:#E2E8F0;--text:#1E293B;--muted:#64748B;--muted2:#94A3B8;
   --red:#DC2626;--blue:#2563EB;
-  --shadow:0 1px 4px rgba(0,0,0,.06);
-  --shadow-md:0 4px 16px rgba(0,0,0,.08);
+  --sh:0 1px 4px rgba(0,0,0,.06);--shm:0 4px 16px rgba(0,0,0,.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--body);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;display:flex;}
-
-/* ── SIDEBAR ── */
 .sb{width:255px;background:var(--dark);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:60;transition:transform .3s;}
 .sb-logo{padding:1.4rem 1.3rem 1rem;border-bottom:1px solid rgba(255,255,255,.07);}
-.logo{font-size:1.45rem;font-weight:800;color:#fff;letter-spacing:-0.5px;}
-.logo span{color:var(--gold);}
+.logo{font-size:1.45rem;font-weight:800;color:#fff;}
+.logo span{color:var(--g);}
 .sb-sec{padding:.75rem .75rem .2rem;font-size:.67rem;font-weight:700;color:#475569;letter-spacing:1.8px;text-transform:uppercase;}
 .ni{display:flex;align-items:center;gap:.65rem;padding:.6rem .9rem;margin:.07rem .45rem;border-radius:9px;cursor:pointer;color:#94A3B8;font-size:.87rem;transition:all .15s;border:none;background:none;width:calc(100% - .9rem);text-align:left;font-family:'Plus Jakarta Sans',sans-serif;}
 .ni:hover{background:rgba(255,255,255,.07);color:#fff;}
-.ni.active{background:rgba(232,144,10,.15);color:var(--gold);font-weight:700;}
+.ni.active{background:rgba(22,163,74,.15);color:#4ADE80;font-weight:700;}
 .ni .ic{font-size:1rem;width:20px;text-align:center;flex-shrink:0;}
 .sb-foot{margin-top:auto;padding:.9rem;}
 .lbtn{width:100%;padding:.65rem;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:9px;color:#EF4444;font-size:.87rem;cursor:pointer;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;}
 .lbtn:hover{background:rgba(239,68,68,.2);}
-
-/* ── MAIN ── */
 .main{margin-left:255px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
-
-/* ── TOPBAR ── */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.5rem;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40;box-shadow:var(--shadow);}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.5rem;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40;box-shadow:var(--sh);}
 .ham{display:none;background:none;border:none;color:var(--text);font-size:1.35rem;cursor:pointer;}
 .page-t{font-weight:700;font-size:1rem;color:var(--dark);}
-.nb{position:relative;background:none;border:none;cursor:pointer;font-size:1.2rem;padding:.3rem;}
+.nb{background:none;border:none;cursor:pointer;font-size:1.2rem;padding:.3rem;position:relative;}
 .nbadge{position:absolute;top:-2px;right:-2px;background:var(--red);color:#fff;font-size:.58rem;font-weight:800;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;}
-
-/* ── CONTENT ── */
 .cnt{padding:1.4rem;flex:1;}
 .sec{display:none;}
 .sec.active{display:block;}
 
-/* ── WELCOME BANNER ── */
-.wbanner{
-  border-radius:18px;padding:2rem 2.2rem;margin-bottom:1.4rem;position:relative;overflow:hidden;
-  background:
-    linear-gradient(135deg,rgba(10,20,40,.85) 0%,rgba(232,144,10,.35) 100%),
-    url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1200&q=80&auto=format&fit=crop')
-    center/cover no-repeat;
-  box-shadow:var(--shadow-md);
-}
+/* WELCOME BANNER */
+.wbanner{border-radius:18px;padding:2rem 2.2rem;margin-bottom:1.4rem;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(5,40,20,.88) 0%,rgba(22,163,74,.35) 100%),
+  url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=900&q=80&auto=format&fit=crop') center/cover no-repeat;
+  box-shadow:var(--shm);}
 .wbanner h2{font-size:1.35rem;font-weight:800;margin-bottom:.3rem;color:#fff;}
 .wbanner p{color:rgba(255,255,255,.78);font-size:.88rem;margin-bottom:1rem;line-height:1.65;max-width:520px;}
 .pills{display:flex;gap:.7rem;flex-wrap:wrap;}
-.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:.28rem .8rem;font-size:.75rem;color:#fff;font-weight:600;backdrop-filter:blur(4px);}
+.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:.28rem .8rem;font-size:.75rem;color:#fff;font-weight:600;}
 
-/* ── STAT CARDS ── */
+/* STAT CARDS */
 .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.9rem;margin-bottom:1.4rem;}
-.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.15rem;box-shadow:var(--shadow);}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.15rem;box-shadow:var(--sh);}
 .sc .lbl{font-size:.72rem;color:var(--muted);margin-bottom:.35rem;font-weight:600;}
-.sc .val{font-size:1.35rem;font-weight:800;color:var(--gold);}
+.sc .val{font-size:1.35rem;font-weight:800;color:var(--g);}
 .sc .sl{font-size:.71rem;color:var(--muted2);margin-top:.15rem;}
 
-/* ── EARNINGS LIST ── */
+/* EARNINGS LIST */
 .stitle{font-size:1rem;font-weight:700;margin-bottom:.9rem;color:var(--dark);}
 .stitle-sub{font-size:.78rem;color:var(--muted);font-weight:400;margin-left:.5rem;}
-.elist{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);}
+.elist{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--sh);}
 .ei{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.15rem;border-bottom:1px solid var(--border);}
 .ei:last-child{border-bottom:none;}
 .eil{display:flex;align-items:center;gap:.8rem;}
-.eico{width:36px;height:36px;border-radius:10px;background:#FFF3DC;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;}
+.eico{width:36px;height:36px;border-radius:10px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;}
 .enm{font-size:.88rem;font-weight:700;color:var(--dark);}
 .esb{font-size:.73rem;color:var(--muted);}
-.eamt{font-weight:800;color:var(--gold);font-size:.95rem;}
+.eamt{font-weight:800;color:var(--g);font-size:.95rem;}
 
-/* ── SCHEDULE ── */
+/* SCHEDULE */
 .sgd{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:.8rem;margin-top:.9rem;}
-.sdcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.95rem;box-shadow:var(--shadow);}
+.sdcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.95rem;box-shadow:var(--sh);}
 .sdcard h4{font-size:.9rem;font-weight:700;margin-bottom:.3rem;color:var(--dark);}
 .sdcard p{font-size:.78rem;color:var(--muted);}
 
-/* ── TODAY ── */
-.tgd{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-top:.9rem;}
-.tcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;box-shadow:var(--shadow);}
-.tcard .em{font-size:1.9rem;margin-bottom:.65rem;}
-.tcard h4{font-weight:700;margin-bottom:.3rem;font-size:.97rem;color:var(--dark);}
-.tcard p{font-size:.84rem;color:var(--muted);line-height:1.55;}
+/* CONTENT CARDS */
+.content-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;margin-top:1rem;}
+.content-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;box-shadow:var(--sh);}
+.content-card .cc-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;}
+.cc-icon{width:46px;height:46px;border-radius:12px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.cc-icon.gold{background:var(--gold-l);}
+.cc-icon.blue{background:#EFF6FF;}
+.cc-icon.purple{background:#F5F3FF;}
+.cc-title{font-size:1rem;font-weight:800;color:var(--dark);}
+.cc-sub{font-size:.75rem;color:var(--muted);}
+.cc-body p{font-size:.87rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;}
+.earn-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--gl);border:1px solid #BBF7D0;border-radius:50px;padding:.3rem .8rem;font-size:.78rem;color:var(--g);font-weight:700;margin-bottom:.8rem;}
+.earn-badge.gold{background:var(--gold-l);border-color:#FDE68A;color:var(--gold);}
+.task-list{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem;}
+.task-item{display:flex;align-items:center;gap:.6rem;font-size:.84rem;color:var(--text);}
+.task-item::before{content:'✅';font-size:.8rem;}
+.link-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--g);color:#fff;border-radius:9px;font-size:.84rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+.link-btn:hover{background:var(--gh);transform:translateY(-1px);}
+.link-btn.gold{background:var(--gold);}
+.link-btn.gold:hover{background:#C97D08;}
+.link-btn.blue{background:var(--blue);}
+.link-btn.blue:hover{background:#1D4ED8;}
+.link-btn.outline{background:var(--card);color:var(--g);border:1.5px solid #BBF7D0;}
+.link-btn.outline:hover{background:var(--gl);}
+.btn-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.5rem;}
+.info-note{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;font-size:.82rem;color:var(--muted);line-height:1.65;margin-top:.8rem;}
+.info-note strong{color:var(--dark);}
 
-/* ── FORM CARD ── */
-.fcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;max-width:490px;box-shadow:var(--shadow);}
+/* FORM CARD */
+.fcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;max-width:490px;box-shadow:var(--sh);}
 .fg{margin-bottom:1.05rem;}
 .fg label{font-size:.82rem;font-weight:600;margin-bottom:.33rem;display:block;color:var(--muted);}
 .fg input{width:100%;padding:.7rem .95rem;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:.88rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:border-color .2s;}
-.fg input:focus{border-color:var(--gold);background:#fff;}
+.fg input:focus{border-color:var(--g);background:#fff;}
 .fg input::placeholder{color:#CBD5E1;}
-.btn{padding:.78rem 1.8rem;background:var(--gold);color:#fff;font-weight:700;border:none;border-radius:10px;font-size:.93rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
-.btn:hover{background:var(--gd);transform:translateY(-1px);}
+.btn{padding:.78rem 1.8rem;background:var(--g);color:#fff;font-weight:700;border:none;border-radius:10px;font-size:.93rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
+.btn:hover{background:var(--gh);transform:translateY(-1px);}
 .btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 .al{padding:.65rem .9rem;border-radius:8px;font-size:.86rem;margin-top:.8rem;display:none;font-weight:600;}
-.al.ok{background:#F0FDF4;border:1px solid #BBF7D0;color:var(--green);}
+.al.ok{background:#F0FDF4;border:1px solid #BBF7D0;color:var(--g);}
 .al.err{background:#FEF2F2;border:1px solid #FECACA;color:var(--red);}
 
-/* ── REFERRAL / SHARE ── */
-.ref-code-box{background:#FFF3DC;border:1.5px solid #FDE68A;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem;}
+/* REFERRAL */
+.ref-code-box{background:var(--gold-l);border:1.5px solid #FDE68A;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem;}
 .ref-code-label{font-size:.73rem;font-weight:700;color:#92400E;margin-bottom:.35rem;letter-spacing:.5px;}
 .ref-code-val{font-family:monospace;font-size:1.5rem;font-weight:800;color:var(--gold);letter-spacing:3px;}
 .ref-link-box{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
 .ref-link-txt{font-family:monospace;font-size:.8rem;color:var(--gold);word-break:break-all;flex:1;}
-.copy-btn{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:.45rem .95rem;font-size:.8rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;}
+.copy-btn{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:.45rem .95rem;font-size:.8rem;font-weight:700;cursor:pointer;white-space:nowrap;}
 .srow{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.sbtn{display:inline-flex;align-items:center;gap:.55rem;padding:.72rem 1.2rem;border-radius:10px;border:none;font-weight:700;font-size:.87rem;cursor:pointer;text-decoration:none;font-family:'Plus Jakarta Sans',sans-serif;}
-.swa{background:#25D366;color:#fff;}
-.swa:hover{background:#1fbb58;}
-.scopy{background:var(--card);border:1.5px solid var(--border);color:var(--text);}
-.scopy:hover{border-color:var(--gold);}
 .ref-earn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.7rem;margin-top:.5rem;}
 .rec{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:.8rem;text-align:center;}
 .rec-amt{font-size:1.1rem;font-weight:800;color:var(--gold);}
 .rec-lbl{font-size:.72rem;color:var(--muted);margin-top:.15rem;}
 
-/* ── TABLE ── */
-.twrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:auto;box-shadow:var(--shadow);}
+/* TABLE */
+.twrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:auto;box-shadow:var(--sh);}
 table{width:100%;border-collapse:collapse;min-width:380px;}
 th{padding:.72rem 1rem;text-align:left;font-size:.75rem;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);}
 td{padding:.72rem 1rem;font-size:.86rem;border-bottom:1px solid var(--border);}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:var(--card2);}
 
-/* ── SPIN ── */
+/* SPIN */
 .spin-wrap{text-align:center;padding:1.5rem 1rem;}
-.spin-btn{padding:.88rem 2.5rem;background:var(--gold);color:#fff;font-weight:800;border:none;border-radius:12px;font-size:1.05rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:1.5rem;transition:all .2s;}
-.spin-btn:hover{background:var(--gd);transform:translateY(-1px);}
+.spin-btn{padding:.88rem 2.5rem;background:var(--g);color:#fff;font-weight:800;border:none;border-radius:12px;font-size:1.05rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:1.5rem;transition:all .2s;}
+.spin-btn:hover{background:var(--gh);transform:translateY(-1px);}
 .spin-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
-.spin-res{margin-top:1rem;font-weight:800;font-size:1.1rem;min-height:1.8rem;color:var(--gold);}
+.spin-res{margin-top:1rem;font-weight:800;font-size:1.1rem;min-height:1.8rem;color:var(--g);}
 
-/* ── GENERIC SECTION ── */
-.gen-sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;max-width:600px;box-shadow:var(--shadow);}
-.gen-sec .em{font-size:2.5rem;margin-bottom:1rem;}
-.gen-sec h3{font-size:1.1rem;font-weight:800;margin-bottom:.6rem;color:var(--dark);}
-.gen-sec p{color:var(--muted);font-size:.9rem;line-height:1.7;}
-
-/* ── NOTIF PANEL ── */
+/* NOTIF */
 .npanel{position:fixed;top:56px;right:1rem;width:305px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 16px 50px rgba(0,0,0,.14);z-index:200;display:none;max-height:380px;overflow-y:auto;}
-.nh{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.9rem;color:var(--dark);}
+.nh{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.9rem;}
 .nitem{padding:.8rem 1.1rem;border-bottom:1px solid var(--border);}
 .nitem:last-child{border-bottom:none;}
 .nitem h5{font-size:.86rem;margin-bottom:.2rem;font-weight:700;}
 .nitem p{font-size:.78rem;color:var(--muted);}
 .nempty{padding:2rem;text-align:center;color:var(--muted);font-size:.88rem;}
-
-/* ── OVERLAY ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;}
-
 @media(max-width:768px){
   .sb{transform:translateX(-100%);}
   .sb.open{transform:translateX(0);}
@@ -164,35 +159,29 @@ tr:hover td{background:var(--card2);}
   .ham{display:block;}
   .overlay.open{display:block;}
   .sgrid{grid-template-columns:repeat(2,1fr);}
+  .content-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
-
-<!-- SIDEBAR -->
 <aside class="sb" id="sb">
   <div class="sb-logo"><div class="logo">Earn<span>Hub</span></div></div>
-
   <div class="sb-sec">Main Menu</div>
   <button class="ni active" onclick="go('dash',this)"><span class="ic">🏠</span>Dashboard</button>
-
   <div class="sb-sec">Financial</div>
   <button class="ni" onclick="go('voucher',this)"><span class="ic">🎟️</span>Voucher</button>
   <button class="ni" onclick="go('recharge',this)"><span class="ic">💳</span>Account Recharge</button>
   <button class="ni" onclick="go('withdraw',this)"><span class="ic">💸</span>Withdraw</button>
   <button class="ni" onclick="go('redeem',this)"><span class="ic">🎁</span>Redeem Bonus</button>
-
   <div class="sb-sec">Community</div>
   <button class="ni" onclick="go('share',this)"><span class="ic">📤</span>Share WhatsApp</button>
   <button class="ni" onclick="openWA()"><span class="ic">👥</span>Join Group</button>
   <button class="ni" onclick="go('downlines',this)"><span class="ic">🌐</span>Downlines</button>
   <button class="ni" onclick="go('chat',this)"><span class="ic">💬</span>Chat Foreigners</button>
-
   <div class="sb-sec">Products</div>
   <button class="ni" onclick="go('spin',this)"><span class="ic">🎰</span>Spin Games</button>
   <button class="ni" onclick="go('aviator',this)"><span class="ic">✈️</span>Aviator Predictor</button>
   <button class="ni" onclick="go('revshare',this)"><span class="ic">📈</span>Aviator REVSHARE</button>
-
   <div class="sb-sec">Digital Services</div>
   <button class="ni" onclick="go('ads',this)"><span class="ic">📣</span>Ads Earnings</button>
   <button class="ni" onclick="go('tiktok',this)"><span class="ic">🎵</span>TikTok Earn</button>
@@ -202,18 +191,12 @@ tr:hover td{background:var(--card2);}
   <button class="ni" onclick="go('forex',this)"><span class="ic">💱</span>Forex Lessons</button>
   <button class="ni" onclick="go('ebooks',this)"><span class="ic">📚</span>Business Ebooks</button>
   <button class="ni" onclick="go('tournaments',this)"><span class="ic">🏆</span>Tournaments</button>
-
   <div class="sb-sec">Account</div>
   <button class="ni" onclick="go('profile',this)"><span class="ic">👤</span>Profile</button>
-
-  <div class="sb-foot">
-    <button class="lbtn" onclick="doLogout()">🚪 Logout</button>
-  </div>
+  <div class="sb-foot"><button class="lbtn" onclick="doLogout()">🚪 Logout</button></div>
 </aside>
-
 <div class="overlay" id="overlay" onclick="closeSb()"></div>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:.9rem;">
@@ -221,12 +204,10 @@ tr:hover td{background:var(--card2);}
       <div class="page-t" id="ptitle">Dashboard</div>
     </div>
     <div style="display:flex;align-items:center;gap:.8rem;">
-      <span style="font-size:.83rem;color:var(--muted);">Hi, <span id="topUser" style="color:var(--gold);font-weight:700;"></span></span>
+      <span style="font-size:.83rem;color:var(--muted);">Hi, <span id="topUser" style="color:var(--g);font-weight:700;"></span></span>
       <button class="nb" onclick="toggleNotif()">🔔<span class="nbadge" id="nbadge"></span></button>
     </div>
   </div>
-
-  <!-- NOTIFICATION PANEL -->
   <div class="npanel" id="npanel">
     <div class="nh">🔔 Notifications</div>
     <div id="nlist"><div class="nempty">No new notifications</div></div>
@@ -237,52 +218,36 @@ tr:hover td{background:var(--card2);}
     <!-- DASHBOARD -->
     <div class="sec active" id="s-dash">
       <div class="wbanner">
-        <h2>Welcome Back, <span id="wname" style="color:#FBBF24;"></span> 👋</h2>
-        <p>Ready to maximize your earnings? Dive into 10+ powerful earning tools — YouTube, TikTok, trivia, articles, and more. Earn KES 100 for every referral! 💰✨</p>
-        <div class="pills">
-          <span class="pill">10+ Earning Tools</span>
-          <span class="pill">KES 100 Per Referral</span>
-          <span class="pill">Secure Platform</span>
-          <span class="pill">Fast M-Pesa Payouts</span>
-        </div>
+        <h2>Welcome Back, <span id="wname" style="color:#86EFAC;"></span> 👋</h2>
+        <p>Ready to maximize your earnings? Explore 10+ powerful earning tools — YouTube, TikTok, trivia, articles, spin games and more. Earn KES 100 for every referral! 💰</p>
+        <div class="pills"><span class="pill">10+ Earning Tools</span><span class="pill">KES 100 Per Referral</span><span class="pill">Fast M-Pesa Payouts</span></div>
       </div>
-
       <div class="sgrid">
         <div class="sc"><div class="lbl">💸 Expenses</div><div class="val" id="d-exp">KSh 0</div><div class="sl">Activation Fee</div></div>
         <div class="sc"><div class="lbl">💰 Total Earnings</div><div class="val" id="d-tot">KSh 0</div><div class="sl">All Sources</div></div>
         <div class="sc"><div class="lbl">💳 Balance</div><div class="val" id="d-bal">KSh 0</div><div class="sl">Withdrawable</div></div>
-        <div class="sc"><div class="lbl">🏦 Withdrawn</div><div class="val" id="d-wd">KSh 0</div><div class="sl">Total Withdrawn</div></div>
-        <div class="sc"><div class="lbl">👥 Affiliate Earnings</div><div class="val" id="d-aff">KSh 0</div><div class="sl">From Referrals</div></div>
-        <div class="sc"><div class="lbl">🎁 Agent Bonus</div><div class="val" id="d-bon">KSh 100</div><div class="sl">Bonus Earnings</div></div>
+        <div class="sc"><div class="lbl">🏦 Withdrawn</div><div class="val" id="d-wd">KSh 0</div><div class="sl">Total</div></div>
+        <div class="sc"><div class="lbl">👥 Affiliate</div><div class="val" id="d-aff">KSh 0</div><div class="sl">From Referrals</div></div>
+        <div class="sc"><div class="lbl">🎁 Agent Bonus</div><div class="val" id="d-bon">KSh 100</div><div class="sl">Bonus</div></div>
       </div>
-
-      <div class="stitle">📊 Earnings Sources <span class="stitle-sub">Complete breakdown</span></div>
+      <div class="stitle">📊 Earnings Breakdown <span class="stitle-sub">All sources</span></div>
       <div class="elist">
         <div class="ei"><div class="eil"><div class="eico">📣</div><div><div class="enm">Ads Earnings</div><div class="esb">Ads Sales</div></div></div><div class="eamt" id="e-ads">KSh 0</div></div>
         <div class="ei"><div class="eil"><div class="eico">🎵</div><div><div class="enm">TikTok Earnings</div><div class="esb">TikTok Views</div></div></div><div class="eamt" id="e-tik">KSh 0</div></div>
         <div class="ei"><div class="eil"><div class="eico">📺</div><div><div class="enm">YouTube Earnings</div><div class="esb">YouTube Views</div></div></div><div class="eamt" id="e-yt">KSh 0</div></div>
         <div class="ei"><div class="eil"><div class="eico">🧩</div><div><div class="enm">Trivia Earnings</div><div class="esb">Trivia Games</div></div></div><div class="eamt" id="e-tri">KSh 0</div></div>
         <div class="ei"><div class="eil"><div class="eico">✍️</div><div><div class="enm">Articles Earnings</div><div class="esb">Articles</div></div></div><div class="eamt" id="e-art">KSh 0</div></div>
-        <div class="ei"><div class="eil"><div class="eico">👥</div><div><div class="enm">Affiliate Earnings</div><div class="esb">From Referrals (KES 100 each)</div></div></div><div class="eamt" id="e-aff2">KSh 0</div></div>
+        <div class="ei"><div class="eil"><div class="eico">👥</div><div><div class="enm">Affiliate Earnings</div><div class="esb">KES 100 per referral</div></div></div><div class="eamt" id="e-aff2">KSh 0</div></div>
       </div>
-
       <div style="margin-top:2rem;">
-        <div class="stitle">📅 Weekly Schedule <span class="stitle-sub">Earning opportunities throughout the week</span></div>
+        <div class="stitle">📅 Weekly Schedule</div>
         <div class="sgd">
           <div class="sdcard"><h4>📺 YouTube</h4><p>Saturday &amp; Sunday</p></div>
           <div class="sdcard"><h4>🎵 TikTok</h4><p>Tuesday &amp; Wednesday</p></div>
           <div class="sdcard"><h4>🧩 Trivia</h4><p>Mon, Wed &amp; Fri</p></div>
           <div class="sdcard"><h4>📣 Ads</h4><p>Mon, Thu &amp; Fri</p></div>
           <div class="sdcard"><h4>✍️ Articles</h4><p>Monday &amp; Friday</p></div>
-          <div class="sdcard"><h4>👥 Affiliate</h4><p>Daily</p></div>
-        </div>
-      </div>
-
-      <div style="margin-top:2rem;">
-        <div class="stitle">📆 Today's Activities <span class="stitle-sub">Your earning opportunities for today</span></div>
-        <div class="tgd">
-          <div class="tcard"><div class="em">✍️</div><h4>Article Writing</h4><p>Write articles and get paid for your creativity! 💰<br><br>💡 Create and get rewarded!</p></div>
-          <div class="tcard"><div class="em">👥</div><h4>Affiliate (Referrals)</h4><p>Invite friends and earn <strong style="color:var(--gold);">KES 100</strong> for every person who activates! 🎉</p></div>
+          <div class="sdcard"><h4>👥 Affiliate</h4><p>Every day</p></div>
         </div>
       </div>
     </div>
@@ -309,53 +274,457 @@ tr:hover td{background:var(--card2);}
       </div>
     </div>
 
-    <!-- SHARE / REFERRAL -->
+    <!-- SHARE -->
     <div class="sec" id="s-share">
       <div class="stitle">📤 Share &amp; Earn — KES 100 Per Referral</div>
-      <p style="color:var(--muted);margin-bottom:1.3rem;font-size:.88rem;">Share your unique referral link. When someone signs up and activates using your link, you earn <strong style="color:var(--gold);">KES 100</strong> instantly credited to your balance.</p>
-
-      <div class="ref-code-box">
-        <div class="ref-code-label">YOUR REFERRAL CODE</div>
-        <div class="ref-code-val" id="refCode">—</div>
-      </div>
-
-      <div class="ref-link-box">
-        <div class="ref-link-txt" id="rlink">Loading…</div>
-        <button class="copy-btn" onclick="copyRef()">📋 Copy</button>
-      </div>
-
+      <p style="color:var(--muted);margin-bottom:1.3rem;font-size:.88rem;">Share your unique referral link. When someone activates using your link, <strong style="color:var(--gold);">KES 100</strong> is instantly credited to your balance.</p>
+      <div class="ref-code-box"><div class="ref-code-label">YOUR REFERRAL CODE</div><div class="ref-code-val" id="refCode">—</div></div>
+      <div class="ref-link-box"><div class="ref-link-txt" id="rlink">Loading…</div><button class="copy-btn" onclick="copyRef()">📋 Copy</button></div>
       <div class="srow">
-        <a id="washr" href="#" target="_blank" class="sbtn swa">📱 Share on WhatsApp</a>
-        <button onclick="copyRef()" class="sbtn scopy">📋 Copy Link</button>
+        <a id="washr" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:.55rem;padding:.72rem 1.2rem;border-radius:10px;background:#25D366;color:#fff;font-weight:700;font-size:.87rem;text-decoration:none;">📱 Share on WhatsApp</a>
+        <button onclick="copyRef()" style="display:inline-flex;align-items:center;gap:.55rem;padding:.72rem 1.2rem;border-radius:10px;background:var(--card);border:1.5px solid var(--border);color:var(--text);font-weight:700;font-size:.87rem;cursor:pointer;">📋 Copy Link</button>
       </div>
-
-      <div class="stitle" style="margin-top:1rem;">💰 Earnings Calculator</div>
+      <div class="stitle">💰 Earnings Calculator</div>
       <div class="ref-earn-grid">
         <div class="rec"><div class="rec-amt">KES 100</div><div class="rec-lbl">1 referral</div></div>
         <div class="rec"><div class="rec-amt">KES 500</div><div class="rec-lbl">5 referrals</div></div>
         <div class="rec"><div class="rec-amt">KES 1,000</div><div class="rec-lbl">10 referrals</div></div>
         <div class="rec"><div class="rec-amt">KES 5,000</div><div class="rec-lbl">50 referrals</div></div>
-        <div class="rec"><div class="rec-amt">KES 10,000</div><div class="rec-lbl">100 referrals</div></div>
       </div>
     </div>
 
     <!-- DOWNLINES -->
     <div class="sec" id="s-downlines">
       <div class="stitle">🌐 My Downlines</div>
+      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">People who signed up using your referral link. Each activation earns you <strong style="color:var(--gold);">KES 100</strong>.</p>
       <div class="twrap">
-        <table><thead><tr><th>Username</th><th>Country</th><th>Joined</th></tr></thead>
-        <tbody id="dlbody"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:2rem;">Loading…</td></tr></tbody>
-        </table>
+        <table><thead><tr><th>Username</th><th>Country</th><th>Joined</th><th>Status</th></tr></thead>
+        <tbody id="dlbody"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No downlines yet. Share your referral link!</td></tr></tbody></table>
       </div>
     </div>
 
-    <!-- SPIN -->
+    <!-- CHAT FOREIGNERS -->
+    <div class="sec" id="s-chat">
+      <div class="stitle">💬 Chat &amp; Earn with Foreigners</div>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon blue">💬</div><div><div class="cc-title">Chat on Telegram</div><div class="cc-sub">Earn by chatting in international groups</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 Earn KES 50–200 per task</div>
+            <p>Join international Telegram groups, engage with foreigners, help answer questions, and get paid for your time. Tasks include welcoming new members, answering FAQs, and promoting channels.</p>
+            <div class="task-list">
+              <div class="task-item">Join English-speaking groups</div>
+              <div class="task-item">Reply to 10 messages daily</div>
+              <div class="task-item">Welcome new members</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://t.me" target="_blank" class="link-btn blue">Open Telegram →</a>
+            </div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon blue">🌍</div><div><div class="cc-title">Engage on Facebook Groups</div><div class="cc-sub">International community engagement</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 Earn KES 30–100 per engagement</div>
+            <p>Join international Facebook groups, interact with members globally, comment on posts, and share your knowledge. Earn from engagement bonuses tracked by our system.</p>
+            <div class="task-list">
+              <div class="task-item">Comment on 5 international posts</div>
+              <div class="task-item">Share group posts daily</div>
+              <div class="task-item">Invite friends to groups</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://facebook.com/groups" target="_blank" class="link-btn blue">Open Facebook →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPIN GAMES -->
     <div class="sec" id="s-spin">
       <div class="stitle">🎰 Spin &amp; Win</div>
+      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Spin the wheel daily for a chance to win KES 5 – KES 20. Winners are paid directly to your balance.</p>
       <div class="spin-wrap">
-        <canvas id="wheel" width="220" height="220" style="border-radius:50%;border:3px solid var(--gold);display:block;margin:0 auto;"></canvas>
-        <button class="spin-btn" id="spinBtn" onclick="doSpin()">🎰 SPIN NOW</button>
+        <canvas id="wheel" width="220" height="220" style="border-radius:50%;border:3px solid var(--g);display:block;margin:0 auto;"></canvas>
+        <button class="spin-btn" id="spinBtn" onclick="doSpin()">🎰 SPIN NOW — FREE Daily Spin</button>
         <div class="spin-res" id="spinRes"></div>
+      </div>
+      <div class="info-note" style="max-width:400px;margin:1rem auto 0;">
+        <strong>How it works:</strong> You get 1 free spin per day. Prizes range from KES 5 to KES 20. Winnings are added to your withdrawable balance instantly.
+      </div>
+    </div>
+
+    <!-- AVIATOR PREDICTOR -->
+    <div class="sec" id="s-aviator">
+      <div class="stitle">✈️ Aviator Predictor</div>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon gold">✈️</div><div><div class="cc-title">Aviator Signal Tool</div><div class="cc-sub">Smart prediction signals for Aviator game</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge gold">🎯 High Accuracy Signals</div>
+            <p>Use our AI-powered signal tool to get predictions for the Aviator crash game. Our algorithm analyzes patterns to suggest optimal cash-out multipliers.</p>
+            <div class="task-list">
+              <div class="task-item">Get real-time multiplier signals</div>
+              <div class="task-item">Follow suggested cash-out points</div>
+              <div class="task-item">Play responsibly with small bets</div>
+            </div>
+            <div class="info-note">⚠️ <strong>Disclaimer:</strong> Aviator is a game of chance. Use signals as guidance only. Never bet more than you can afford to lose. Play responsibly.</div>
+            <div class="btn-row" style="margin-top:1rem;">
+              <a href="https://www.betika.com" target="_blank" class="link-btn gold">Play on Betika →</a>
+              <a href="https://www.sportybet.com" target="_blank" class="link-btn gold">Play on SportyBet →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AVIATOR REVSHARE -->
+    <div class="sec" id="s-revshare">
+      <div class="stitle">📈 Aviator REVSHARE</div>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon gold">📈</div><div><div class="cc-title">Revenue Share Program</div><div class="cc-sub">Earn commission from referrals who play Aviator</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge gold">💰 Earn 5% commission per referral bet</div>
+            <p>Refer people to play Aviator on partner platforms. Earn a percentage of every bet placed by your referrals. The more they play, the more you earn — passively.</p>
+            <div class="task-list">
+              <div class="task-item">Share your referral link on WhatsApp, Facebook</div>
+              <div class="task-item">Your referrals sign up and play Aviator</div>
+              <div class="task-item">Earn 5% of their total bets automatically</div>
+            </div>
+            <div class="btn-row">
+              <button class="link-btn gold" onclick="go('share',null)">📤 Get My Referral Link</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADS EARNINGS -->
+    <div class="sec" id="s-ads">
+      <div class="stitle">📣 Ads Earnings</div>
+      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available: <strong>Monday, Thursday &amp; Friday</strong></p>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon">📣</div><div><div class="cc-title">Watch &amp; Click Ads</div><div class="cc-sub">Earn by interacting with advertisements</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 5–15 per ad interaction</div>
+            <p>Watch short video ads or click banner ads from our advertising partners. Each verified interaction earns you KES 5–15 credited to your balance immediately.</p>
+            <div class="task-list">
+              <div class="task-item">Watch a 30-second video ad — KES 5</div>
+              <div class="task-item">Click and visit an advertiser page — KES 10</div>
+              <div class="task-item">Complete a survey ad — KES 15</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://www.google.com/adsense" target="_blank" class="link-btn">View Today's Ads →</a>
+            </div>
+            <div class="info-note">📅 <strong>Next ads available:</strong> Check back on Monday, Thursday, or Friday for new ad batches.</div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon">📲</div><div><div class="cc-title">Social Media Ads</div><div class="cc-sub">Promote brands on your social media</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 50–200 per promotion</div>
+            <p>Promote brand posts on your Facebook, Instagram, or Twitter. Simply share the provided post and earn when verified. Minimum 50 followers required.</p>
+            <div class="task-list">
+              <div class="task-item">Share brand post on Facebook — KES 50</div>
+              <div class="task-item">Retweet brand post — KES 30</div>
+              <div class="task-item">Share on Instagram stories — KES 80</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://facebook.com" target="_blank" class="link-btn">Start Promoting →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIKTOK EARN -->
+    <div class="sec" id="s-tiktok">
+      <div class="stitle">🎵 TikTok Earn</div>
+      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available: <strong>Tuesday &amp; Wednesday</strong></p>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon">🎵</div><div><div class="cc-title">Watch TikTok Videos</div><div class="cc-sub">Earn by watching and engaging with TikTok</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 5–20 per task</div>
+            <p>Watch assigned TikTok videos, like them, follow creators, and comment. Each completed task is verified and paid to your balance. Tasks refresh every Tuesday and Wednesday.</p>
+            <div class="task-list">
+              <div class="task-item">Watch full video + like — KES 5</div>
+              <div class="task-item">Follow a TikTok account — KES 10</div>
+              <div class="task-item">Leave a genuine comment — KES 8</div>
+              <div class="task-item">Share to your TikTok story — KES 15</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://www.tiktok.com" target="_blank" class="link-btn">Open TikTok →</a>
+            </div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon">📱</div><div><div class="cc-title">Create TikTok Content</div><div class="cc-sub">Earn by creating videos about EarnHub</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 100–500 per video</div>
+            <p>Create a TikTok video reviewing or promoting EarnHub. Videos with 100+ views earn KES 100. Videos with 1,000+ views earn KES 500. Must tag @EarnHub and include your referral link.</p>
+            <div class="task-list">
+              <div class="task-item">100+ views — KES 100 bonus</div>
+              <div class="task-item">500+ views — KES 250 bonus</div>
+              <div class="task-item">1,000+ views — KES 500 bonus</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://www.tiktok.com/creator-portal" target="_blank" class="link-btn">Create on TikTok →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- YOUTUBE EARN -->
+    <div class="sec" id="s-youtube">
+      <div class="stitle">📺 YouTube Earn</div>
+      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available: <strong>Saturday &amp; Sunday</strong></p>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon" style="background:#FEE2E2;">📺</div><div><div class="cc-title">Watch YouTube Videos</div><div class="cc-sub">Earn by watching assigned videos</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 5–25 per task</div>
+            <p>Watch assigned YouTube videos from our content partners. Complete the full video, like, subscribe, and leave a comment. Tasks are verified and paid every Saturday and Sunday.</p>
+            <div class="task-list">
+              <div class="task-item">Watch full video (3+ min) — KES 5</div>
+              <div class="task-item">Subscribe to channel — KES 15</div>
+              <div class="task-item">Like + Comment — KES 10</div>
+              <div class="task-item">Share to WhatsApp — KES 8</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://www.youtube.com" target="_blank" class="link-btn" style="background:#FF0000;">Open YouTube →</a>
+            </div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon" style="background:#FEE2E2;">🎬</div><div><div class="cc-title">Create YouTube Content</div><div class="cc-sub">Earn by creating videos about EarnHub</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 200–1,000 per video</div>
+            <p>Create a YouTube video reviewing EarnHub or teaching people how to earn online. Include your referral link in the description. Earn based on views and referrals generated.</p>
+            <div class="task-list">
+              <div class="task-item">500+ views — KES 200 bonus</div>
+              <div class="task-item">1,000+ views — KES 500 bonus</div>
+              <div class="task-item">5,000+ views — KES 1,000 bonus</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://studio.youtube.com" target="_blank" class="link-btn" style="background:#FF0000;">YouTube Studio →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRIVIA -->
+    <div class="sec" id="s-trivia">
+      <div class="stitle">🧩 Trivia Questions</div>
+      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available: <strong>Monday, Wednesday &amp; Friday</strong></p>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon">🧩</div><div><div class="cc-title">Daily Trivia Challenge</div><div class="cc-sub">Answer questions and win KES per correct answer</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 10 per correct answer</div>
+            <p>Answer 10 trivia questions across categories: General Knowledge, Science, History, Sports, and Tech. Get KES 10 for every correct answer. Maximum KES 100 per day from trivia.</p>
+            <div class="task-list">
+              <div class="task-item">General Knowledge — KES 10 per correct</div>
+              <div class="task-item">Science &amp; Technology — KES 10 per correct</div>
+              <div class="task-item">History &amp; Geography — KES 10 per correct</div>
+              <div class="task-item">Sports &amp; Entertainment — KES 10 per correct</div>
+            </div>
+            <div id="triviaSection">
+              <button class="link-btn" onclick="startTrivia()" style="margin-top:.5rem;">🧩 Start Today's Trivia</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Trivia quiz UI -->
+      <div id="triviaQuiz" style="display:none;margin-top:1.2rem;">
+        <div class="content-card" id="triviaCard">
+          <div id="triviaContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARTICLES -->
+    <div class="sec" id="s-articles">
+      <div class="stitle">✍️ Write Articles &amp; Earn</div>
+      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available: <strong>Monday &amp; Friday</strong></p>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon">✍️</div><div><div class="cc-title">Article Writing Tasks</div><div class="cc-sub">Write and get paid per approved article</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 50–200 per approved article</div>
+            <p>Write original articles on assigned topics. Articles must be 300–500 words, original, well-written in English. Approved articles are paid within 24 hours to your balance.</p>
+            <div class="task-list">
+              <div class="task-item">300 words article — KES 50</div>
+              <div class="task-item">500 words article — KES 100</div>
+              <div class="task-item">800+ words premium article — KES 200</div>
+            </div>
+            <div class="info-note">📌 <strong>Today's Topics:</strong> (1) How to earn money online in Kenya. (2) Benefits of M-Pesa in daily life. (3) How to grow your savings as a young person.</div>
+            <div class="btn-row" style="margin-top:.8rem;">
+              <a href="https://docs.google.com/document/create" target="_blank" class="link-btn">Write on Google Docs →</a>
+            </div>
+            <div class="info-note" style="margin-top:.8rem;">✅ Submit your article link to our WhatsApp group for review and payment.</div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon">📰</div><div><div class="cc-title">Blog on Medium</div><div class="cc-sub">Publish and earn from Medium Partner Program</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 Earn from views + EarnHub bonus</div>
+            <p>Publish articles on Medium about earning online in Africa. Include your EarnHub referral link. Earn from Medium's Partner Program AND get a KES 100 bonus for every referral from your article.</p>
+            <div class="task-list">
+              <div class="task-item">Create free Medium account</div>
+              <div class="task-item">Write about earning online in Kenya</div>
+              <div class="task-item">Include your EarnHub referral link</div>
+              <div class="task-item">Earn from Medium + referral commissions</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://medium.com/new-story" target="_blank" class="link-btn outline">Write on Medium →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOREX LESSONS -->
+    <div class="sec" id="s-forex">
+      <div class="stitle">💱 Forex Lessons &amp; Earn</div>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon" style="background:#EFF6FF;">💱</div><div><div class="cc-title">Learn Forex Trading</div><div class="cc-sub">Free lessons + earn while you learn</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 20 per completed lesson</div>
+            <p>Complete free forex trading lessons and earn KES 20 for each lesson you finish. Learn candlestick patterns, support/resistance, risk management, and more from beginner to advanced.</p>
+            <div class="task-list">
+              <div class="task-item">Lesson 1: What is Forex Trading? — KES 20</div>
+              <div class="task-item">Lesson 2: Reading Candlestick Charts — KES 20</div>
+              <div class="task-item">Lesson 3: Support &amp; Resistance — KES 20</div>
+              <div class="task-item">Lesson 4: Risk Management — KES 20</div>
+              <div class="task-item">Lesson 5: Your First Trade — KES 20</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://www.babypips.com/learn/forex" target="_blank" class="link-btn blue">Start Free Lessons →</a>
+            </div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon" style="background:#EFF6FF;">📊</div><div><div class="cc-title">Practice on Demo Account</div><div class="cc-sub">Trade with virtual money risk-free</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 50 for opening demo account</div>
+            <p>Open a free forex demo account and earn KES 50 from EarnHub as a reward. Practice trading with $10,000 virtual money. Master your skills before using real money.</p>
+            <div class="task-list">
+              <div class="task-item">Open free demo account — KES 50 bonus</div>
+              <div class="task-item">Complete 10 demo trades — KES 30 bonus</div>
+              <div class="task-item">Share your learning journey in group</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://www.exness.com/open-demo-account/" target="_blank" class="link-btn blue">Open Demo Account →</a>
+              <a href="https://www.fxpro.com/forex-trading/demo-account" target="_blank" class="link-btn outline">FxPro Demo →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EBOOKS -->
+    <div class="sec" id="s-ebooks">
+      <div class="stitle">📚 Business Ebooks &amp; Earn</div>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon">📚</div><div><div class="cc-title">Free Business Ebooks</div><div class="cc-sub">Read and earn KES per ebook completed</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge">💰 KES 30 per ebook read</div>
+            <p>Read free business and entrepreneurship ebooks from our library. Complete a short quiz after each book to prove you read it and earn KES 30 per verified read.</p>
+            <div class="task-list">
+              <div class="task-item">📖 How to Start a Business in Kenya — KES 30</div>
+              <div class="task-item">📖 Financial Freedom for Millennials — KES 30</div>
+              <div class="task-item">📖 Digital Marketing Basics — KES 30</div>
+              <div class="task-item">📖 Online Earning Strategies 2024 — KES 30</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://www.free-ebooks.net/business" target="_blank" class="link-btn">Read Free Ebooks →</a>
+              <a href="https://www.gutenberg.org" target="_blank" class="link-btn outline">Project Gutenberg →</a>
+            </div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon">💡</div><div><div class="cc-title">Sell Your Own Ebook</div><div class="cc-sub">Write and sell an ebook — earn passively</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge gold">💰 Earn KES per sale passively</div>
+            <p>Write a short ebook (20–50 pages) on a topic you know well. List it in our marketplace. Earn every time someone buys it. Topics that sell well: farming, cooking, business ideas, online earning.</p>
+            <div class="task-list">
+              <div class="task-item">Write ebook on any practical topic</div>
+              <div class="task-item">Submit to our admin for review</div>
+              <div class="task-item">Earn KES for every download/sale</div>
+            </div>
+            <div class="btn-row">
+              <a href="https://docs.google.com/document/create" target="_blank" class="link-btn gold">Start Writing →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOURNAMENTS -->
+    <div class="sec" id="s-tournaments">
+      <div class="stitle">🏆 Tournaments &amp; Competitions</div>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon gold">🏆</div><div><div class="cc-title">Weekly Top Earner Tournament</div><div class="cc-sub">Compete for the top earner prize this week</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge gold">🥇 Top prize: KES 1,000</div>
+            <p>Every week the top 3 earners on EarnHub win bonus prizes. Rankings are based on total earnings from all sources combined. Tournament resets every Monday at midnight.</p>
+            <div class="task-list">
+              <div class="task-item">🥇 1st Place — KES 1,000 bonus</div>
+              <div class="task-item">🥈 2nd Place — KES 500 bonus</div>
+              <div class="task-item">🥉 3rd Place — KES 250 bonus</div>
+            </div>
+            <div class="info-note">📅 <strong>Next tournament ends:</strong> This Sunday at midnight. Keep earning to climb the leaderboard!</div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="cc-header"><div class="cc-icon gold">👥</div><div><div class="cc-title">Top Referrer Tournament</div><div class="cc-sub">Bring the most referrals this month</div></div></div>
+          <div class="cc-body">
+            <div class="earn-badge gold">🥇 Top prize: KES 2,000</div>
+            <p>The member who refers the most activated users in a calendar month wins a massive bonus on top of their regular KES 100 per referral commission. Monthly competition.</p>
+            <div class="task-list">
+              <div class="task-item">🥇 Most referrals (month) — KES 2,000 extra</div>
+              <div class="task-item">🥈 2nd most referrals — KES 1,000 extra</div>
+              <div class="task-item">🥉 3rd most referrals — KES 500 extra</div>
+            </div>
+            <div class="btn-row">
+              <button class="link-btn gold" onclick="go('share',null)">📤 Start Referring Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECHARGE -->
+    <div class="sec" id="s-recharge">
+      <div class="stitle">💳 Account Recharge</div>
+      <div class="content-card" style="max-width:500px;">
+        <div class="cc-header"><div class="cc-icon gold">💳</div><div><div class="cc-title">Top Up Your Balance</div><div class="cc-sub">Add funds to access premium features</div></div></div>
+        <div class="cc-body">
+          <p>Top up your EarnHub balance to access premium earning tasks and higher-paying opportunities. Send M-Pesa to our paybill and your balance is updated within minutes.</p>
+          <div class="info-note" style="margin-top:.8rem;">📞 <strong>M-Pesa Paybill:</strong> Contact admin via WhatsApp for recharge details.<br><br>After sending M-Pesa, send your transaction code to admin for balance update.</div>
+          <div class="btn-row" style="margin-top:1rem;">
+            <a href="https://wa.me/254700000000" target="_blank" class="link-btn">Contact Admin →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REDEEM -->
+    <div class="sec" id="s-redeem">
+      <div class="stitle">🎁 Redeem Bonus</div>
+      <div class="fcard">
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.2rem;">Enter your bonus code to redeem points or extra balance. Bonus codes are shared in our WhatsApp group monthly.</p>
+        <div class="fg"><label>Bonus Code</label><input type="text" id="vc2" placeholder="Enter your bonus code"/></div>
+        <button class="btn" onclick="doVoucher2()">Redeem Bonus</button>
+        <div class="al" id="val2"></div>
       </div>
     </div>
 
@@ -372,89 +741,50 @@ tr:hover td{background:var(--card2);}
       </div>
     </div>
 
-    <!-- GENERIC STUBS -->
-    <div class="sec" id="s-recharge"><div class="gen-sec"><div class="em">💳</div><h3>Account Recharge</h3><p>Top up your account balance. Contact support for recharge options.</p></div></div>
-    <div class="sec" id="s-redeem"><div class="gen-sec"><div class="em">🎁</div><h3>Redeem Bonus</h3><p>Redeem accumulated bonus points. Bonuses credited monthly.</p></div></div>
-    <div class="sec" id="s-chat"><div class="gen-sec"><div class="em">💬</div><h3>Chat Foreigners</h3><p>Connect with international members. Feature coming soon!</p></div></div>
-    <div class="sec" id="s-aviator"><div class="gen-sec"><div class="em">✈️</div><h3>Aviator Predictor</h3><p>AI-powered Aviator prediction tool. Launching soon!</p></div></div>
-    <div class="sec" id="s-revshare"><div class="gen-sec"><div class="em">📈</div><h3>Aviator REVSHARE</h3><p>Earn a share of Aviator game revenue. Enrollment opening soon!</p></div></div>
-    <div class="sec" id="s-ads"><div class="gen-sec"><div class="em">📣</div><h3>Ads Earnings</h3><p>View ads to earn. Available Mon, Thu &amp; Fri. Check back!</p></div></div>
-    <div class="sec" id="s-tiktok"><div class="gen-sec"><div class="em">🎵</div><h3>TikTok Earn</h3><p>Watch TikTok and earn. Available Tue &amp; Wed.</p></div></div>
-    <div class="sec" id="s-youtube"><div class="gen-sec"><div class="em">📺</div><h3>YouTube Earn</h3><p>Watch YouTube and earn. Available Sat &amp; Sun.</p></div></div>
-    <div class="sec" id="s-trivia"><div class="gen-sec"><div class="em">🧩</div><h3>Trivia Questions</h3><p>Answer trivia and win KES per correct answer. Mon, Wed &amp; Fri!</p></div></div>
-    <div class="sec" id="s-articles"><div class="gen-sec"><div class="em">✍️</div><h3>Write Articles</h3><p>Write quality articles and earn per approval. Mon &amp; Fri!</p></div></div>
-    <div class="sec" id="s-forex"><div class="gen-sec"><div class="em">💱</div><h3>Forex Lessons</h3><p>Learn forex trading and earn while you grow!</p></div></div>
-    <div class="sec" id="s-ebooks"><div class="gen-sec"><div class="em">📚</div><h3>Business Ebooks</h3><p>Access business and entrepreneurship ebooks.</p></div></div>
-    <div class="sec" id="s-tournaments"><div class="gen-sec"><div class="em">🏆</div><h3>Tournaments</h3><p>Join weekly earning tournaments. Top earners win bonus prizes. Next: Friday!</p></div></div>
-
-  </div><!-- /cnt -->
-</div><!-- /main -->
+  </div>
+</div>
 
 <script>
-const TITLES={
-  dash:'Dashboard',voucher:'Voucher',recharge:'Account Recharge',withdraw:'Withdraw',
-  redeem:'Redeem Bonus',share:'Share & Earn',downlines:'Downlines',chat:'Chat Foreigners',
-  spin:'Spin Games',aviator:'Aviator Predictor',revshare:'Aviator REVSHARE',
-  ads:'Ads Earnings',tiktok:'TikTok Earn',youtube:'YouTube Earn',trivia:'Trivia Questions',
-  articles:'Articles',forex:'Forex Lessons',ebooks:'Business Ebooks',
-  tournaments:'Tournaments',profile:'Profile'
-};
-let notifOpen=false, spinning=false, rot=0;
+const TITLES={dash:'Dashboard',voucher:'Voucher',recharge:'Account Recharge',withdraw:'Withdraw',redeem:'Redeem Bonus',share:'Share & Earn',downlines:'Downlines',chat:'Chat Foreigners',spin:'Spin Games',aviator:'Aviator Predictor',revshare:'Aviator REVSHARE',ads:'Ads Earnings',tiktok:'TikTok Earn',youtube:'YouTube Earn',trivia:'Trivia Questions',articles:'Articles',forex:'Forex Lessons',ebooks:'Business Ebooks',tournaments:'Tournaments',profile:'Profile'};
+let notifOpen=false,spinning=false,rot=0;
 
-// ── Load user data ──
 async function loadUser(){
   try{
     const r=await fetch('/api/auth/me');
     const d=await r.json();
     if(!d.success){window.location.href='/login';return;}
     const u=d.user;
-    // Topbar & welcome
-    document.getElementById('wname').textContent  = u.username;
-    document.getElementById('topUser').textContent= u.username;
-    // Stats
-    document.getElementById('d-exp').textContent  = 'KSh '+(d.settings?.activation_fee||300);
-    document.getElementById('d-tot').textContent  = 'KSh '+(u.total_earnings||0);
-    document.getElementById('d-bal').textContent  = 'KSh '+(u.balance||0);
-    document.getElementById('d-wd').textContent   = 'KSh '+(u.total_withdrawn||0);
-    document.getElementById('d-aff').textContent  = 'KSh '+(u.affiliate_earnings||0);
-    document.getElementById('d-bon').textContent  = 'KSh '+(u.agent_bonus||100);
-    // Earnings breakdown
-    document.getElementById('e-ads').textContent  = 'KSh '+(u.ads_earnings||0);
-    document.getElementById('e-tik').textContent  = 'KSh '+(u.tiktok_earnings||0);
-    document.getElementById('e-yt').textContent   = 'KSh '+(u.youtube_earnings||0);
-    document.getElementById('e-tri').textContent  = 'KSh '+(u.trivia_earnings||0);
-    document.getElementById('e-art').textContent  = 'KSh '+(u.articles_earnings||0);
-    document.getElementById('e-aff2').textContent = 'KSh '+(u.affiliate_earnings||0);
-    // Profile
-    document.getElementById('pun').value = u.username;
-    document.getElementById('pem').value = u.email;
-    document.getElementById('pco').value = u.country;
-    document.getElementById('pmo').value = u.mobile;
-    document.getElementById('prc').value = u.referral_code;
-    document.getElementById('pms').value = new Date(u.created_at).toLocaleDateString();
-    // Referral
-    const refUrl = window.location.origin+'/register?ref='+u.referral_code;
-    document.getElementById('refCode').textContent = u.referral_code||'—';
-    document.getElementById('rlink').textContent   = refUrl;
-    document.getElementById('washr').href =
-      'https://wa.me/?text='+encodeURIComponent(
-        'Join EarnHub and earn online! Use my referral link: '+refUrl+
-        '\n\nEarn from TikTok, YouTube, Ads, Articles & more. Activate for only KES 300 and I earn KES 100!'
-      );
-    // Notifications
-    if(d.notifications && d.notifications.length>0){
-      const nb=document.getElementById('nbadge');
-      nb.textContent=d.notifications.length; nb.style.display='flex';
-      document.getElementById('nlist').innerHTML=
-        d.notifications.map(n=>`<div class="nitem"><h5>${n.title}</h5><p>${n.message}</p></div>`).join('');
+    document.getElementById('wname').textContent=u.username;
+    document.getElementById('topUser').textContent=u.username;
+    document.getElementById('d-exp').textContent='KSh '+(d.settings?.activation_fee||300);
+    document.getElementById('d-tot').textContent='KSh '+(u.total_earnings||0);
+    document.getElementById('d-bal').textContent='KSh '+(u.balance||0);
+    document.getElementById('d-wd').textContent='KSh '+(u.total_withdrawn||0);
+    document.getElementById('d-aff').textContent='KSh '+(u.affiliate_earnings||0);
+    document.getElementById('d-bon').textContent='KSh '+(u.agent_bonus||100);
+    document.getElementById('e-ads').textContent='KSh '+(u.ads_earnings||0);
+    document.getElementById('e-tik').textContent='KSh '+(u.tiktok_earnings||0);
+    document.getElementById('e-yt').textContent='KSh '+(u.youtube_earnings||0);
+    document.getElementById('e-tri').textContent='KSh '+(u.trivia_earnings||0);
+    document.getElementById('e-art').textContent='KSh '+(u.articles_earnings||0);
+    document.getElementById('e-aff2').textContent='KSh '+(u.affiliate_earnings||0);
+    document.getElementById('pun').value=u.username;
+    document.getElementById('pem').value=u.email;
+    document.getElementById('pco').value=u.country;
+    document.getElementById('pmo').value=u.mobile;
+    document.getElementById('prc').value=u.referral_code;
+    document.getElementById('pms').value=new Date(u.created_at).toLocaleDateString();
+    const refUrl=window.location.origin+'/register?ref='+u.referral_code;
+    document.getElementById('refCode').textContent=u.referral_code||'—';
+    document.getElementById('rlink').textContent=refUrl;
+    document.getElementById('washr').href='https://wa.me/?text='+encodeURIComponent('Join EarnHub and earn online! Use my referral link: '+refUrl+'\n\nEarn from TikTok, YouTube, Ads, Articles & more. Activate for only KES 300 and I earn KES 100!');
+    if(d.notifications&&d.notifications.length>0){
+      const nb=document.getElementById('nbadge');nb.textContent=d.notifications.length;nb.style.display='flex';
+      document.getElementById('nlist').innerHTML=d.notifications.map(n=>`<div class="nitem"><h5>${n.title}</h5><p>${n.message}</p></div>`).join('');
     }
-  }catch(e){
-    console.error(e);
-    window.location.href='/login';
-  }
+  }catch{window.location.href='/login';}
 }
 
-// ── Navigation ──
 function go(id,el){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
@@ -466,96 +796,75 @@ function go(id,el){
   closeSb();
 }
 
-function openWA(){ window.open('https://chat.whatsapp.com/','_blank'); }
-function toggleSb(){ document.getElementById('sb').classList.toggle('open'); document.getElementById('overlay').classList.toggle('open'); }
-function closeSb(){ document.getElementById('sb').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
-function toggleNotif(){ notifOpen=!notifOpen; document.getElementById('npanel').style.display=notifOpen?'block':'none'; }
-async function doLogout(){ await fetch('/api/auth/logout',{method:'POST'}); window.location.href='/'; }
+function openWA(){window.open('https://chat.whatsapp.com/','_blank');}
+function toggleSb(){document.getElementById('sb').classList.toggle('open');document.getElementById('overlay').classList.toggle('open');}
+function closeSb(){document.getElementById('sb').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+function toggleNotif(){notifOpen=!notifOpen;document.getElementById('npanel').style.display=notifOpen?'block':'none';}
+async function doLogout(){await fetch('/api/auth/logout',{method:'POST'});window.location.href='/';}
 
-// ── Withdraw ──
 async function doWithdraw(){
-  const a=document.getElementById('wa').value;
-  const p=document.getElementById('wp').value;
+  const a=document.getElementById('wa').value,p=document.getElementById('wp').value;
   const r=await fetch('/api/user/withdraw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:parseFloat(a),mobile:p})});
   const d=await r.json();
   showAl('wal',d.message,d.success?'ok':'err');
-  if(d.success) loadUser();
+  if(d.success)loadUser();
 }
-
-// ── Voucher ──
 async function doVoucher(){
   const c=document.getElementById('vc').value;
   const r=await fetch('/api/user/voucher',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:c})});
-  const d=await r.json();
-  showAl('val',d.message,d.success?'ok':'err');
+  const d=await r.json();showAl('val',d.message,d.success?'ok':'err');
 }
-
-// ── Copy referral ──
+async function doVoucher2(){
+  const c=document.getElementById('vc2').value;
+  const r=await fetch('/api/user/voucher',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:c})});
+  const d=await r.json();showAl('val2',d.message,d.success?'ok':'err');
+}
 function copyRef(){
   const txt=document.getElementById('rlink').textContent;
-  navigator.clipboard.writeText(txt).then(()=>alert('✅ Referral link copied to clipboard!')).catch(()=>{
-    const ta=document.createElement('textarea'); ta.value=txt;
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta); alert('✅ Referral link copied!');
+  navigator.clipboard.writeText(txt).then(()=>alert('✅ Referral link copied!')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('✅ Copied!');
   });
 }
-
-// ── Load downlines ──
 async function loadDownlines(){
-  const r=await fetch('/api/user/downlines');
-  const d=await r.json();
+  const r=await fetch('/api/user/downlines');const d=await r.json();
   const tb=document.getElementById('dlbody');
   if(!d.downlines||!d.downlines.length){
-    tb.innerHTML='<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:2rem;">No downlines yet. Share your referral link to earn KES 100 per signup!</td></tr>';
+    tb.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No downlines yet. Share your referral link to earn KES 100 per signup!</td></tr>';
     return;
   }
-  tb.innerHTML=d.downlines.map(dl=>
-    `<tr><td><strong>${dl.username}</strong></td><td>${dl.country}</td><td style="color:var(--muted);">${new Date(dl.created_at).toLocaleDateString()}</td></tr>`
-  ).join('');
+  tb.innerHTML=d.downlines.map(dl=>`<tr><td><strong>${dl.username}</strong></td><td>${dl.country}</td><td style="color:var(--muted);">${new Date(dl.created_at).toLocaleDateString()}</td><td><span style="background:var(--gl);color:var(--g);padding:.2rem .6rem;border-radius:50px;font-size:.75rem;font-weight:700;">Member</span></td></tr>`).join('');
 }
+function showAl(id,msg,type){const e=document.getElementById(id);e.textContent=msg;e.className='al '+(type==='ok'?'ok':'err');e.style.display='block';}
 
-// ── Alert helper ──
-function showAl(id,msg,type){
-  const e=document.getElementById(id);
-  e.textContent=msg; e.className='al '+(type==='ok'?'ok':'err'); e.style.display='block';
-}
-
-// ── Spin Wheel ──
+// ── SPIN WHEEL ──
 function drawWheel(){
-  const cv=document.getElementById('wheel');
-  if(!cv)return;
+  const cv=document.getElementById('wheel');if(!cv)return;
   const ctx=cv.getContext('2d');
   const prizes=['KES 0','KES 5','KES 0','KES 10','KES 0','KES 20','KES 0','KES 5'];
-  const colors=['#F1F5F9','#E8900A','#F1F5F9','#16A34A','#F1F5F9','#E8900A','#F1F5F9','#16A34A'];
+  const colors=['#F1F5F9','#16A34A','#F1F5F9','#E8900A','#F1F5F9','#16A34A','#F1F5F9','#E8900A'];
   const arc=(2*Math.PI)/prizes.length;
   ctx.clearRect(0,0,220,220);
   prizes.forEach((p,i)=>{
     const a=rot*(Math.PI/180)+i*arc;
     ctx.beginPath();ctx.moveTo(110,110);ctx.arc(110,110,105,a,a+arc);ctx.closePath();
-    ctx.fillStyle=colors[i];ctx.fill();ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle=colors[i];ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
     ctx.save();ctx.translate(110,110);ctx.rotate(a+arc/2);
     ctx.textAlign='right';ctx.fillStyle=i%2===0?'#64748B':'#fff';
     ctx.font='bold 11px Plus Jakarta Sans';ctx.fillText(p,92,4);ctx.restore();
   });
   ctx.beginPath();ctx.arc(110,110,14,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();
-  ctx.beginPath();ctx.arc(110,110,12,0,2*Math.PI);ctx.fillStyle=var_gold();ctx.fill();
+  ctx.beginPath();ctx.arc(110,110,12,0,2*Math.PI);ctx.fillStyle='#16A34A';ctx.fill();
 }
-function var_gold(){return '#E8900A';}
-
 async function doSpin(){
-  if(spinning)return;
-  spinning=true;
-  const btn=document.getElementById('spinBtn');
-  btn.disabled=true;
+  if(spinning)return;spinning=true;
+  const btn=document.getElementById('spinBtn');btn.disabled=true;
   document.getElementById('spinRes').textContent='';
-  const spins=360*5+Math.random()*360;
-  const dur=3000; const start=performance.now(); const startR=rot;
+  const spins=360*5+Math.random()*360,dur=3000,start=performance.now(),startR=rot;
   function animate(now){
-    const el=now-start; const prog=Math.min(el/dur,1);
-    const ease=1-Math.pow(1-prog,4);
-    rot=(startR+spins*ease)%360; drawWheel();
+    const el=now-start,prog=Math.min(el/dur,1),ease=1-Math.pow(1-prog,4);
+    rot=(startR+spins*ease)%360;drawWheel();
     if(prog<1){requestAnimationFrame(animate);return;}
-    spinning=false; btn.disabled=false;
+    spinning=false;btn.disabled=false;
     fetch('/api/user/spin',{method:'POST'}).then(r=>r.json()).then(d=>{
       document.getElementById('spinRes').textContent=d.message;
       if(d.prize>0)loadUser();
@@ -564,14 +873,71 @@ async function doSpin(){
   requestAnimationFrame(animate);
 }
 
-// Close notif panel on outside click
-document.addEventListener('click',e=>{
-  if(notifOpen && !e.target.closest('.npanel') && !e.target.closest('.nb')){
-    notifOpen=false; document.getElementById('npanel').style.display='none';
-  }
-});
+// ── TRIVIA ──
+const triviaQuestions=[
+  {q:'What is the capital of Kenya?',o:['Nairobi','Mombasa','Kisumu','Nakuru'],a:0},
+  {q:'Which river is the longest in the world?',o:['Amazon','Nile','Congo','Yangtze'],a:1},
+  {q:'How many continents are there on Earth?',o:['5','6','7','8'],a:2},
+  {q:'What currency does Kenya use?',o:['Dollar','Euro','Shilling','Pound'],a:2},
+  {q:'What is 15% of 200?',o:['20','25','30','35'],a:2},
+  {q:'Which planet is known as the Red Planet?',o:['Venus','Jupiter','Mars','Saturn'],a:2},
+  {q:'What does M-Pesa stand for?',o:['Mobile Peso','Mobile Money','Mobile Pesa','Mobile Pay'],a:2},
+  {q:'How many days are in a leap year?',o:['364','365','366','367'],a:2},
+  {q:'Which company founded the Android operating system?',o:['Apple','Google','Microsoft','Samsung'],a:1},
+  {q:'What is the main export of Kenya?',o:['Coffee','Tea','Flowers','All of the above'],a:3}
+];
+let tqIdx=0,tScore=0,tAnswered=false;
 
-// Init
+function startTrivia(){
+  tqIdx=0;tScore=0;
+  document.getElementById('triviaSection').style.display='none';
+  document.getElementById('triviaQuiz').style.display='block';
+  showTriviaQ();
+}
+function showTriviaQ(){
+  if(tqIdx>=triviaQuestions.length){
+    const earned=tScore*10;
+    document.getElementById('triviaContent').innerHTML=`
+      <div style="text-align:center;padding:1rem;">
+        <div style="font-size:2rem;margin-bottom:.8rem;">🎉</div>
+        <h3 style="font-size:1.2rem;font-weight:800;margin-bottom:.5rem;">Trivia Complete!</h3>
+        <p style="color:var(--muted);margin-bottom:1rem;">You got <strong>${tScore}/10</strong> correct</p>
+        <div style="background:var(--gl);border:1.5px solid #BBF7D0;border-radius:12px;padding:1rem;margin-bottom:1rem;">
+          <div style="font-size:1.8rem;font-weight:800;color:var(--g);">+KES ${earned}</div>
+          <div style="font-size:.82rem;color:var(--muted);">Added to your balance</div>
+        </div>
+        <button class="link-btn" onclick="document.getElementById('triviaQuiz').style.display='none';document.getElementById('triviaSection').style.display='block';">Play Again Tomorrow</button>
+      </div>`;
+    if(earned>0){
+      fetch('/api/user/trivia-earn',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:earned})})
+        .then(r=>r.json()).then(()=>loadUser()).catch(()=>{});
+    }
+    return;
+  }
+  const q=triviaQuestions[tqIdx];tAnswered=false;
+  document.getElementById('triviaContent').innerHTML=`
+    <div style="margin-bottom:1rem;">
+      <div style="font-size:.78rem;color:var(--muted);font-weight:600;margin-bottom:.5rem;">QUESTION ${tqIdx+1} OF ${triviaQuestions.length}</div>
+      <h4 style="font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:1rem;">${q.q}</h4>
+      <div style="display:flex;flex-direction:column;gap:.6rem;">
+        ${q.o.map((opt,i)=>`<button onclick="answerTrivia(${i})" id="topt${i}" style="padding:.75rem 1rem;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;text-align:left;font-size:.88rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;transition:all .2s;" onmouseover="this.style.borderColor='var(--g)'" onmouseout="if(!this.dataset.answered)this.style.borderColor='var(--border)'">${String.fromCharCode(65+i)}. ${opt}</button>`).join('')}
+      </div>
+    </div>`;
+}
+function answerTrivia(idx){
+  if(tAnswered)return;tAnswered=true;
+  const q=triviaQuestions[tqIdx];
+  const correct=idx===q.a;
+  if(correct)tScore++;
+  for(let i=0;i<q.o.length;i++){
+    const btn=document.getElementById('topt'+i);btn.dataset.answered='1';btn.style.cursor='default';
+    if(i===q.a)btn.style.background='#F0FDF4',btn.style.borderColor='#16A34A',btn.style.color='#15803D',btn.style.fontWeight='700';
+    else if(i===idx)btn.style.background='#FEF2F2',btn.style.borderColor='#DC2626',btn.style.color='#DC2626';
+  }
+  setTimeout(()=>{tqIdx++;showTriviaQ();},1200);
+}
+
+document.addEventListener('click',e=>{if(notifOpen&&!e.target.closest('.npanel')&&!e.target.closest('.nb')){notifOpen=false;document.getElementById('npanel').style.display='none';}});
 loadUser();
 </script>
 </body>
