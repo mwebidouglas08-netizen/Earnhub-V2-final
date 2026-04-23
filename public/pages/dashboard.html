@@ -252,15 +252,45 @@ tr:hover td{background:var(--card2);}
       </div>
     </div>
 
-    <!-- WITHDRAW -->
+    <<!-- WITHDRAW -->
     <div class="sec" id="s-withdraw">
       <div class="stitle">💸 Withdraw Earnings</div>
-      <div class="fcard">
-        <div class="fg"><label>Amount (KES)</label><input type="number" id="wa" placeholder="e.g. 500" min="500"/></div>
+      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1.2rem;">Withdraw your earnings to M-Pesa. Two separate withdrawal options below.</p>
+
+      <!-- Main balance withdrawal -->
+      <div class="fcard" style="margin-bottom:1.2rem;">
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:1rem;">
+          <div style="width:38px;height:38px;border-radius:10px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">💳</div>
+          <div>
+            <div style="font-weight:700;font-size:.95rem;">Withdraw Main Balance</div>
+            <div style="font-size:.78rem;color:var(--muted);">Minimum: KES 500 · From ads, trivia, YouTube, spin etc.</div>
+          </div>
+        </div>
+        <div style="background:var(--gl);border:1px solid #BBF7D0;border-radius:10px;padding:.7rem 1rem;margin-bottom:1rem;font-size:.85rem;">
+          Available Balance: <strong id="wd-balance" style="color:var(--g);">KES 0</strong>
+        </div>
+        <div class="fg"><label>Amount (KES) — min KES 500</label><input type="number" id="wa" placeholder="e.g. 500" min="500"/></div>
         <div class="fg"><label>M-Pesa Number</label><input type="tel" id="wp" placeholder="+254712345678"/></div>
         <button class="btn" onclick="doWithdraw()">Request Withdrawal</button>
         <div class="al" id="wal"></div>
-        <p style="margin-top:1rem;font-size:.79rem;color:var(--muted);">Minimum: KES 500. Processed within 24 hours.</p>
+      </div>
+
+      <!-- Affiliate earnings withdrawal -->
+      <div class="fcard">
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:1rem;">
+          <div style="width:38px;height:38px;border-radius:10px;background:#FFF3DC;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">👥</div>
+          <div>
+            <div style="font-weight:700;font-size:.95rem;">Withdraw Affiliate Earnings</div>
+            <div style="font-size:.78rem;color:var(--muted);">Minimum: KES 100 · From referral commissions only</div>
+          </div>
+        </div>
+        <div style="background:#FFF3DC;border:1px solid #FDE68A;border-radius:10px;padding:.7rem 1rem;margin-bottom:1rem;font-size:.85rem;">
+          Affiliate Earnings: <strong id="wd-affiliate" style="color:var(--gold);">KES 0</strong>
+        </div>
+        <div class="fg"><label>Amount (KES) — min KES 100</label><input type="number" id="wa2" placeholder="e.g. 100" min="100"/></div>
+        <div class="fg"><label>M-Pesa Number</label><input type="tel" id="wp2" placeholder="+254712345678"/></div>
+        <button class="btn" style="background:var(--gold);" onclick="doAffiliateWithdraw()">Withdraw Affiliate Earnings</button>
+        <div class="al" id="wal2"></div>
       </div>
     </div>
 
@@ -939,6 +969,11 @@ function answerTrivia(idx){
 
 document.addEventListener('click',e=>{if(notifOpen&&!e.target.closest('.npanel')&&!e.target.closest('.nb')){notifOpen=false;document.getElementById('npanel').style.display='none';}});
 loadUser();
+  // Update withdrawal balance displays
+if(document.getElementById('wd-balance'))
+  document.getElementById('wd-balance').textContent = 'KES ' + (u.balance || 0);
+if(document.getElementById('wd-affiliate'))
+  document.getElementById('wd-affiliate').textContent = 'KES ' + (u.affiliate_earnings || 0);
 </script>
 </body>
 </html>
