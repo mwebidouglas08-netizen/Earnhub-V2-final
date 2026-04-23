@@ -5,7 +5,7 @@
 <title>EarnHub – Activate Account</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-:root{--g:#16A34A;--gh:#15803D;--gl:#F0FDF4;--dark:#0F172A;--body:#F8FAFC;--card:#fff;--border:#E2E8F0;--text:#1E293B;--muted:#64748B;--red:#DC2626;}
+:root{--g:#16A34A;--gh:#15803D;--gl:#F0FDF4;--dark:#0F172A;--body:#F8FAFC;--card:#fff;--border:#E2E8F0;--text:#1E293B;--muted:#64748B;--red:#DC2626;--gold:#E8900A;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--body);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background-image:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(22,163,74,.09) 0%,transparent 70%);}
 .card{background:var(--card);border-radius:22px;padding:2.5rem 2rem;width:100%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,.10);}
@@ -31,6 +31,26 @@ input::placeholder{color:#CBD5E1;}
 .btn-cancel:hover{color:var(--text)!important;border-color:#94A3B8!important;transform:none!important;}
 .btn-red{background:var(--red)!important;margin-top:.5rem;}
 .btn-red:hover{background:#B91C1C!important;box-shadow:none!important;transform:none!important;}
+/* MANUAL ACCESS BUTTON — shown after 5 minutes */
+.manual-access{
+  display:none;
+  background:linear-gradient(135deg,#FFFBEB,#FFF3DC);
+  border:2px solid var(--gold);
+  border-radius:14px;padding:1.3rem 1.2rem;
+  margin-bottom:.8rem;text-align:center;
+}
+.manual-access h4{color:var(--dark);font-size:.97rem;font-weight:800;margin-bottom:.4rem;}
+.manual-access p{font-size:.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.6;}
+.btn-gold{background:var(--gold)!important;box-shadow:0 4px 14px rgba(232,144,10,.35)!important;}
+.btn-gold:hover{background:#C97D08!important;}
+.countdown-ring{display:flex;flex-direction:column;align-items:center;margin-bottom:.8rem;}
+.ring-wrap{position:relative;width:80px;height:80px;margin-bottom:.5rem;}
+.ring-svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:#E2E8F0;stroke-width:6;}
+.ring-prog{fill:none;stroke:var(--gold);stroke-width:6;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220;transition:stroke-dashoffset .5s linear;}
+.ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:var(--dark);}
+.ring-label{font-size:.75rem;color:var(--muted);font-weight:600;}
+/* LOADER */
 .loader{display:none;text-align:center;}
 .spinner{width:56px;height:56px;border:4px solid #E2E8F0;border-top-color:var(--g);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 1.1rem;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -42,7 +62,7 @@ input::placeholder{color:#CBD5E1;}
 .si.done{color:var(--g);}
 .si.done .dot{background:var(--g);border-color:var(--g);color:#fff;}
 .si.active{color:var(--dark);font-weight:700;}
-.si.active .dot{background:#E8900A;border-color:#E8900A;color:#fff;animation:pulse .9s ease-in-out infinite;}
+.si.active .dot{background:var(--gold);border-color:var(--gold);color:#fff;animation:pulse .9s ease-in-out infinite;}
 .si.fail{color:var(--red);}
 .si.fail .dot{background:var(--red);border-color:var(--red);color:#fff;}
 @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
@@ -93,24 +113,48 @@ input::placeholder{color:#CBD5E1;}
       <div class="si"        id="s3"><div class="dot">3</div><span>Confirming with Safaricom</span></div>
       <div class="si"        id="s4"><div class="dot">4</div><span>Activating your account</span></div>
     </div>
+
+    <!-- Countdown ring + manual access button (shown after 5 minutes) -->
+    <div class="manual-access" id="manualAccess">
+      <h4>⏳ Payment taking longer than usual?</h4>
+      <p>If you already entered your M-Pesa PIN and the payment went through, tap the button below to access your dashboard.</p>
+      <button class="btn btn-gold" id="manualBtn" onclick="manualAccess()">
+        🚀 I Have Paid — Access Dashboard
+      </button>
+    </div>
+
+    <!-- Countdown ring — visible while waiting -->
+    <div class="countdown-ring" id="countdownRing">
+      <div class="ring-wrap">
+        <svg class="ring-svg" width="80" height="80" viewBox="0 0 80 80">
+          <circle class="ring-bg"   cx="40" cy="40" r="35"/>
+          <circle class="ring-prog" cx="40" cy="40" r="35" id="ringProg"/>
+        </svg>
+        <div class="ring-num" id="ringNum">5:00</div>
+      </div>
+      <div class="ring-label">Manual access button appears in</div>
+    </div>
+
     <div class="fail-box" id="failBox">
       <p>❌ Payment was not completed.</p>
       <small>Possible reasons: wrong PIN, insufficient M-Pesa balance, or the STK push expired. Please try again.</small>
       <button class="btn btn-red" onclick="retry()">↩ Try Again</button>
     </div>
     <div class="wait-note" id="waitNote">
-      ⏳ Still waiting for Safaricom confirmation.<br>
-      <strong>Do not close this page.</strong> You'll be redirected automatically when payment is confirmed.
+      ⏳ Still confirming with Safaricom. <strong>Do not close this page.</strong>
     </div>
     <button onclick="cancel()" class="btn btn-cancel">↩ Cancel &amp; use different number</button>
   </div>
 </div>
 
 <script>
-let _pollTimer = null;
-let _pollCount = 0;
-let _startTime = 0;
-const TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
+let pt=null, pc=0, countdownTimer=null;
+const PINT=3000, PMAX=150; // 150 × 3s = 7.5 min max poll
+const MANUAL_AFTER_MS = 5 * 60 * 1000; // 5 minutes
+const TOTAL_RING_SECS = 300; // 300 seconds = 5 minutes
+const CIRCUMFERENCE   = 2 * Math.PI * 35; // ≈ 220
+
+let countdownStart = null;
 
 fetch('/api/auth/me').then(r=>r.json()).then(d=>{
   if(!d.success){window.location.href='/login';return;}
@@ -124,7 +168,7 @@ async function startPayment(){
   const raw=document.getElementById('phone').value.trim();
   if(!raw||raw.length<9){alert2('Enter a valid 9-digit M-Pesa number.','error');return;}
   const btn=document.getElementById('payBtn');
-  btn.disabled=true;btn.innerHTML='⏳ Sending STK push…';clearAlert();
+  btn.disabled=true; btn.innerHTML='⏳ Sending STK push…'; clearAlert();
   try{
     const r=await fetch('/api/auth/activate/stk',{
       method:'POST',headers:{'Content-Type':'application/json'},
@@ -133,15 +177,14 @@ async function startPayment(){
     const d=await r.json();
     if(d.success){
       if(d.alreadyActivated){window.location.href='/dashboard';return;}
-      showLoader();
-      startPoll();
+      showLoader(); startPoll(); startCountdown();
     }else{
       alert2(d.message||'STK push failed. Please try again.','error');
-      btn.disabled=false;btn.innerHTML='🚀 Pay &amp; Activate';
+      btn.disabled=false; btn.innerHTML='🚀 Pay &amp; Activate';
     }
   }catch{
     alert2('Network error. Check your connection.','error');
-    btn.disabled=false;btn.innerHTML='🚀 Pay &amp; Activate';
+    btn.disabled=false; btn.innerHTML='🚀 Pay &amp; Activate';
   }
 }
 
@@ -150,120 +193,126 @@ function showLoader(){
   document.getElementById('loaderView').style.display='block';
 }
 
-/* ── Adaptive polling schedule ──
- *   0–15 s  → every 500 ms  (aggressive: catches fast payments)
- *  15–60 s  → every 1 000 ms
- *  60–300 s → every 3 000 ms
- * Redirect ONLY when backend returns activated:true (Lipana confirmed).
- */
-function getInterval(){
-  const elapsed = Date.now() - _startTime;
-  if(elapsed < 15000) return 500;
-  if(elapsed < 60000) return 1000;
-  return 3000;
-}
-
 function startPoll(){
-  _pollCount = 0;
-  _startTime = Date.now();
-  schedulePoll();
-}
-
-function schedulePoll(){
-  if(_pollTimer) clearTimeout(_pollTimer);
-  _pollTimer = setTimeout(doPoll, getInterval());
-}
-
-function stopPoll(){
-  if(_pollTimer){ clearTimeout(_pollTimer); _pollTimer=null; }
+  pc=0; pt=setInterval(doPoll,PINT);
 }
 
 async function doPoll(){
-  _pollCount++;
-  const elapsed = Date.now() - _startTime;
-
-  // Update step indicators based on elapsed time
-  if(elapsed >= 5000)  setStep('s3','active');
-  if(elapsed >= 20000){ setStep('s2','done'); setStep('s3','done'); setStep('s4','active'); }
-  if(elapsed >= 30000) document.getElementById('waitNote').style.display='block';
-
-  // Hard timeout after 5 minutes
-  if(elapsed >= TIMEOUT_MS){
-    stopPoll();
-    document.getElementById('ltitle').textContent='⏰ Taking longer than expected';
-    document.getElementById('lsub').textContent='Your payment may still be processing. Contact support if you paid.';
-    document.getElementById('waitNote').style.display='block';
-    return;
-  }
-
+  pc++;
+  if(pc===3) setStep('s3','active');
+  if(pc===7){setStep('s2','done');setStep('s3','done');setStep('s4','active');}
   try{
     const r=await fetch('/api/auth/activate/status?_='+Date.now());
     const d=await r.json();
-
-    if(d.activated){
-      // Lipana confirmed payment — redirect immediately
-      onDone();
-      return;
-    }
-    if(d.failed){
-      stopPoll();
-      onFail(d.message);
-      return;
-    }
-  }catch(e){
-    console.log('poll err:',e.message);
+    if(d.activated){onDone();return;}
+    if(d.failed){stopPoll();onFail(d.message);return;}
+  }catch(e){console.log('poll:',e.message);}
+  if(pc>=PMAX){
+    stopPoll();
+    document.getElementById('ltitle').textContent='⏰ Confirmation is delayed';
+    document.getElementById('lsub').textContent='Payment confirmation is taking very long. Contact support if needed.';
+    document.getElementById('waitNote').style.display='block';
   }
+}
 
-  // Schedule next poll with adaptive interval
-  schedulePoll();
+function stopPoll(){if(pt){clearInterval(pt);pt=null;}}
+
+// ── 5-minute countdown ring ──
+function startCountdown(){
+  countdownStart = Date.now();
+  document.getElementById('ringProg').style.strokeDasharray = CIRCUMFERENCE;
+  document.getElementById('ringProg').style.strokeDashoffset = CIRCUMFERENCE;
+  countdownTimer = setInterval(tickCountdown, 500);
+}
+
+function tickCountdown(){
+  const elapsed = (Date.now() - countdownStart) / 1000;
+  const remaining = Math.max(0, TOTAL_RING_SECS - elapsed);
+  const mins = Math.floor(remaining / 60);
+  const secs = Math.floor(remaining % 60);
+  document.getElementById('ringNum').textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+  // Update ring progress
+  const progress = elapsed / TOTAL_RING_SECS;
+  const offset = CIRCUMFERENCE * (1 - Math.min(progress, 1));
+  document.getElementById('ringProg').style.strokeDashoffset = offset;
+  // Show manual button when countdown hits 0
+  if(remaining <= 0){
+    clearInterval(countdownTimer);
+    document.getElementById('countdownRing').style.display='none';
+    document.getElementById('manualAccess').style.display='block';
+    document.getElementById('waitNote').style.display='block';
+  }
+}
+
+// Manual access after 5 min — only works if STK was sent (pending payment exists)
+async function manualAccess(){
+  const btn=document.getElementById('manualBtn');
+  btn.disabled=true; btn.textContent='⏳ Verifying…';
+  try{
+    const r=await fetch('/api/auth/activate/manual',{
+      method:'POST',headers:{'Content-Type':'application/json'}
+    });
+    const d=await r.json();
+    if(d.activated||d.success){ onDone(); }
+    else{
+      btn.disabled=false; btn.textContent='🚀 I Have Paid — Access Dashboard';
+      alert(d.message||'Could not verify payment. Please contact support.');
+    }
+  }catch{
+    btn.disabled=false; btn.textContent='🚀 I Have Paid — Access Dashboard';
+    alert('Network error. Try again.');
+  }
 }
 
 function onDone(){
-  stopPoll();
+  stopPoll(); clearInterval(countdownTimer);
   setStep('s2','done'); setStep('s3','done'); setStep('s4','done');
   const sp=document.getElementById('spinEl');
-  sp.style.border='4px solid #BBF7D0';
-  sp.style.borderTopColor='#16A34A';
-  sp.style.animation='none';
+  sp.style.border='4px solid #BBF7D0'; sp.style.borderTopColor='#16A34A'; sp.style.animation='none';
   document.getElementById('ltitle').textContent='🎉 Payment Confirmed!';
-  document.getElementById('lsub').textContent='Payment verified by Safaricom. Redirecting to your dashboard…';
+  document.getElementById('lsub').textContent='Account activated! Redirecting to your dashboard…';
   document.getElementById('failBox').style.display='none';
   document.getElementById('waitNote').style.display='none';
-  // Redirect within 100 ms; 3-second fallback for any browser delay
-  setTimeout(()=>{ window.location.href='/dashboard'; }, 100);
-  setTimeout(()=>{ window.location.href='/dashboard'; }, 3000);
+  document.getElementById('manualAccess').style.display='none';
+  document.getElementById('countdownRing').style.display='none';
+  window.location.href='/dashboard';
 }
 
 function onFail(msg){
+  clearInterval(countdownTimer);
   setStep('s2','fail');
   const sp=document.getElementById('spinEl');
-  sp.style.border='4px solid #FECACA';
-  sp.style.borderTopColor='#DC2626';
-  sp.style.animation='none';
+  sp.style.border='4px solid #FECACA'; sp.style.borderTopColor='#DC2626'; sp.style.animation='none';
   document.getElementById('ltitle').textContent='❌ Payment Not Completed';
   document.getElementById('lsub').textContent=msg||'The payment was not completed.';
   document.getElementById('failBox').style.display='block';
   document.getElementById('waitNote').style.display='none';
+  document.getElementById('countdownRing').style.display='none';
+  document.getElementById('manualAccess').style.display='none';
 }
 
 function retry(){
-  stopPoll();
+  stopPoll(); clearInterval(countdownTimer);
   document.getElementById('loaderView').style.display='none';
   document.getElementById('formView').style.display='block';
   document.getElementById('failBox').style.display='none';
   document.getElementById('waitNote').style.display='none';
+  document.getElementById('manualAccess').style.display='none';
+  document.getElementById('countdownRing').style.display='flex';
   resetSteps();
-  const btn=document.getElementById('payBtn');btn.disabled=false;btn.innerHTML='🚀 Pay &amp; Activate';
+  const btn=document.getElementById('payBtn'); btn.disabled=false; btn.innerHTML='🚀 Pay &amp; Activate';
 }
 
 function cancel(){
-  stopPoll();
+  stopPoll(); clearInterval(countdownTimer);
   document.getElementById('loaderView').style.display='none';
   document.getElementById('formView').style.display='block';
   document.getElementById('failBox').style.display='none';
   document.getElementById('waitNote').style.display='none';
+  document.getElementById('manualAccess').style.display='none';
+  document.getElementById('countdownRing').style.display='flex';
   resetSteps();
-  const btn=document.getElementById('payBtn');btn.disabled=false;btn.innerHTML='🚀 Pay &amp; Activate';
+  const btn=document.getElementById('payBtn'); btn.disabled=false; btn.innerHTML='🚀 Pay &amp; Activate';
 }
 
 function resetSteps(){
@@ -273,19 +322,16 @@ function resetSteps(){
     el.querySelector('.dot').textContent=st==='done'?'✓':id.replace('s','');
   });
   const sp=document.getElementById('spinEl');
-  sp.style.border='4px solid #E2E8F0';
-  sp.style.borderTopColor='#16A34A';
-  sp.style.animation='spin .75s linear infinite';
-  document.getElementById('ltitle').textContent='Waiting for payment confirmation from Safaricom…';
+  sp.style.border='4px solid #E2E8F0'; sp.style.borderTopColor='#16A34A'; sp.style.animation='spin .75s linear infinite';
+  document.getElementById('ltitle').textContent='Waiting for payment confirmation…';
   document.getElementById('lsub').textContent='Check your phone for the M-Pesa STK prompt and enter your PIN';
 }
 
 function setStep(id,state){
-  const el=document.getElementById(id);
-  el.classList.remove('active','done','fail');
-  if(state) el.classList.add(state);
-  if(state==='done') el.querySelector('.dot').textContent='✓';
-  if(state==='fail') el.querySelector('.dot').textContent='✕';
+  const el=document.getElementById(id); el.classList.remove('active','done','fail');
+  if(state)el.classList.add(state);
+  if(state==='done')el.querySelector('.dot').textContent='✓';
+  if(state==='fail')el.querySelector('.dot').textContent='✕';
 }
 
 function alert2(msg,type){const e=document.getElementById('alert');e.textContent=msg;e.className='alert '+type;e.style.display='block';}
