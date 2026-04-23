@@ -23,9 +23,7 @@ router.post('/voucher', requireActivated, (req, res) => {
 router.get('/downlines', requireActivated, (req, res) => {
   const user      = db.getUserById(req.session.userId);
   const all       = db.getAllUsers();
-  const downlines = all
-    .filter(u => u.referred_by === user?.referral_code)
-    .map(u => ({ username: u.username, country: u.country, created_at: u.created_at }));
+  const downlines = all.filter(u => u.referred_by === user?.referral_code).map(u => ({ username: u.username, country: u.country, created_at: u.created_at }));
   return res.json({ success: true, downlines });
 });
 
@@ -34,27 +32,18 @@ router.post('/spin', requireActivated, (req, res) => {
   const prize  = prizes[Math.floor(Math.random() * prizes.length)];
   if (prize > 0) {
     const user = db.getUserById(req.session.userId);
-    db.updateUser(req.session.userId, {
-      balance:        (user.balance        || 0) + prize,
-      total_earnings: (user.total_earnings || 0) + prize
-    });
+    db.updateUser(req.session.userId, { balance: (user.balance||0)+prize, total_earnings: (user.total_earnings||0)+prize });
   }
   return res.json({ success: true, prize, message: prize > 0 ? `🎉 You won KES ${prize}!` : 'Better luck next time!' });
 });
 
-// Trivia earnings — called after completing trivia quiz
 router.post('/trivia-earn', requireActivated, (req, res) => {
   const { amount } = req.body;
-  const amt = parseFloat(amount) || 0;
+  const amt = Math.min(parseFloat(amount) || 0, 100);
   if (amt <= 0) return res.json({ success: false, message: 'No earnings.' });
-  if (amt > 100) return res.json({ success: false, message: 'Invalid amount.' }); // max KES 100 per day
   const user = db.getUserById(req.session.userId);
-  db.updateUser(req.session.userId, {
-    balance:          (user.balance          || 0) + amt,
-    total_earnings:   (user.total_earnings   || 0) + amt,
-    trivia_earnings:  (user.trivia_earnings  || 0) + amt
-  });
-  console.log(`💰 Trivia earn: user ${req.session.userId} earned KES ${amt}`);
+  db.updateUser(req.session.userId, { balance: (user.balance||0)+amt, total_earnings: (user.total_earnings||0)+amt, trivia_earnings: (user.trivia_earnings||0)+amt });
+  console.log(`💰 Trivia: user ${req.session.userId} earned KES ${amt}`);
   return res.json({ success: true, message: `KES ${amt} added to your balance!` });
 });
 
