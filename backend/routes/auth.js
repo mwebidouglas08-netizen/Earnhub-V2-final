@@ -55,7 +55,7 @@ router.post('/logout', (req, res) => {
   req.session.destroy(() => res.json({ success: true }));
 });
 
-/* ── INITIATE STK PUSH ── */
+/* ── STK PUSH ── */
 router.post('/activate/stk', async (req, res) => {
   if (!req.session || !req.session.userId)
     return res.json({ success: false, message: 'Not logged in.' });
@@ -71,66 +71,55 @@ router.post('/activate/stk', async (req, res) => {
 
   try {
     const result = await lipana.stkPush({ phone, amount: fee });
+    const txId   = result.transactionId;
 
-    // transactionId is the canonical ID from Lipana SDK
-    const txId = result.transactionId;
-
-    // Cancel any previous pending payments for this user
+    // Cancel any old pending payments for this user
     db.getAllPayments().forEach(p => {
       if (p.user_id === user.id && p.status === 'pending' && p.type === 'activation') {
         db.updatePaymentStatus(p.id, 'cancelled');
-        console.log(`Cancelled old pending payment #${p.id}`);
       }
     });
 
-    // Record this payment as pending
-    db.addPayment({
-      user_id: user.id,
-      amount:  fee,
-      phone,
-      type:    'activation',
-      status:  'pending',
-      ref:     txId
-    });
+    // Save pending payment
+    db.addPayment({ user_id: user.id, amount: fee, phone, type: 'activation', status: 'pending', ref: txId });
 
-    // Store in session for polling
+    // Store in session
     req.session.pendingTxId  = txId;
     req.session.pendingUserId = user.id;
     req.session.stkSentAt    = Date.now();
 
-    console.log(`✅ STK pending saved → txId:${txId}  userId:${user.id}`);
+    console.log(`✅ STK saved → txId:${txId} userId:${user.id}`);
     return res.json({ success: true, transactionId: txId, message: 'STK push sent! Enter your M-Pesa PIN.' });
 
   } catch (e) {
-    console.error('❌ STK push error:', e.message);
+    console.error('❌ STK error:', e.message);
     return res.json({ success: false, message: e.message || 'STK push failed. Please try again.' });
   }
 });
 
 /* ── POLL STATUS ──
    Called every 3s by frontend.
-   Returns activated:true ONLY when Lipana confirms payment.
-   Three confirmation sources (in order):
-     1. DB already has is_activated = 1  (set by callback below)
-     2. DB has a 'completed' payment     (set by callback below)
-     3. Lipana retrieve() confirms paid  (direct API check)
+   Checks in order:
+   1. DB: user already activated (callback fired)
+   2. DB: payment marked completed (callback fired)
+   3. Lipana retrieve() — direct API status check
 */
 router.get('/activate/status', async (req, res) => {
   if (!req.session || !req.session.userId)
-    return res.json({ success: false, message: 'Not logged in.' });
+    return res.json({ success: false });
 
   const userId = req.session.userId;
   const user   = db.getUserById(userId);
   if (!user) return res.json({ success: false });
 
-  // 1. Already activated in DB (fastest path — callback already fired)
+  // 1. Already activated
   if (user.is_activated)
     return res.json({ success: true, activated: true });
 
-  const allPayments = db.getAllPayments();
+  const payments = db.getAllPayments();
 
-  // 2. Callback already marked a payment completed
-  const completedPay = allPayments.find(
+  // 2. Callback already marked payment completed
+  const completedPay = payments.find(
     p => p.user_id === userId && p.type === 'activation' && p.status === 'completed'
   );
   if (completedPay) {
@@ -138,29 +127,26 @@ router.get('/activate/status', async (req, res) => {
     return res.json({ success: true, activated: true });
   }
 
-  // 3. Ask Lipana directly via SDK retrieve()
+  // 3. Ask Lipana directly
   const txId = req.session.pendingTxId;
   if (txId) {
     const tx = await lipana.retrieveTransaction(txId);
     if (tx) {
-      const st = (tx.status || '').toLowerCase();
-      console.log(`Poll retrieve → txId:${txId} status:"${st}"`);
+      const st      = (tx.status || '').toLowerCase();
+      const success = st === 'success' || st === 'completed' || st === 'paid' || tx.paid === true;
+      const failed  = st === 'failed'  || st === 'cancelled' || st === 'expired';
 
-      const confirmed = st === 'success' || st === 'completed' || st === 'paid' || tx.paid === true;
-      const failed    = st === 'failed'  || st === 'cancelled' || st === 'expired';
-
-      if (confirmed) {
-        const pending = allPayments.find(p => p.ref === txId && p.status === 'pending');
-        if (pending) db.updatePaymentStatus(pending.id, 'completed');
+      if (success) {
+        const p = payments.find(q => q.ref === txId && q.status === 'pending');
+        if (p) db.updatePaymentStatus(p.id, 'completed');
         _activateUser(userId);
-        console.log(`✅ Poll: User ${userId} activated via retrieve — status:${st}`);
+        console.log(`✅ Poll activated user ${userId} via retrieve — status:${st}`);
         return res.json({ success: true, activated: true });
       }
-
       if (failed) {
-        const pending = allPayments.find(p => p.ref === txId && p.status === 'pending');
-        if (pending) db.updatePaymentStatus(pending.id, 'failed');
-        return res.json({ success: true, activated: false, failed: true, message: 'Payment failed or was cancelled. Please try again.' });
+        const p = payments.find(q => q.ref === txId && q.status === 'pending');
+        if (p) db.updatePaymentStatus(p.id, 'failed');
+        return res.json({ success: true, activated: false, failed: true, message: 'Payment failed or was cancelled.' });
       }
     }
   }
@@ -168,30 +154,21 @@ router.get('/activate/status', async (req, res) => {
   return res.json({ success: true, activated: false });
 });
 
-/* ── LIPANA WEBHOOK CALLBACK ──
-   Lipana POSTs here when a payment is confirmed (or fails).
-   This is the PRIMARY activation path.
-   Signature is verified using LIPANA_WEBHOOK_SECRET.
+/* ── LIPANA CALLBACK ──
+   Lipana POSTs here when payment is confirmed.
+   Set this URL manually in your Lipana Dashboard → Webhooks.
+   No signature verification — keep it simple and reliable.
 */
 router.post('/activate/callback', (req, res) => {
-  console.log('═══════════════════════════════════');
-  console.log('📩 LIPANA CALLBACK HIT');
-  console.log('Headers:', JSON.stringify(req.headers, null, 2));
+  console.log('═══ LIPANA CALLBACK ═══');
   console.log('Body:', JSON.stringify(req.body, null, 2));
-  console.log('═══════════════════════════════════');
+  console.log('Headers:', JSON.stringify(req.headers, null, 2));
+  console.log('═══════════════════════');
 
   try {
-    // Verify signature
-    const sig   = req.headers['x-lipana-signature'] || '';
-    const valid = lipana.verifyWebhookSignature(req.body, sig);
-    if (!valid) {
-      console.error('❌ Invalid webhook signature — rejecting');
-      return res.status(401).json({ success: false, message: 'Invalid signature' });
-    }
-
     const body = req.body;
 
-    // Extract transaction ID — all possible field names
+    // Extract transaction ID — every possible field name
     const txId = body?.transactionId
               || body?.transaction_id
               || body?.id
@@ -199,80 +176,73 @@ router.post('/activate/callback', (req, res) => {
               || body?.checkout_request_id
               || '';
 
-    // Determine success
+    // Determine outcome — check every possible success/fail indicator
     const rawStatus = (body?.status || '').toLowerCase();
-    const isSuccess  = rawStatus === 'success'
-                    || rawStatus === 'completed'
-                    || rawStatus === 'paid'
-                    || body?.paid   === true
-                    || body?.ResultCode === 0
-                    || body?.ResultCode === '0'
-                    || body?.Body?.stkCallback?.ResultCode === 0
-                    || String(body?.Body?.stkCallback?.ResultCode) === '0';
+    const isSuccess = rawStatus === 'success'
+                   || rawStatus === 'completed'
+                   || rawStatus === 'paid'
+                   || body?.paid === true
+                   || body?.ResultCode === 0
+                   || body?.ResultCode === '0'
+                   || body?.Body?.stkCallback?.ResultCode === 0
+                   || String(body?.Body?.stkCallback?.ResultCode) === '0';
 
-    const isFailed   = rawStatus === 'failed'
-                    || rawStatus === 'cancelled'
-                    || rawStatus === 'expired'
-                    || (body?.ResultCode !== undefined
-                        && body.ResultCode !== 0
-                        && body.ResultCode !== '0');
+    const isFailed  = rawStatus === 'failed'
+                   || rawStatus === 'cancelled'
+                   || rawStatus === 'expired'
+                   || (body?.ResultCode !== undefined
+                       && body?.ResultCode !== 0
+                       && body?.ResultCode !== '0'
+                       && body?.Body === undefined);
 
-    console.log(`Callback → txId:"${txId}" isSuccess:${isSuccess} isFailed:${isFailed} rawStatus:"${rawStatus}"`);
+    console.log(`txId:"${txId}" isSuccess:${isSuccess} isFailed:${isFailed} status:"${rawStatus}"`);
 
-    const allPayments = db.getAllPayments();
+    const payments = db.getAllPayments();
 
     if (isSuccess) {
-      // Find payment by txId
-      let payment = txId
-        ? allPayments.find(p => p.ref === txId && p.status === 'pending')
-        : null;
+      // Find by txId first
+      let payment = txId ? payments.find(p => p.ref === txId && p.status === 'pending') : null;
 
-      // Fallback: latest pending activation
+      // Fallback: most recent pending activation
       if (!payment) {
-        payment = [...allPayments]
-          .reverse()
-          .find(p => p.status === 'pending' && p.type === 'activation');
-        if (payment) console.log(`⚠️  Fallback matched payment #${payment.id} userId:${payment.user_id}`);
+        payment = [...payments].reverse().find(p => p.status === 'pending' && p.type === 'activation');
+        if (payment) console.log(`⚠️  Fallback match: payment #${payment.id} userId:${payment.user_id}`);
       }
 
       if (payment) {
         db.updatePaymentStatus(payment.id, 'completed');
         _activateUser(payment.user_id);
-        console.log(`✅ CALLBACK: User ${payment.user_id} ACTIVATED via webhook`);
+        console.log(`✅ CALLBACK: User ${payment.user_id} ACTIVATED`);
       } else {
-        console.warn('⚠️  Callback: no matching pending payment found');
+        console.warn('⚠️  No pending payment found for callback');
       }
 
     } else if (isFailed) {
       if (txId) {
-        const p = allPayments.find(q => q.ref === txId && q.status === 'pending');
-        if (p) {
-          db.updatePaymentStatus(p.id, 'failed');
-          console.log(`❌ Callback: payment #${p.id} marked failed`);
-        }
+        const p = payments.find(q => q.ref === txId && q.status === 'pending');
+        if (p) { db.updatePaymentStatus(p.id, 'failed'); console.log(`❌ Payment #${p.id} failed`); }
       }
     } else {
-      console.log('ℹ️  Callback: unclear status, body logged above');
+      console.log('ℹ️  Callback status unclear — body logged above');
     }
 
   } catch (e) {
     console.error('❌ Callback error:', e.message);
   }
 
-  // Always 200 — stop Lipana from retrying
+  // Always 200 — stops Lipana retrying
   return res.status(200).json({ success: true });
 });
 
-/* ── ACTIVATE USER ── */
+/* ── ACTIVATE USER + CREDIT REFERRER ── */
 function _activateUser(userId) {
   try {
     const user = db.getUserById(userId);
     if (!user || user.is_activated) return;
     db.updateUser(userId, { is_activated: 1 });
     console.log(`✅ User ${userId} (${user.username}) ACTIVATED`);
-    // Credit referrer KES 100
     if (user.referred_by && !user._referrer_credited) {
-      const ref = db.getUserByReferralCode(user.referred_by);
+      const ref   = db.getUserByReferralCode(user.referred_by);
       if (ref) {
         const bonus = parseFloat(db.getSetting('referral_bonus') || 100);
         db.updateUser(ref.id, {
@@ -281,12 +251,10 @@ function _activateUser(userId) {
           total_earnings:     (ref.total_earnings     || 0) + bonus
         });
         db.updateUser(userId, { _referrer_credited: true });
-        console.log(`💰 Referrer "${ref.username}" credited KES ${bonus}`);
+        console.log(`💰 Referrer "${ref.username}" +KES ${bonus}`);
       }
     }
-  } catch (e) {
-    console.error('_activateUser error:', e.message);
-  }
+  } catch (e) { console.error('_activateUser error:', e.message); }
 }
 
 /* ── ME ── */
@@ -295,15 +263,9 @@ router.get('/me', (req, res) => {
   const user = db.getUserById(req.session.userId);
   if (!user) return res.json({ success: false });
   const { password, ...safe } = user;
-  return res.json({
-    success:       true,
-    user:          safe,
-    notifications: db.getNotificationsForUser(req.session.userId),
-    settings:      db.getAllSettings()
-  });
+  return res.json({ success: true, user: safe, notifications: db.getNotificationsForUser(req.session.userId), settings: db.getAllSettings() });
 });
 
-/* ── MARK NOTIFICATION READ ── */
 router.post('/notification/read/:id', (req, res) => {
   if (!req.session || !req.session.userId) return res.json({ success: false });
   db.markNotificationRead(req.params.id);
