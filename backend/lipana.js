@@ -1,37 +1,21 @@
 'use strict';
 
 const LIPANA_SECRET_KEY = process.env.LIPANA_SECRET_KEY || '';
-const APP_URL           = (process.env.APP_URL || '').replace(/\/+$/, '');
 
-console.log('=== Lipana Config ===');
-console.log('SECRET KEY SET:', !!LIPANA_SECRET_KEY);
-console.log('SECRET KEY PREFIX:', LIPANA_SECRET_KEY ? LIPANA_SECRET_KEY.substring(0, 20) + '...' : 'MISSING');
-console.log('APP_URL:', APP_URL || 'NOT SET');
-console.log('====================');
+if (!LIPANA_SECRET_KEY) {
+  console.error('❌ LIPANA_SECRET_KEY not set in environment variables!');
+} else {
+  console.log('✅ Lipana secret key loaded:', LIPANA_SECRET_KEY.substring(0, 20) + '...');
+}
 
 let _client = null;
 
 function getClient() {
   if (_client) return _client;
-  if (!LIPANA_SECRET_KEY) {
-    throw new Error('LIPANA_SECRET_KEY is not set in Railway environment variables.');
-  }
+  if (!LIPANA_SECRET_KEY)
+    throw new Error('LIPANA_SECRET_KEY is missing. Add it to Railway environment variables.');
   const { Lipana } = require('@lipana/sdk');
-  _client = new Lipana({
-    apiKey:      LIPANA_SECRET_KEY,
-    environment: 'production'
-  });
-
-  // Register webhook URL with Lipana on startup
-  if (APP_URL) {
-    const webhookUrl = `${APP_URL}/api/auth/activate/callback`;
-    _client.webhooks.updateSettings({ webhookUrl })
-      .then(() => console.log('✅ Lipana webhook URL registered:', webhookUrl))
-      .catch(e  => console.warn('⚠️  Webhook register failed (non-fatal):', e.message));
-  } else {
-    console.warn('⚠️  APP_URL not set — Lipana callback will not work. Set APP_URL in Railway variables.');
-  }
-
+  _client = new Lipana({ apiKey: LIPANA_SECRET_KEY, environment: 'production' });
   console.log('✅ Lipana client initialised');
   return _client;
 }
@@ -45,40 +29,28 @@ function formatPhone(raw) {
 }
 
 async function stkPush({ phone, amount }) {
-  const formattedPhone = formatPhone(phone);
-  console.log(`📲 Initiating STK push → ${formattedPhone}  KES ${Math.ceil(amount)}`);
-
-  let client;
-  try {
-    client = getClient();
-  } catch (e) {
-    throw new Error('Payment system not configured: ' + e.message);
-  }
-
-  const result = await client.transactions.initiateStkPush({
-    phone:  formattedPhone,
+  const client = getClient();
+  const fmt    = formatPhone(phone);
+  console.log(`📲 STK push → ${fmt}  KES ${Math.ceil(amount)}`);
+  const resp = await client.transactions.initiateStkPush({
+    phone:  fmt,
     amount: Math.ceil(amount)
   });
-
-  console.log('✅ STK push success. Response:', JSON.stringify(result));
-
-  if (!result || (!result.transactionId && !result.id)) {
-    console.error('⚠️  Lipana returned unexpected response:', JSON.stringify(result));
-    throw new Error('STK push sent but no transaction ID returned. Check Lipana dashboard.');
-  }
-
-  return result;
+  console.log('✅ STK response:', JSON.stringify(resp));
+  if (!resp || !resp.transactionId)
+    throw new Error('No transactionId in Lipana response: ' + JSON.stringify(resp));
+  return resp;
 }
 
-async function retrieveTransaction(transactionId) {
-  if (!transactionId) return null;
+async function retrieveTransaction(txId) {
+  if (!txId) return null;
   try {
     const client = getClient();
-    const tx     = await client.transactions.retrieve(transactionId);
-    console.log(`🔍 Transaction ${transactionId} status:`, JSON.stringify(tx));
+    const tx     = await client.transactions.retrieve(txId);
+    console.log(`🔍 Retrieve [${txId}]:`, JSON.stringify(tx));
     return tx;
   } catch (e) {
-    console.log(`ℹ️  Retrieve ${transactionId}:`, e.message);
+    console.log(`ℹ️  Retrieve [${txId}]:`, e.message);
     return null;
   }
 }
