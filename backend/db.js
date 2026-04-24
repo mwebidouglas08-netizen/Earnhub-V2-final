@@ -8,7 +8,11 @@ const DATA_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH
               || path.join(__dirname, '..', 'data');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-const DB_FILE = path.join(DATA_DIR, 'db.json');
+const DB_FILE  = path.join(DATA_DIR, 'db.json');
+const TMP_FILE = DB_FILE + '.tmp';
+
+console.log(`📂 Data directory : ${DATA_DIR}`);
+console.log(`📄 Database file  : ${DB_FILE}`);
 
 const DEFAULT_DB = {
   settings: { activation_fee:'300', site_name:'EarnHub', referral_bonus:'100', min_withdrawal:'500', welcome_bonus:'0', maintenance_mode:'false' },
@@ -21,18 +25,50 @@ function loadDb() {
     if (fs.existsSync(DB_FILE)) {
       const raw    = fs.readFileSync(DB_FILE, 'utf8');
       const parsed = JSON.parse(raw);
+
+      // Ensure all required top-level arrays exist (migrate old data)
+      if (!Array.isArray(parsed.users))         parsed.users         = [];
+      if (!Array.isArray(parsed.admins))        parsed.admins        = [];
+      if (!Array.isArray(parsed.notifications)) parsed.notifications = [];
+      if (!Array.isArray(parsed.withdrawals))   parsed.withdrawals   = [];
+      if (!Array.isArray(parsed.payments))      parsed.payments      = [];
+
+      // Ensure _nextId block is complete
       if (!parsed._nextId) parsed._nextId = { ...DEFAULT_DB._nextId };
+      for (const key of Object.keys(DEFAULT_DB._nextId)) {
+        if (typeof parsed._nextId[key] !== 'number') {
+          parsed._nextId[key] = DEFAULT_DB._nextId[key];
+        }
+      }
+
+      // Ensure settings block is complete; merge defaults for any missing keys
       if (!parsed.settings) parsed.settings = { ...DEFAULT_DB.settings };
+      for (const [k, v] of Object.entries(DEFAULT_DB.settings)) {
+        if (parsed.settings[k] === undefined) parsed.settings[k] = v;
+      }
       parsed.settings.referral_bonus = '100';
+
+      console.log(`✅ Loaded db.json — ${parsed.users.length} user(s) found`);
       return parsed;
     }
-  } catch (e) { console.error('DB load error:', e.message); }
+  } catch (e) {
+    console.error('❌ DB load error:', e.message);
+  }
+  console.log('📋 No existing db.json — starting with empty database');
   return JSON.parse(JSON.stringify(DEFAULT_DB));
 }
 
 function saveDb(data) {
-  try { fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf8'); }
-  catch (e) { console.error('DB save error:', e.message); }
+  try {
+    // Atomic write: write to .tmp then rename to avoid corruption on crash
+    fs.writeFileSync(TMP_FILE, JSON.stringify(data, null, 2), 'utf8');
+    fs.renameSync(TMP_FILE, DB_FILE);
+  } catch (e) {
+    console.error('❌ DB save error:', e.message);
+    // Fallback: direct write if rename fails (e.g. cross-device)
+    try { fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf8'); }
+    catch (e2) { console.error('❌ DB save fallback error:', e2.message); }
+  }
 }
 
 let _db = loadDb();
