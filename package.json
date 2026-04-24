@@ -4,6 +4,7 @@
   "description": "EarnHub - Your Gateway to Online Earnings",
   "main": "server.js",
   "scripts": {
+    "prestart": "node -e \"const fs=require('fs'),path=require('path'),d=process.env.RAILWAY_VOLUME_MOUNT_PATH||process.env.DATA_DIR||path.join(__dirname,'data');fs.mkdirSync(d,{recursive:true});console.log('💾 Data dir ready:',d);\"",
     "start": "node server.js",
     "build": "echo 'Build complete'"
   },

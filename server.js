@@ -9,9 +9,31 @@ const PAGES = path.join(__dirname, 'public', 'pages');
 const app   = express();
 
 // ── Health check FIRST — before any requires that could fail ──
-app.get('/health', (_req, res) =>
-  res.status(200).json({ status: 'ok', app: 'EarnHub', ts: Date.now() })
-);
+app.get('/health', (_req, res) => {
+  const fs   = require('fs');
+  const path = require('path');
+  const dataDir = process.env.RAILWAY_VOLUME_MOUNT_PATH
+               || process.env.DATA_DIR
+               || path.join(__dirname, 'data');
+  const dbFile  = path.join(dataDir, 'db.json');
+  const dbExists = fs.existsSync(dbFile);
+  let userCount  = null;
+  if (dbExists) {
+    try { userCount = JSON.parse(fs.readFileSync(dbFile, 'utf8')).users?.length ?? 0; }
+    catch { /* non-fatal */ }
+  }
+  res.status(200).json({
+    status:      'ok',
+    app:         'EarnHub',
+    ts:          Date.now(),
+    storage: {
+      dataDir,
+      dbFile,
+      dbExists,
+      userCount
+    }
+  });
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,8 +48,12 @@ app.use(session({
 
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
-try { require('./backend/db'); console.log('✅ DB ready'); }
-catch (e) { console.error('❌ DB error:', e.message); }
+let _dbModule;
+try {
+  _dbModule = require('./backend/db');
+  const stats = _dbModule.getStats();
+  console.log(`✅ DB ready — ${stats.totalUsers} user(s) loaded (${stats.activeUsers} active)`);
+} catch (e) { console.error('❌ DB error:', e.message); }
 
 app.use('/api/auth',  require('./backend/routes/auth'));
 app.use('/api/admin', require('./backend/routes/admin'));
@@ -76,9 +102,14 @@ app.use((err, _req, res, _next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
+  const path    = require('path');
+  const dataDir = process.env.RAILWAY_VOLUME_MOUNT_PATH
+               || process.env.DATA_DIR
+               || path.join(__dirname, 'data');
   console.log('================================');
   console.log(`🚀 EarnHub on port ${PORT}`);
-  console.log(`💚 Health: http://localhost:${PORT}/health`);
+  console.log(`💚 Health : http://localhost:${PORT}/health`);
+  console.log(`💾 Storage: ${dataDir}`);
   console.log('================================');
 });
 
