@@ -7,12 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --green:#16A34A;--green-h:#15803D;--green-light:#F0FDF4;--green-mid:#22C55E;
-  --gold:#E8900A;--gold-light:#FFF3DC;
+  --g:#16A34A;--gh:#15803D;--gl:#F0FDF4;--gm:#22C55E;
+  --gold:#E8900A;--gold-l:#FFF3DC;
   --dark:#0F172A;--card:#fff;--body:#F8FAFC;
   --border:#E2E8F0;--text:#1E293B;--muted:#64748B;
-  --shadow:0 4px 24px rgba(0,0,0,.08);
-  --shadow-lg:0 16px 50px rgba(0,0,0,.14);
+  --sh:0 4px 24px rgba(0,0,0,.08);
+  --shl:0 12px 48px rgba(0,0,0,.16);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -21,82 +21,117 @@ a{text-decoration:none;color:inherit;}
 
 /* ── NAV ── */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
+  position:fixed;top:0;left:0;right:0;z-index:200;
   display:flex;align-items:center;justify-content:space-between;
   padding:.9rem 2.5rem;
-  background:rgba(255,255,255,.97);
+  background:rgba(255,255,255,.96);
   backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
   box-shadow:0 1px 10px rgba(0,0,0,.06);
 }
 .logo{font-size:1.6rem;font-weight:800;color:var(--dark);letter-spacing:-1px;}
-.logo span{color:var(--green);}
+.logo span{color:var(--g);}
 .nav-cta{display:flex;gap:.6rem;align-items:center;}
 .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem 1.3rem;border-radius:9px;font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;border:none;font-family:'Plus Jakarta Sans',sans-serif;}
 .btn-outline{border:1.5px solid var(--border);color:var(--text);background:#fff;}
-.btn-outline:hover{border-color:var(--green);color:var(--green);}
-.btn-green{background:var(--green);color:#fff;}
-.btn-green:hover{background:var(--green-h);transform:translateY(-1px);box-shadow:0 4px 14px rgba(22,163,74,.35);}
+.btn-outline:hover{border-color:var(--g);color:var(--g);}
+.btn-green{background:var(--g);color:#fff;}
+.btn-green:hover{background:var(--gh);transform:translateY(-1px);box-shadow:0 4px 14px rgba(22,163,74,.35);}
 .btn-lg{padding:.8rem 2rem;font-size:1rem;border-radius:11px;}
 .btn-xl{padding:1rem 2.4rem;font-size:1.05rem;border-radius:12px;}
-.btn-white{background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.35);}
-.btn-white:hover{background:rgba(255,255,255,.25);transform:translateY(-1px);}
+.btn-glass{background:rgba(255,255,255,.15);color:#fff;border:2px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);}
+.btn-glass:hover{background:rgba(255,255,255,.28);transform:translateY(-1px);}
 
-/* ── HERO ── */
+/* ── HERO WITH VIDEO BACKGROUND ── */
 .hero{
-  min-height:100vh;
   position:relative;
+  min-height:100vh;
   display:flex;
   align-items:center;
   overflow:hidden;
-  /* HD image: happy African woman with smartphone — finance/success theme */
-  background:
-    linear-gradient(
-      115deg,
-      rgba(5,40,20,.90) 0%,
-      rgba(10,60,30,.82) 35%,
-      rgba(15,80,40,.65) 60%,
-      rgba(22,163,74,.22) 100%
-    ),
-    url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1920&q=90&auto=format&fit=crop&crop=focalpoint&fp-x=0.65&fp-y=0.35')
-    center center / cover no-repeat;
   padding:8rem 5% 5rem;
 }
-.hero::after{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 50% 75% at 72% 45%,rgba(22,163,74,.10) 0%,transparent 65%);
-  z-index:1;
+
+/* Video element */
+.hero-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  z-index:0;
 }
-.hero-inner{position:relative;z-index:2;max-width:660px;}
+
+/* Dark gradient overlay on video for readability */
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(
+    115deg,
+    rgba(5,40,20,.90) 0%,
+    rgba(10,60,30,.82) 38%,
+    rgba(15,80,40,.68) 62%,
+    rgba(22,163,74,.22) 100%
+  );
+}
+
+/* Subtle radial glow */
+.hero-glow{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:radial-gradient(ellipse 55% 70% at 72% 48%,rgba(22,163,74,.12) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+.hero-inner{
+  position:relative;
+  z-index:2;
+  max-width:680px;
+}
+
 .hero-badge{
   display:inline-flex;align-items:center;gap:.5rem;
-  background:rgba(22,163,74,.20);
+  background:rgba(22,163,74,.22);
   border:1px solid rgba(22,163,74,.45);
   border-radius:50px;padding:.42rem 1.1rem;
   font-size:.78rem;color:#86EFAC;font-weight:700;
   margin-bottom:1.7rem;
   backdrop-filter:blur(10px);
+  letter-spacing:.2px;
 }
+
 .hero h1{
-  font-size:clamp(2.5rem,5.5vw,4.4rem);font-weight:800;
-  line-height:1.07;letter-spacing:-2.5px;color:#fff;margin-bottom:1.3rem;
+  font-size:clamp(2.5rem,5.5vw,4.4rem);
+  font-weight:800;line-height:1.07;
+  letter-spacing:-2.5px;color:#fff;
+  margin-bottom:1.3rem;
 }
 .hero h1 .hl{
   display:block;
   background:linear-gradient(90deg,#86EFAC,#22C55E);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
 }
-.hero-desc{font-size:1.08rem;color:rgba(255,255,255,.80);line-height:1.80;margin-bottom:2.5rem;max-width:530px;}
+
+.hero-desc{
+  font-size:1.08rem;color:rgba(255,255,255,.82);
+  line-height:1.80;margin-bottom:2.5rem;max-width:530px;
+}
 .hero-desc strong{color:#86EFAC;}
+
 .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem;}
+
 /* Stats panel */
 .hero-stats{
   display:flex;
   background:rgba(255,255,255,.09);
   backdrop-filter:blur(14px);
   border:1px solid rgba(255,255,255,.16);
-  border-radius:18px;
-  overflow:hidden;max-width:560px;
+  border-radius:18px;overflow:hidden;max-width:580px;
 }
 .hstat{flex:1;padding:1.1rem 1.4rem;border-right:1px solid rgba(255,255,255,.1);}
 .hstat:last-child{border-right:none;}
@@ -106,36 +141,52 @@ nav{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .hstat-l{font-size:.71rem;color:rgba(255,255,255,.58);margin-top:.3rem;}
-/* Floating card */
+
+/* Floating card — desktop */
 .float-card{
-  position:absolute;z-index:3;right:6%;top:50%;transform:translateY(-50%);
-  background:rgba(255,255,255,.97);border-radius:20px;
-  padding:1.5rem 1.6rem;box-shadow:0 24px 80px rgba(0,0,0,.28);
+  position:absolute;z-index:3;
+  right:6%;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,.97);
+  border-radius:20px;padding:1.5rem 1.6rem;
+  box-shadow:0 24px 80px rgba(0,0,0,.30);
   min-width:210px;display:flex;flex-direction:column;gap:.9rem;
 }
 .fc-row{display:flex;align-items:center;gap:.8rem;}
 .fc-ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
-.ico-g{background:#F0FDF4;} .ico-o{background:#FFF3DC;} .ico-b{background:#EFF6FF;}
+.ico-g{background:#F0FDF4;}.ico-o{background:#FFF3DC;}.ico-b{background:#EFF6FF;}
 .fc-lbl{font-size:.7rem;color:var(--muted);margin-bottom:.1rem;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
 .fc-val{font-size:1.05rem;font-weight:800;color:var(--dark);}
 .fc-div{height:1px;background:var(--border);}
 .live-row{display:flex;align-items:center;gap:.5rem;}
-.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:livepulse 1.6s ease-in-out infinite;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--g);animation:livepulse 1.6s ease-in-out infinite;}
 @keyframes livepulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(1.3);}}
-.live-lbl{font-size:.74rem;font-weight:700;color:var(--green);}
-/* Scroll */
+.live-lbl{font-size:.74rem;font-weight:700;color:var(--g);}
+
+/* Scroll hint */
 .scroll-hint{
   position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
   display:flex;flex-direction:column;align-items:center;gap:.35rem;
-  color:rgba(255,255,255,.35);font-size:.73rem;
+  color:rgba(255,255,255,.38);font-size:.73rem;
   animation:bob 2.2s ease-in-out infinite;z-index:2;
 }
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(9px);}}
 
+/* Video mute button */
+.vid-ctrl{
+  position:absolute;bottom:2.5rem;right:2rem;z-index:5;
+  background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);
+  border-radius:50px;padding:.5rem 1rem;color:#fff;
+  font-size:.78rem;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;gap:.4rem;
+  backdrop-filter:blur(8px);transition:all .2s;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+.vid-ctrl:hover{background:rgba(255,255,255,.25);}
+
 /* ── SECTIONS ── */
 section{padding:5.5rem 5%;}
 .container{max-width:1180px;margin:0 auto;}
-.sec-tag{display:inline-flex;align-items:center;gap:.4rem;background:var(--green-light);border-radius:50px;padding:.3rem .9rem;font-size:.75rem;color:var(--green);font-weight:700;margin-bottom:.9rem;}
+.sec-tag{display:inline-flex;align-items:center;gap:.4rem;background:var(--gl);border-radius:50px;padding:.3rem .9rem;font-size:.75rem;color:var(--g);font-weight:700;margin-bottom:.9rem;}
 .sec-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-1.2px;color:var(--dark);margin-bottom:.9rem;}
 .sec-sub{color:var(--muted);font-size:1rem;line-height:1.78;max-width:520px;}
 .text-center{text-align:center;}
@@ -143,16 +194,16 @@ section{padding:5.5rem 5%;}
 
 /* ── FEATURES ── */
 .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem;margin-top:3rem;}
-.feat-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:2rem;transition:all .22s;box-shadow:var(--shadow);}
-.feat-card:hover{transform:translateY(-5px);border-color:#BBF7D0;box-shadow:var(--shadow-lg);}
-.feat-icon{width:52px;height:52px;border-radius:14px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1.1rem;}
-.feat-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem;}
+.feat-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:2rem;transition:all .22s;box-shadow:var(--sh);}
+.feat-card:hover{transform:translateY(-5px);border-color:#BBF7D0;box-shadow:var(--shl);}
+.feat-icon{width:52px;height:52px;border-radius:14px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:1.1rem;}
+.feat-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem;color:var(--dark);}
 .feat-card p{font-size:.88rem;color:var(--muted);line-height:1.65;}
 
 /* ── HOW IT WORKS ── */
 .how-bg{
   background:
-    linear-gradient(135deg,rgba(5,40,20,.95) 0%,rgba(10,70,35,.93) 100%),
+    linear-gradient(135deg,rgba(5,40,20,.96) 0%,rgba(10,70,35,.94) 100%),
     url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80&auto=format&fit=crop')
     center/cover no-repeat;
 }
@@ -169,15 +220,15 @@ section{padding:5.5rem 5%;}
 /* ── TOOLS ── */
 .tools-bg{background:#F0FDF4;}
 .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:1rem;margin-top:3rem;}
-.tool-card{background:var(--card);border:1.5px solid #BBF7D0;border-radius:14px;padding:1.3rem 1rem;text-align:center;transition:all .22s;box-shadow:var(--shadow);}
-.tool-card:hover{border-color:var(--green);background:var(--green-light);transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.tool-card{background:var(--card);border:1.5px solid #BBF7D0;border-radius:14px;padding:1.3rem 1rem;text-align:center;transition:all .22s;box-shadow:var(--sh);}
+.tool-card:hover{border-color:var(--g);background:var(--gl);transform:translateY(-4px);box-shadow:var(--shl);}
 .tool-card .em{font-size:2rem;margin-bottom:.5rem;}
 .tool-card p{font-size:.82rem;font-weight:700;color:var(--dark);}
 
 /* ── REFERRAL ── */
 .ref-section{
   background:
-    linear-gradient(135deg,rgba(5,40,20,.96) 0%,rgba(10,70,35,.94) 100%),
+    linear-gradient(135deg,rgba(5,40,20,.97) 0%,rgba(10,70,35,.95) 100%),
     url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1400&q=80&auto=format&fit=crop')
     center/cover no-repeat;
 }
@@ -204,19 +255,19 @@ section{padding:5.5rem 5%;}
 
 /* ── TESTIMONIALS ── */
 .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem;margin-top:3rem;}
-.testi-card{background:var(--card);border:1.5px solid #BBF7D0;border-radius:18px;padding:1.9rem;box-shadow:var(--shadow);transition:all .22s;}
-.testi-card:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:var(--shadow-lg);}
+.testi-card{background:var(--card);border:1.5px solid #BBF7D0;border-radius:18px;padding:1.9rem;box-shadow:var(--sh);transition:all .22s;}
+.testi-card:hover{transform:translateY(-4px);border-color:var(--g);box-shadow:var(--shl);}
 .stars{color:var(--gold);font-size:1rem;margin-bottom:.9rem;}
 .testi-text{font-size:.9rem;color:var(--muted);line-height:1.72;margin-bottom:1.3rem;font-style:italic;}
 .testi-author{display:flex;align-items:center;gap:.8rem;}
-.tav{width:42px;height:42px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--green);}
+.tav{width:42px;height:42px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--g);}
 .tname{font-weight:700;font-size:.9rem;color:var(--dark);}
 .tloc{font-size:.75rem;color:var(--muted);}
 
 /* ── CTA ── */
 .cta-section{
   background:
-    linear-gradient(135deg,rgba(5,40,20,.92) 0%,rgba(22,163,74,.30) 100%),
+    linear-gradient(135deg,rgba(5,40,20,.93) 0%,rgba(22,163,74,.28) 100%),
     url('https://images.unsplash.com/photo-1556742212-5b321f3c261b?w=1600&q=85&auto=format&fit=crop')
     center/cover no-repeat;
   padding:6rem 5%;text-align:center;
@@ -228,14 +279,22 @@ section{padding:5.5rem 5%;}
 /* ── FOOTER ── */
 footer{background:var(--dark);padding:2.5rem 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
 .footer-logo{font-size:1.3rem;font-weight:800;color:#fff;}
-.footer-logo span{color:var(--green);}
+.footer-logo span{color:var(--g);}
 .footer-links{display:flex;gap:1.5rem;}
 .footer-links a{color:#64748B;font-size:.85rem;transition:color .2s;}
-.footer-links a:hover{color:var(--green);}
+.footer-links a:hover{color:var(--g);}
 footer p{color:#475569;font-size:.82rem;}
 
 @media(max-width:900px){.float-card{display:none;}}
-@media(max-width:600px){nav{padding:.8rem 1.2rem;}.hero{padding:7rem 5% 4rem;background-attachment:scroll;}.hero-stats{max-width:100%;}.btn-xl{padding:.88rem 1.7rem;font-size:.97rem;}}
+@media(max-width:600px){
+  nav{padding:.8rem 1.2rem;}
+  .hero{padding:7rem 5% 4rem;}
+  .hero-stats{max-width:100%;}
+  .hstat{padding:.85rem 1rem;}
+  .hstat-n{font-size:1.3rem;}
+  .btn-xl{padding:.88rem 1.7rem;font-size:.97rem;}
+  .vid-ctrl{bottom:1rem;right:1rem;}
+}
 </style>
 </head>
 <body>
@@ -248,19 +307,43 @@ footer p{color:#475569;font-size:.82rem;}
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- ── HERO WITH VIDEO ── -->
 <section class="hero">
+
+  <!-- HD Background Video — free stock from Mixkit/Pexels CDN -->
+  <video
+    class="hero-video"
+    id="heroVideo"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    poster="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1920&q=90&auto=format&fit=crop"
+  >
+    <!-- Primary source — HD mobile money / business video -->
+    <source src="https://videos.pexels.com/video-files/7579820/7579820-uhd_2560_1440_25fps.mp4" type="video/mp4"/>
+    <!-- Fallback source -->
+    <source src="https://videos.pexels.com/video-files/6774022/6774022-hd_1920_1080_25fps.mp4" type="video/mp4"/>
+    <!-- If video fails, show poster image -->
+  </video>
+
+  <!-- Overlays -->
+  <div class="hero-overlay"></div>
+  <div class="hero-glow"></div>
+
+  <!-- Content -->
   <div class="hero-inner">
     <div class="hero-badge">🌍 Trusted by 10,000+ earners across Kenya &amp; East Africa</div>
     <h1>Your Gateway to<br><span class="hl">Online Earnings</span></h1>
     <p class="hero-desc">
       Earn money through ads, TikTok, YouTube, trivia, articles, and affiliate referrals.
       Earn <strong>KES 100</strong> for every friend you refer.
-      Withdraw via M-Pesa anytime.
+      Withdraw via M-Pesa anytime, any day.
     </p>
     <div class="hero-btns">
       <a href="/register" class="btn btn-green btn-xl">🚀 Start Earning Free</a>
-      <a href="#how"      class="btn btn-white btn-lg">How It Works ↓</a>
+      <a href="#how"      class="btn btn-glass btn-lg">How It Works ↓</a>
     </div>
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-n">10K+</div><div class="hstat-l">Active Earners</div></div>
@@ -269,6 +352,7 @@ footer p{color:#475569;font-size:.82rem;}
       <div class="hstat"><div class="hstat-n">10+</div><div class="hstat-l">Earning Tools</div></div>
     </div>
   </div>
+
   <!-- Floating stats card (desktop) -->
   <div class="float-card">
     <div class="fc-row"><div class="fc-ico ico-g">💸</div><div><div class="fc-lbl">Today's Payouts</div><div class="fc-val">KES 52,400</div></div></div>
@@ -279,10 +363,17 @@ footer p{color:#475569;font-size:.82rem;}
     <div class="fc-div"></div>
     <div class="live-row"><div class="live-dot"></div><div class="live-lbl">LIVE — Updating now</div></div>
   </div>
+
+  <!-- Scroll hint -->
   <div class="scroll-hint"><span>↓</span>Scroll to explore</div>
+
+  <!-- Video mute/unmute toggle -->
+  <button class="vid-ctrl" id="vidCtrl" onclick="toggleMute()">
+    <span id="vidIcon">🔇</span> <span id="vidTxt">Unmute</span>
+  </button>
 </section>
 
-<!-- FEATURES -->
+<!-- ── FEATURES ── -->
 <section>
   <div class="container">
     <div class="sec-tag">✨ Why EarnHub</div>
@@ -299,7 +390,7 @@ footer p{color:#475569;font-size:.82rem;}
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
+<!-- ── HOW IT WORKS ── -->
 <section class="how-bg" id="how">
   <div class="container">
     <div class="text-center">
@@ -315,7 +406,7 @@ footer p{color:#475569;font-size:.82rem;}
   </div>
 </section>
 
-<!-- TOOLS -->
+<!-- ── TOOLS ── -->
 <section class="tools-bg">
   <div class="container">
     <div class="text-center">
@@ -340,7 +431,7 @@ footer p{color:#475569;font-size:.82rem;}
   </div>
 </section>
 
-<!-- REFERRAL -->
+<!-- ── REFERRAL ── -->
 <section class="ref-section">
   <div class="container">
     <div class="ref-inner">
@@ -370,7 +461,7 @@ footer p{color:#475569;font-size:.82rem;}
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
+<!-- ── TESTIMONIALS ── -->
 <section>
   <div class="container">
     <div class="text-center">
@@ -379,14 +470,26 @@ footer p{color:#475569;font-size:.82rem;}
       <p class="sec-sub">Real earners, real results from across Kenya and East Africa.</p>
     </div>
     <div class="testi-grid">
-      <div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"I've withdrawn over KES 8,000 in my first month! I referred 12 friends and earned KES 1,200 from referrals alone."</p><div class="testi-author"><div class="tav">JO</div><div><div class="tname">James Ochieng</div><div class="tloc">📍 Nairobi, Kenya</div></div></div></div>
-      <div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"EarnHub is 100% legit! M-Pesa withdrawals arrive fast. I do YouTube and TikTok tasks every week — great side income."</p><div class="testi-author"><div class="tav">AW</div><div><div class="tname">Amina Wanjiru</div><div class="tloc">📍 Mombasa, Kenya</div></div></div></div>
-      <div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"I shared my referral link in WhatsApp groups and earned KES 3,000 in two days. Best earning platform in Kenya!"</p><div class="testi-author"><div class="tav">BK</div><div><div class="tname">Brian Kamau</div><div class="tloc">📍 Kisumu, Kenya</div></div></div></div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"I've withdrawn over KES 8,000 in my first month! I referred 12 friends and earned KES 1,200 from referrals alone. EarnHub is the real deal!"</p>
+        <div class="testi-author"><div class="tav">JO</div><div><div class="tname">James Ochieng</div><div class="tloc">📍 Nairobi, Kenya</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"EarnHub is 100% legit! M-Pesa withdrawals arrive fast. I do YouTube and TikTok tasks every week — great reliable side income."</p>
+        <div class="testi-author"><div class="tav">AW</div><div><div class="tname">Amina Wanjiru</div><div class="tloc">📍 Mombasa, Kenya</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"I shared my referral link in WhatsApp groups and earned KES 3,000 in two days. Best earning platform in Kenya — no doubt!"</p>
+        <div class="testi-author"><div class="tav">BK</div><div><div class="tname">Brian Kamau</div><div class="tloc">📍 Kisumu, Kenya</div></div></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ── CTA ── -->
 <section class="cta-section">
   <div class="container">
     <div class="sec-tag" style="background:rgba(22,163,74,.20);color:#86EFAC;border:1px solid rgba(22,163,74,.4);margin:0 auto 1.3rem;">🚀 Join Today — It's Free</div>
@@ -394,11 +497,12 @@ footer p{color:#475569;font-size:.82rem;}
     <p>One account. 10+ income streams. KES 100 per referral. Instant M-Pesa payouts.</p>
     <div class="cta-btns">
       <a href="/register" class="btn btn-green btn-xl">Create Free Account →</a>
-      <a href="/login"    class="btn btn-white btn-lg">Sign In</a>
+      <a href="/login"    class="btn btn-glass btn-lg">Sign In</a>
     </div>
   </div>
 </section>
 
+<!-- ── FOOTER ── */
 <footer>
   <div class="footer-logo">Earn<span>Hub</span></div>
   <div class="footer-links">
@@ -408,6 +512,34 @@ footer p{color:#475569;font-size:.82rem;}
   </div>
   <p>© 2024 EarnHub. All rights reserved.</p>
 </footer>
+
+<script>
+// ── Video mute/unmute ──
+const video = document.getElementById('heroVideo');
+let muted   = true;
+
+function toggleMute() {
+  muted = !muted;
+  video.muted = muted;
+  document.getElementById('vidIcon').textContent = muted ? '🔇' : '🔊';
+  document.getElementById('vidTxt').textContent  = muted ? 'Unmute' : 'Mute';
+}
+
+// Try to autoplay — if browser blocks it, keep muted
+video.play().catch(() => {
+  video.muted = true;
+  console.log('Autoplay blocked — video muted by browser policy');
+});
+
+// ── Smooth scroll for anchor links ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
 
 </body>
 </html>
