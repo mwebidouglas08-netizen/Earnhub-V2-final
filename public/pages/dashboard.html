@@ -360,17 +360,120 @@ tr:hover td{background:var(--card2);}
       </div>
     </div>
 
-    <!-- SPIN -->
+ <!-- SPIN GAME -->
     <div class="sec" id="s-spin">
-      <div class="stitle">🎰 Spin &amp; Win — Daily</div>
-      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available every day. Spin once daily for a chance to win KES 5–20 credited instantly to your balance.</p>
-      <div class="spin-wrap">
-        <canvas id="wheel" width="220" height="220" style="border-radius:50%;border:3px solid var(--g);display:block;margin:0 auto;"></canvas>
-        <button class="spin-btn" id="spinBtn" onclick="doSpin()">🎰 SPIN NOW — Free Daily Spin</button>
-        <div class="spin-res" id="spinRes"></div>
+      <div class="stitle">🎰 Spin &amp; Win — 3 Spins Per Day</div>
+
+      <!-- DEPOSIT MODAL -->
+      <div id="spinDepositModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem;">
+        <div style="background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+          <div style="text-align:center;font-size:2rem;margin-bottom:.8rem;">💳</div>
+          <h3 style="font-weight:800;font-size:1.1rem;text-align:center;margin-bottom:.4rem;color:var(--dark);">Deposit to Play Spin</h3>
+          <p style="font-size:.84rem;color:var(--muted);text-align:center;margin-bottom:1.3rem;line-height:1.6;">Enter your M-Pesa number to receive an STK push. Each spin costs <strong style="color:var(--g);">KES 20</strong>. Minimum deposit is KES 20.</p>
+          <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;padding:.8rem 1rem;margin-bottom:1rem;font-size:.84rem;text-align:center;">
+            ℹ️ <strong>House edge: 10%</strong> — fairly disclosed. Prizes: KES 0–50 per spin.
+          </div>
+          <div id="depositAlert" style="padding:.65rem .9rem;border-radius:8px;font-size:.86rem;margin-bottom:.8rem;display:none;font-weight:600;"></div>
+          <div style="margin-bottom:.8rem;">
+            <label style="font-size:.82rem;font-weight:600;margin-bottom:.35rem;display:block;color:var(--muted);">M-Pesa Phone Number</label>
+            <div style="display:flex;gap:.5rem;">
+              <div style="padding:.75rem .9rem;background:#F1F5F9;border:1.5px solid var(--border);border-radius:10px;color:var(--muted);font-size:.9rem;font-weight:700;">+254</div>
+              <input type="tel" id="spinPhone" placeholder="712 345 678" maxlength="9" inputmode="numeric"
+                style="flex:1;padding:.75rem 1rem;background:#F8FAFC;border:1.5px solid var(--border);border-radius:10px;font-size:.9rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;"/>
+            </div>
+          </div>
+          <div style="margin-bottom:1rem;">
+            <label style="font-size:.82rem;font-weight:600;margin-bottom:.35rem;display:block;color:var(--muted);">Amount (KES) — min KES 20</label>
+            <input type="number" id="spinAmt" value="60" min="20" step="20"
+              style="width:100%;padding:.75rem 1rem;background:#F8FAFC;border:1.5px solid var(--border);border-radius:10px;font-size:.9rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;"/>
+            <div style="display:flex;gap:.4rem;margin-top:.5rem;">
+              <button onclick="setSpinAmt(20)"  style="flex:1;padding:.4rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:7px;font-size:.78rem;font-weight:700;color:var(--g);cursor:pointer;">KES 20</button>
+              <button onclick="setSpinAmt(60)"  style="flex:1;padding:.4rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:7px;font-size:.78rem;font-weight:700;color:var(--g);cursor:pointer;">KES 60</button>
+              <button onclick="setSpinAmt(100)" style="flex:1;padding:.4rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:7px;font-size:.78rem;font-weight:700;color:var(--g);cursor:pointer;">KES 100</button>
+              <button onclick="setSpinAmt(200)" style="flex:1;padding:.4rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:7px;font-size:.78rem;font-weight:700;color:var(--g);cursor:pointer;">KES 200</button>
+            </div>
+          </div>
+          <button id="depositBtn" onclick="initiateSpinDeposit()"
+            style="width:100%;padding:.9rem;background:var(--g);color:#fff;font-weight:700;border:none;border-radius:11px;font-size:1rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;margin-bottom:.6rem;">
+            📱 Send M-Pesa STK Push
+          </button>
+          <button onclick="closeDepositModal()"
+            style="width:100%;padding:.75rem;background:#F8FAFC;border:1.5px solid var(--border);border-radius:11px;font-size:.9rem;cursor:pointer;font-weight:600;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;">
+            Cancel
+          </button>
+          <!-- Deposit polling status -->
+          <div id="depositPolling" style="display:none;text-align:center;margin-top:1rem;">
+            <div style="width:36px;height:36px;border:3px solid #E2E8F0;border-top-color:var(--g);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto .6rem;"></div>
+            <div style="font-size:.85rem;color:var(--muted);" id="depositPollingMsg">Waiting for M-Pesa confirmation…</div>
+          </div>
+        </div>
       </div>
-      <div class="info-note" style="max-width:420px;margin:1rem auto 0;text-align:center;">
-        <strong>Prizes:</strong> KES 5, KES 10, or KES 20 — added to your main balance instantly.
+
+      <!-- SPIN GAME MAIN UI -->
+      <div style="max-width:520px;margin:0 auto;">
+        <!-- Balance & spins info -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;margin-bottom:1.2rem;">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;box-shadow:var(--sh);">
+            <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:.3rem;">💳 BALANCE</div>
+            <div id="spinBalance" style="font-size:1.2rem;font-weight:800;color:var(--g);">KES 0</div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;box-shadow:var(--sh);">
+            <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:.3rem;">🎰 SPINS LEFT</div>
+            <div id="spinCount" style="font-size:1.2rem;font-weight:800;color:var(--gold);">3</div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;box-shadow:var(--sh);">
+            <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:.3rem;">💰 SPIN COST</div>
+            <div style="font-size:1.2rem;font-weight:800;color:var(--dark);">KES 20</div>
+          </div>
+        </div>
+
+        <!-- Wheel -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2rem 1.5rem;text-align:center;box-shadow:var(--shm);position:relative;">
+          <!-- Arrow pointer -->
+          <div style="position:absolute;top:1.2rem;left:50%;transform:translateX(-50%);font-size:1.8rem;z-index:2;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));">▼</div>
+          <div style="position:relative;display:inline-block;margin-top:.5rem;">
+            <!-- Outer glow ring -->
+            <div id="wheelGlow" style="position:absolute;inset:-8px;border-radius:50%;background:conic-gradient(from 0deg,#16A34A,#22C55E,#E8900A,#FBBF24,#16A34A);opacity:.3;animation:glowPulse 2s ease-in-out infinite;"></div>
+            <canvas id="wheel" width="260" height="260"
+              style="border-radius:50%;border:6px solid #fff;box-shadow:0 8px 30px rgba(0,0,0,.2);position:relative;z-index:1;display:block;">
+            </canvas>
+          </div>
+          <!-- Result display -->
+          <div id="spinResultDisplay" style="margin-top:1.2rem;min-height:60px;display:flex;align-items:center;justify-content:center;">
+            <div style="font-size:.9rem;color:var(--muted);">Tap SPIN to play! Each spin costs KES 20.</div>
+          </div>
+          <!-- Spin button -->
+          <div style="display:flex;gap:.8rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;">
+            <button id="spinBtn" onclick="doSpin()"
+              style="padding:.9rem 2.5rem;background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;font-weight:800;border:none;border-radius:14px;font-size:1.05rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 4px 15px rgba(22,163,74,.4);transition:all .2s;letter-spacing:.3px;">
+              🎰 SPIN — KES 20
+            </button>
+            <button onclick="showDepositModal()"
+              style="padding:.9rem 1.5rem;background:var(--card);border:1.5px solid #BBF7D0;color:var(--g);font-weight:700;border-radius:14px;font-size:.9rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;">
+              💳 Deposit
+            </button>
+          </div>
+        </div>
+
+        <!-- How it works -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;margin-top:1rem;box-shadow:var(--sh);">
+          <div style="font-weight:700;font-size:.9rem;margin-bottom:.7rem;color:var(--dark);">🎯 Prize Table</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.8rem;">
+            <div style="text-align:center;background:#FEF2F2;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:var(--red);">KES 0</div><div style="font-size:.68rem;color:var(--muted);">45% chance</div></div>
+            <div style="text-align:center;background:#FFF3DC;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:var(--gold);">KES 10</div><div style="font-size:.68rem;color:var(--muted);">20% chance</div></div>
+            <div style="text-align:center;background:#F0FDF4;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:var(--g);">KES 20</div><div style="font-size:.68rem;color:var(--muted);">15% chance</div></div>
+            <div style="text-align:center;background:#F0FDF4;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:var(--g);">KES 30</div><div style="font-size:.68rem;color:var(--muted);">10% chance</div></div>
+            <div style="text-align:center;background:#EFF6FF;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:#2563EB;">KES 40</div><div style="font-size:.68rem;color:var(--muted);">7% chance</div></div>
+            <div style="text-align:center;background:linear-gradient(135deg,#FFF3DC,#FEE2E2);border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:#7C3AED;">KES 50</div><div style="font-size:.68rem;color:var(--muted);">3% chance</div></div>
+            <div style="grid-column:span 2;background:#F8FAFC;border-radius:8px;padding:.5rem;text-align:center;"><div style="font-size:.75rem;color:var(--muted);">ℹ️ House edge: 10% · Max 3 spins/day</div></div>
+          </div>
+        </div>
+
+        <!-- Recent results -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;margin-top:.8rem;box-shadow:var(--sh);">
+          <div style="font-weight:700;font-size:.88rem;margin-bottom:.6rem;color:var(--dark);">📊 Your Spin History (Today)</div>
+          <div id="spinHistory" style="font-size:.82rem;color:var(--muted);">No spins yet today.</div>
+        </div>
       </div>
     </div>
 
@@ -925,6 +1028,316 @@ document.addEventListener('click', e => {
 // Build day-locked content and load user on startup
 buildDayContent();
 loadUser();
+  // After loadUser sets all the stats, add:
+updateSpinUI(u);
+  // ── SPIN GAME ──
+let spinning     = false;
+let rot          = 0;
+let spinHistory  = [];
+let depositPollT = null;
+
+const SEGMENTS = [
+  { label:'KES 0',  prize:0,  color:'#EF4444' },
+  { label:'KES 10', prize:10, color:'#F59E0B' },
+  { label:'KES 0',  prize:0,  color:'#EF4444' },
+  { label:'KES 20', prize:20, color:'#16A34A' },
+  { label:'KES 0',  prize:0,  color:'#EF4444' },
+  { label:'KES 30', prize:30, color:'#22C55E' },
+  { label:'KES 40', prize:40, color:'#2563EB' },
+  { label:'KES 0',  prize:0,  color:'#EF4444' },
+  { label:'KES 50', prize:50, color:'#7C3AED' },
+  { label:'KES 0',  prize:0,  color:'#EF4444' }
+];
+
+function drawWheel(highlight) {
+  const cv  = document.getElementById('wheel');
+  if (!cv)  return;
+  const ctx = cv.getContext('2d');
+  const cx  = 130, cy = 130, r = 120;
+  const arc = (2 * Math.PI) / SEGMENTS.length;
+  ctx.clearRect(0, 0, 260, 260);
+  SEGMENTS.forEach((seg, i) => {
+    const a = rot * (Math.PI / 180) + i * arc;
+    // Segment fill
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, a, a + arc); ctx.closePath();
+    ctx.fillStyle   = (highlight === i) ? '#FFFFFF' : seg.color;
+    ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+    // Label
+    ctx.save();
+    ctx.translate(cx, cy); ctx.rotate(a + arc / 2);
+    ctx.textAlign    = 'right';
+    ctx.fillStyle    = (highlight === i) ? seg.color : '#fff';
+    ctx.font         = 'bold 12px Plus Jakarta Sans';
+    ctx.shadowColor  = 'rgba(0,0,0,.3)'; ctx.shadowBlur = 3;
+    ctx.fillText(seg.label, r - 8, 4);
+    ctx.restore();
+  });
+  // Center circle
+  ctx.beginPath(); ctx.arc(cx, cy, 22, 0, 2 * Math.PI);
+  ctx.fillStyle = '#fff'; ctx.fill();
+  ctx.beginPath(); ctx.arc(cx, cy, 18, 0, 2 * Math.PI);
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 18);
+  grad.addColorStop(0, '#22C55E'); grad.addColorStop(1, '#16A34A');
+  ctx.fillStyle = grad; ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 9px Plus Jakarta Sans';
+  ctx.textAlign = 'center'; ctx.fillText('SPIN', cx, cy + 3);
+}
+
+function updateSpinUI(userData) {
+  if (!userData) return;
+  const el = document.getElementById('spinBalance');
+  if (el) el.textContent = 'KES ' + (userData.balance || 0);
+  const today       = new Date().toISOString().slice(0, 10);
+  const lastDay     = userData.last_spin_day || '';
+  const spinsUsed   = lastDay === today ? (userData.spins_today || 0) : 0;
+  const spinsLeft   = Math.max(0, 3 - spinsUsed);
+  const sc          = document.getElementById('spinCount');
+  if (sc) {
+    sc.textContent = spinsLeft;
+    sc.style.color = spinsLeft === 0 ? 'var(--red)' : 'var(--gold)';
+  }
+  const btn = document.getElementById('spinBtn');
+  if (btn) btn.disabled = spinsLeft === 0 || spinning;
+}
+
+async function doSpin() {
+  if (spinning) return;
+  const btn = document.getElementById('spinBtn');
+  btn.disabled = true;
+  spinning     = true;
+
+  // Pre-spin flash
+  document.getElementById('spinResultDisplay').innerHTML =
+    '<div style="font-size:.85rem;color:var(--muted);">🎰 Spinning…</div>';
+
+  // Call backend first to get result
+  let result;
+  try {
+    const r = await fetch('/api/user/spin', { method:'POST', headers:{'Content-Type':'application/json'} });
+    result  = await r.json();
+  } catch(e) {
+    spinning = false; btn.disabled = false;
+    document.getElementById('spinResultDisplay').innerHTML =
+      '<div style="color:var(--red);font-size:.85rem;">Network error. Try again.</div>';
+    return;
+  }
+
+  if (!result.success) {
+    spinning = false; btn.disabled = false;
+    document.getElementById('spinResultDisplay').innerHTML =
+      `<div style="color:var(--red);font-size:.88rem;font-weight:600;">⚠️ ${result.message}</div>`;
+    return;
+  }
+
+  // Find which segment matches the prize
+  const prize = result.prize;
+  // Pick a segment index that matches the prize
+  const matching = SEGMENTS.map((s,i)=>({...s,i})).filter(s=>s.prize===prize);
+  const target   = matching[Math.floor(Math.random()*matching.length)];
+  const segIdx   = target.i;
+
+  // Calculate rotation so that segment lands under the pointer (top)
+  const arc       = 360 / SEGMENTS.length;
+  const segCenter = segIdx * arc + arc / 2;
+  const extraSpins= 360 * (5 + Math.floor(Math.random() * 3));
+  const targetRot = extraSpins + (360 - (rot % 360)) + (180 - segCenter);
+
+  // Animate
+  const dur   = 4000;
+  const start = performance.now();
+  const startR= rot;
+
+  function animate(now) {
+    const elapsed = now - start;
+    const prog    = Math.min(elapsed / dur, 1);
+    // Ease out cubic
+    const ease    = 1 - Math.pow(1 - prog, 3);
+    rot           = startR + targetRot * ease;
+    drawWheel(prog > 0.97 ? segIdx : undefined);
+    if (prog < 1) { requestAnimationFrame(animate); return; }
+
+    // Done spinning
+    spinning = false;
+
+    // Show result
+    const won     = result.won;
+    const netSign = result.netChange >= 0 ? '+' : '';
+    let resultHtml;
+    if (prize === 50) {
+      resultHtml = `<div style="animation:bounceIn .5s;">
+        <div style="font-size:2rem;margin-bottom:.4rem;">🎉🎊🏆</div>
+        <div style="font-size:1.2rem;font-weight:800;color:#7C3AED;">JACKPOT! KES ${prize}!</div>
+        <div style="font-size:.85rem;color:var(--g);font-weight:600;">Net: ${netSign}KES ${result.netChange}</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">${result.spinsLeft} spin${result.spinsLeft===1?'':'s'} left today</div>
+      </div>`;
+    } else if (prize >= 30) {
+      resultHtml = `<div>
+        <div style="font-size:1.8rem;margin-bottom:.3rem;">🎉</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--g);">You won KES ${prize}!</div>
+        <div style="font-size:.85rem;color:var(--muted);">Net: ${netSign}KES ${result.netChange} · ${result.spinsLeft} spins left</div>
+      </div>`;
+    } else if (prize > 0) {
+      resultHtml = `<div>
+        <div style="font-size:1.5rem;margin-bottom:.3rem;">${won?'😊':'😕'}</div>
+        <div style="font-size:1rem;font-weight:700;color:${won?'var(--g)':'var(--gold)'};">${prize===20?'Break even!':'Won KES '+prize}</div>
+        <div style="font-size:.83rem;color:var(--muted);">Net: ${netSign}KES ${result.netChange} · ${result.spinsLeft} spins left</div>
+      </div>`;
+    } else {
+      resultHtml = `<div>
+        <div style="font-size:1.5rem;margin-bottom:.3rem;">😔</div>
+        <div style="font-size:1rem;font-weight:700;color:var(--red);">No win this time</div>
+        <div style="font-size:.83rem;color:var(--muted);">Lost KES ${result.spinCost} · ${result.spinsLeft} spins left today</div>
+      </div>`;
+    }
+    document.getElementById('spinResultDisplay').innerHTML = resultHtml;
+
+    // Update spin history
+    const time = new Date().toLocaleTimeString();
+    spinHistory.unshift({ prize, netChange: result.netChange, time });
+    if (spinHistory.length > 3) spinHistory = spinHistory.slice(0, 3);
+    document.getElementById('spinHistory').innerHTML = spinHistory.map(h =>
+      `<div style="display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);">
+        <span>${h.time}</span>
+        <span style="font-weight:700;color:${h.prize>0?'var(--g)':'var(--red)'};">${h.prize>0?'+':''}KES ${h.prize} (net ${h.netChange>=0?'+':''}${h.netChange})</span>
+      </div>`
+    ).join('') || 'No spins yet today.';
+
+    // Update balance display
+    const balEl = document.getElementById('spinBalance');
+    if (balEl) balEl.textContent = 'KES ' + result.newBalance;
+    const sc = document.getElementById('spinCount');
+    if (sc) {
+      sc.textContent = result.spinsLeft;
+      sc.style.color = result.spinsLeft === 0 ? 'var(--red)' : 'var(--gold)';
+    }
+
+    // Re-enable button if spins left
+    if (result.spinsLeft > 0) {
+      btn.disabled = false;
+    } else {
+      btn.textContent = '🔒 No Spins Left Today';
+      btn.style.opacity = '.6';
+      btn.style.cursor  = 'not-allowed';
+    }
+
+    // Refresh full user data
+    loadUser();
+  }
+  requestAnimationFrame(animate);
+}
+
+// ── DEPOSIT MODAL ──
+function showDepositModal() {
+  const modal = document.getElementById('spinDepositModal');
+  modal.style.display = 'flex';
+  document.getElementById('depositAlert').style.display    = 'none';
+  document.getElementById('depositPolling').style.display  = 'none';
+  document.getElementById('depositBtn').disabled           = false;
+  document.getElementById('depositBtn').textContent        = '📱 Send M-Pesa STK Push';
+}
+function closeDepositModal() {
+  document.getElementById('spinDepositModal').style.display = 'none';
+  if (depositPollT) { clearInterval(depositPollT); depositPollT = null; }
+}
+function setSpinAmt(n) {
+  document.getElementById('spinAmt').value = n;
+}
+
+async function initiateSpinDeposit() {
+  const rawPhone = document.getElementById('spinPhone').value.trim();
+  const amount   = parseFloat(document.getElementById('spinAmt').value) || 0;
+
+  if (!rawPhone || rawPhone.length < 9) {
+    showDepositAlert('Enter a valid 9-digit M-Pesa number.', 'error'); return;
+  }
+  if (amount < 20) {
+    showDepositAlert('Minimum deposit is KES 20.', 'error'); return;
+  }
+
+  const btn = document.getElementById('depositBtn');
+  btn.disabled = true; btn.textContent = '⏳ Sending STK push…';
+  showDepositAlert('', '');
+
+  try {
+    const r = await fetch('/api/user/spin-deposit', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: '+254' + rawPhone, amount })
+    });
+    const d = await r.json();
+    if (d.success) {
+      document.getElementById('depositPolling').style.display = 'block';
+      document.getElementById('depositPollingMsg').textContent = 'STK push sent! Enter your M-Pesa PIN…';
+      startDepositPoll();
+    } else {
+      showDepositAlert(d.message || 'Failed to send STK push. Try again.', 'error');
+      btn.disabled = false; btn.textContent = '📱 Send M-Pesa STK Push';
+    }
+  } catch {
+    showDepositAlert('Network error. Check your connection.', 'error');
+    btn.disabled = false; btn.textContent = '📱 Send M-Pesa STK Push';
+  }
+}
+
+function startDepositPoll() {
+  let pc = 0;
+  depositPollT = setInterval(async () => {
+    pc++;
+    try {
+      const r = await fetch('/api/user/spin-deposit/status?_=' + Date.now());
+      const d = await r.json();
+      if (d.deposited) {
+        clearInterval(depositPollT); depositPollT = null;
+        document.getElementById('depositPollingMsg').textContent = `✅ KES ${d.amount} deposited successfully!`;
+        showDepositAlert(`KES ${d.amount} added to your balance! You can now spin.`, 'success');
+        document.getElementById('depositPolling').style.display = 'none';
+        setTimeout(closeDepositModal, 2000);
+        loadUser().then(u => updateSpinUI(u));
+        return;
+      }
+      if (d.failed) {
+        clearInterval(depositPollT); depositPollT = null;
+        document.getElementById('depositPolling').style.display = 'none';
+        showDepositAlert(d.message || 'Payment failed. Try again.', 'error');
+        document.getElementById('depositBtn').disabled    = false;
+        document.getElementById('depositBtn').textContent = '📱 Send M-Pesa STK Push';
+        return;
+      }
+    } catch (e) { console.log('Deposit poll:', e.message); }
+    if (pc >= 60) { // 3 min timeout
+      clearInterval(depositPollT); depositPollT = null;
+      document.getElementById('depositPolling').style.display = 'none';
+      showDepositAlert('Timeout. If you paid, your balance will update shortly.', 'error');
+      document.getElementById('depositBtn').disabled    = false;
+      document.getElementById('depositBtn').textContent = '📱 Send M-Pesa STK Push';
+    }
+  }, 3000);
+}
+
+function showDepositAlert(msg, type) {
+  const e = document.getElementById('depositAlert');
+  if (!msg) { e.style.display = 'none'; return; }
+  e.textContent    = msg;
+  e.style.display  = 'block';
+  e.style.background  = type==='success' ? '#F0FDF4' : '#FEF2F2';
+  e.style.border      = type==='success' ? '1px solid #BBF7D0' : '1px solid #FECACA';
+  e.style.color       = type==='success' ? '#15803D' : '#DC2626';
+  e.style.borderRadius= '8px';
+  e.style.padding     = '.65rem .9rem';
+}
+
+// Add keyframe for wheel glow and bounceIn
+const styleEl = document.createElement('style');
+styleEl.textContent = `
+@keyframes glowPulse{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:.4;transform:scale(1.03);}}
+@keyframes bounceIn{0%{transform:scale(.8);opacity:0;}60%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+`;
+document.head.appendChild(styleEl);
+
+// Draw wheel on load
+window.addEventListener('load', () => { drawWheel(); });
 </script>
 </body>
 </html>
