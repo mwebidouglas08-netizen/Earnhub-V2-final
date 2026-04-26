@@ -6,155 +6,192 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --g:#16A34A;--gh:#15803D;--gl:#F0FDF4;--gm:#22C55E;
+  --g:#16A34A;--gh:#15803D;--gl:#F0FDF4;
   --gold:#E8900A;--gold-l:#FFF3DC;
-  --dark:#0F172A;--dark2:#1E293B;
-  --body:#F1F5F9;--card:#fff;--card2:#F8FAFC;
+  --dark:#0F172A;--body:#F1F5F9;--card:#fff;--card2:#F8FAFC;
   --border:#E2E8F0;--text:#1E293B;--muted:#64748B;--muted2:#94A3B8;
   --red:#DC2626;--blue:#2563EB;
   --sh:0 1px 4px rgba(0,0,0,.06);--shm:0 4px 16px rgba(0,0,0,.08);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--body);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;display:flex;}
+
 /* SIDEBAR */
 .sb{width:255px;background:var(--dark);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:60;transition:transform .3s;}
 .sb-logo{padding:1.4rem 1.3rem 1rem;border-bottom:1px solid rgba(255,255,255,.07);}
-.logo{font-size:1.45rem;font-weight:800;color:#fff;}
+.logo{font-size:1.45rem;font-weight:800;color:#fff;letter-spacing:-1px;}
 .logo span{color:var(--g);}
 .sb-sec{padding:.75rem .75rem .2rem;font-size:.67rem;font-weight:700;color:#475569;letter-spacing:1.8px;text-transform:uppercase;}
 .ni{display:flex;align-items:center;gap:.65rem;padding:.6rem .9rem;margin:.07rem .45rem;border-radius:9px;cursor:pointer;color:#94A3B8;font-size:.87rem;transition:all .15s;border:none;background:none;width:calc(100% - .9rem);text-align:left;font-family:'Plus Jakarta Sans',sans-serif;}
 .ni:hover{background:rgba(255,255,255,.07);color:#fff;}
-.ni.active{background:rgba(22,163,74,.15);color:#4ADE80;font-weight:700;}
+.ni.active{background:rgba(22,163,74,.18);color:#4ADE80;font-weight:700;}
 .ni .ic{font-size:1rem;width:20px;text-align:center;flex-shrink:0;}
 .sb-foot{margin-top:auto;padding:.9rem;}
 .lbtn{width:100%;padding:.65rem;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:9px;color:#EF4444;font-size:.87rem;cursor:pointer;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;}
 .lbtn:hover{background:rgba(239,68,68,.2);}
+
 /* MAIN */
-.main{margin-left:255px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.main{margin-left:255px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.5rem;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40;box-shadow:var(--sh);}
-.ham{display:none;background:none;border:none;color:var(--text);font-size:1.35rem;cursor:pointer;}
+.ham{display:none;background:none;border:none;color:var(--text);font-size:1.35rem;cursor:pointer;padding:.2rem .4rem;}
 .page-t{font-weight:700;font-size:1rem;color:var(--dark);}
 .nb{background:none;border:none;cursor:pointer;font-size:1.2rem;padding:.3rem;position:relative;}
 .nbadge{position:absolute;top:-2px;right:-2px;background:var(--red);color:#fff;font-size:.58rem;font-weight:800;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;}
+
 /* CONTENT */
 .cnt{padding:1.4rem;flex:1;}
 .sec{display:none;}
 .sec.active{display:block;}
-/* WELCOME */
+
+/* BANNER */
 .wbanner{border-radius:18px;padding:2rem 2.2rem;margin-bottom:1.4rem;position:relative;overflow:hidden;
   background:linear-gradient(135deg,rgba(5,40,20,.88) 0%,rgba(22,163,74,.35) 100%),
   url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=900&q=80&auto=format&fit=crop') center/cover no-repeat;
   box-shadow:var(--shm);}
-.wbanner h2{font-size:1.35rem;font-weight:800;margin-bottom:.3rem;color:#fff;}
-.wbanner p{color:rgba(255,255,255,.78);font-size:.88rem;margin-bottom:1rem;line-height:1.65;max-width:520px;}
-.pills{display:flex;gap:.7rem;flex-wrap:wrap;}
-.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:.28rem .8rem;font-size:.75rem;color:#fff;font-weight:600;}
+.wbanner h2{font-size:1.3rem;font-weight:800;margin-bottom:.3rem;color:#fff;}
+.wbanner p{color:rgba(255,255,255,.78);font-size:.87rem;margin-bottom:1rem;line-height:1.6;max-width:500px;}
+.pills{display:flex;gap:.6rem;flex-wrap:wrap;}
+.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:.25rem .75rem;font-size:.74rem;color:#fff;font-weight:600;}
+
 /* STATS */
-.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.9rem;margin-bottom:1.4rem;}
-.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.15rem;box-shadow:var(--sh);}
-.sc .lbl{font-size:.72rem;color:var(--muted);margin-bottom:.35rem;font-weight:600;}
-.sc .val{font-size:1.35rem;font-weight:800;color:var(--g);}
-.sc .sl{font-size:.71rem;color:var(--muted2);margin-top:.15rem;}
-/* EARNINGS LIST */
-.stitle{font-size:1rem;font-weight:700;margin-bottom:.9rem;color:var(--dark);}
-.stitle-sub{font-size:.78rem;color:var(--muted);font-weight:400;margin-left:.5rem;}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:.85rem;margin-bottom:1.4rem;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;box-shadow:var(--sh);}
+.sc .lbl{font-size:.71rem;color:var(--muted);margin-bottom:.3rem;font-weight:600;}
+.sc .val{font-size:1.3rem;font-weight:800;color:var(--g);}
+.sc .sl{font-size:.7rem;color:var(--muted2);margin-top:.1rem;}
+
+/* LISTS */
+.stitle{font-size:.97rem;font-weight:700;margin-bottom:.85rem;color:var(--dark);}
+.stitle-sub{font-size:.77rem;color:var(--muted);font-weight:400;margin-left:.4rem;}
 .elist{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--sh);}
-.ei{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.15rem;border-bottom:1px solid var(--border);}
+.ei{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.1rem;border-bottom:1px solid var(--border);}
 .ei:last-child{border-bottom:none;}
-.eil{display:flex;align-items:center;gap:.8rem;}
-.eico{width:36px;height:36px;border-radius:10px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;}
-.enm{font-size:.88rem;font-weight:700;color:var(--dark);}
-.esb{font-size:.73rem;color:var(--muted);}
-.eamt{font-weight:800;color:var(--g);font-size:.95rem;}
+.eil{display:flex;align-items:center;gap:.75rem;}
+.eico{width:34px;height:34px;border-radius:9px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.enm{font-size:.87rem;font-weight:700;color:var(--dark);}
+.esb{font-size:.72rem;color:var(--muted);}
+.eamt{font-weight:800;color:var(--g);font-size:.93rem;}
+
 /* SCHEDULE */
-.sgd{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:.8rem;margin-top:.9rem;}
-.sdcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.95rem;box-shadow:var(--sh);}
-.sdcard h4{font-size:.9rem;font-weight:700;margin-bottom:.3rem;color:var(--dark);}
-.sdcard p{font-size:.78rem;color:var(--muted);}
-/* CONTENT CARDS */
-.content-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;margin-top:1rem;}
-.content-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;box-shadow:var(--sh);}
-.cc-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;}
-.cc-icon{width:46px;height:46px;border-radius:12px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
-.cc-icon.gold{background:var(--gold-l);}
-.cc-icon.blue{background:#EFF6FF;}
-.cc-title{font-size:1rem;font-weight:800;color:var(--dark);}
-.cc-sub{font-size:.75rem;color:var(--muted);}
-.earn-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--gl);border:1px solid #BBF7D0;border-radius:50px;padding:.3rem .8rem;font-size:.78rem;color:var(--g);font-weight:700;margin-bottom:.8rem;}
-.earn-badge.gold{background:var(--gold-l);border-color:#FDE68A;color:var(--gold);}
-.task-list{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem;}
-.task-item{display:flex;align-items:center;gap:.6rem;font-size:.84rem;color:var(--text);}
-.task-item::before{content:'✅';font-size:.8rem;}
-.link-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;background:var(--g);color:#fff;border-radius:9px;font-size:.84rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
-.link-btn:hover{background:var(--gh);transform:translateY(-1px);}
-.link-btn.gold{background:var(--gold);}
-.link-btn.gold:hover{background:#C97D08;}
-.link-btn.blue{background:var(--blue);}
-.link-btn.blue:hover{background:#1D4ED8;}
-.link-btn.red{background:#FF0000;}
-.link-btn.red:hover{background:#CC0000;}
-.link-btn.outline{background:var(--card);color:var(--g);border:1.5px solid #BBF7D0;}
-.link-btn.outline:hover{background:var(--gl);}
-.btn-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.5rem;}
-.info-note{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;font-size:.82rem;color:var(--muted);line-height:1.65;margin-top:.8rem;}
-.info-note strong{color:var(--dark);}
-/* LOCKED DAY NOTICE */
-.locked-notice{background:#FEF2F2;border:1.5px solid #FECACA;border-radius:12px;padding:1.2rem 1.4rem;text-align:center;}
-.locked-notice .lock-icon{font-size:2.5rem;margin-bottom:.6rem;}
-.locked-notice h4{font-size:1rem;font-weight:800;color:#991B1B;margin-bottom:.4rem;}
-.locked-notice p{font-size:.85rem;color:#DC2626;line-height:1.65;}
+.sgd{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.75rem;margin-top:.85rem;}
+.sdcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.9rem;box-shadow:var(--sh);}
+.sdcard h4{font-size:.88rem;font-weight:700;margin-bottom:.25rem;}
+.sdcard p{font-size:.77rem;color:var(--muted);}
+
 /* FORM */
-.fcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;max-width:490px;box-shadow:var(--sh);}
-.fg{margin-bottom:1.05rem;}
-.fg label{font-size:.82rem;font-weight:600;margin-bottom:.33rem;display:block;color:var(--muted);}
-.fg input{width:100%;padding:.7rem .95rem;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:.88rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:border-color .2s;}
+.fcard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.4rem;max-width:480px;box-shadow:var(--sh);}
+.fg{margin-bottom:1rem;}
+.fg label{font-size:.81rem;font-weight:600;margin-bottom:.3rem;display:block;color:var(--muted);}
+.fg input,.fg select{width:100%;padding:.68rem .9rem;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:.88rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;transition:border-color .2s;}
 .fg input:focus{border-color:var(--g);background:#fff;}
 .fg input::placeholder{color:#CBD5E1;}
-.btn{padding:.78rem 1.8rem;background:var(--g);color:#fff;font-weight:700;border:none;border-radius:10px;font-size:.93rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
-.btn:hover{background:var(--gh);transform:translateY(-1px);}
-.btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
-.al{padding:.65rem .9rem;border-radius:8px;font-size:.86rem;margin-top:.8rem;display:none;font-weight:600;}
+.gbtn{padding:.75rem 1.6rem;background:var(--g);color:#fff;font-weight:700;border:none;border-radius:10px;font-size:.9rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;}
+.gbtn:hover{background:var(--gh);transform:translateY(-1px);}
+.gbtn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.gbtn-gold{background:var(--gold)!important;}
+.gbtn-gold:hover{background:#C97D08!important;}
+.al{padding:.6rem .9rem;border-radius:8px;font-size:.85rem;margin-top:.7rem;display:none;font-weight:600;}
 .al.ok{background:#F0FDF4;border:1px solid #BBF7D0;color:var(--g);}
 .al.err{background:#FEF2F2;border:1px solid #FECACA;color:var(--red);}
+
+/* CONTENT CARDS */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.1rem;margin-top:.9rem;}
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.4rem;box-shadow:var(--sh);}
+.ccard-hd{display:flex;align-items:center;gap:.75rem;margin-bottom:.9rem;}
+.ccard-ico{width:44px;height:44px;border-radius:11px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.ccard-ico.gold{background:var(--gold-l);}
+.ccard-ico.blue{background:#EFF6FF;}
+.ccard-ico.red{background:#FEF2F2;}
+.ccard-t{font-size:.97rem;font-weight:800;color:var(--dark);}
+.ccard-s{font-size:.74rem;color:var(--muted);}
+.ebadge{display:inline-flex;align-items:center;gap:.35rem;background:var(--gl);border:1px solid #BBF7D0;border-radius:50px;padding:.28rem .75rem;font-size:.77rem;color:var(--g);font-weight:700;margin-bottom:.75rem;}
+.ebadge.gold{background:var(--gold-l);border-color:#FDE68A;color:var(--gold);}
+.tlist{display:flex;flex-direction:column;gap:.55rem;margin-bottom:.9rem;}
+.ti{font-size:.83rem;color:var(--text);}
+.ti::before{content:'✅';margin-right:.5rem;font-size:.78rem;}
+.abtn{display:inline-flex;align-items:center;gap:.4rem;padding:.58rem 1.1rem;background:var(--g);color:#fff;border-radius:9px;font-size:.83rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;}
+.abtn:hover{background:var(--gh);transform:translateY(-1px);}
+.abtn.gold{background:var(--gold);}
+.abtn.gold:hover{background:#C97D08;}
+.abtn.blue{background:var(--blue);}
+.abtn.blue:hover{background:#1D4ED8;}
+.abtn.red{background:#EF4444;}
+.abtn.red:hover{background:#DC2626;}
+.abtn.out{background:var(--card);color:var(--g);border:1.5px solid #BBF7D0;}
+.abtn.out:hover{background:var(--gl);}
+.abtn.wa{background:#25D366;color:#fff;}
+.abtn.wa:hover{background:#1fbb58;}
+.brow{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:.5rem;}
+.inote{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:.8rem .95rem;font-size:.81rem;color:var(--muted);line-height:1.6;margin-top:.75rem;}
+.inote strong{color:var(--dark);}
+
+/* LOCKED */
+.locked{background:#FEF2F2;border:1.5px solid #FECACA;border-radius:14px;padding:1.5rem;text-align:center;}
+.locked .lic{font-size:2.5rem;margin-bottom:.6rem;}
+.locked h4{font-size:1rem;font-weight:800;color:#991B1B;margin-bottom:.35rem;}
+.locked p{font-size:.84rem;color:#DC2626;line-height:1.6;}
+
 /* REFERRAL */
-.ref-code-box{background:var(--gold-l);border:1.5px solid #FDE68A;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.2rem;}
-.ref-code-label{font-size:.73rem;font-weight:700;color:#92400E;margin-bottom:.35rem;letter-spacing:.5px;}
-.ref-code-val{font-family:monospace;font-size:1.5rem;font-weight:800;color:var(--gold);letter-spacing:3px;}
-.ref-link-box{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
-.ref-link-txt{font-family:monospace;font-size:.8rem;color:var(--gold);word-break:break-all;flex:1;}
-.copy-btn{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:.45rem .95rem;font-size:.8rem;font-weight:700;cursor:pointer;white-space:nowrap;}
-.srow{display:flex;gap:.9rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.ref-earn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.7rem;margin-top:.5rem;}
-.rec{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:.8rem;text-align:center;}
-.rec-amt{font-size:1.1rem;font-weight:800;color:var(--gold);}
-.rec-lbl{font-size:.72rem;color:var(--muted);margin-top:.15rem;}
+.rbox{background:var(--gold-l);border:1.5px solid #FDE68A;border-radius:14px;padding:1.1rem 1.3rem;margin-bottom:1.1rem;}
+.rbox-lbl{font-size:.72rem;font-weight:700;color:#92400E;margin-bottom:.3rem;letter-spacing:.4px;}
+.rbox-val{font-family:monospace;font-size:1.45rem;font-weight:800;color:var(--gold);letter-spacing:2.5px;}
+.rlink-box{background:var(--card);border:1.5px solid var(--border);border-radius:11px;padding:.85rem 1rem;margin-bottom:1.1rem;display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;}
+.rlink-txt{font-family:monospace;font-size:.79rem;color:var(--gold);word-break:break-all;flex:1;}
+.cpbtn{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:.42rem .85rem;font-size:.79rem;font-weight:700;cursor:pointer;}
+.reg{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:.65rem;margin-top:.5rem;}
+.rec{background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:.75rem;text-align:center;}
+.rec-a{font-size:1.05rem;font-weight:800;color:var(--gold);}
+.rec-l{font-size:.71rem;color:var(--muted);margin-top:.12rem;}
+
 /* TABLE */
 .twrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:auto;box-shadow:var(--sh);}
-table{width:100%;border-collapse:collapse;min-width:380px;}
-th{padding:.72rem 1rem;text-align:left;font-size:.75rem;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);}
-td{padding:.72rem 1rem;font-size:.86rem;border-bottom:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;min-width:360px;}
+th{padding:.68rem 1rem;text-align:left;font-size:.74rem;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);}
+td{padding:.68rem 1rem;font-size:.85rem;border-bottom:1px solid var(--border);}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:var(--card2);}
+
 /* SPIN */
-.spin-wrap{text-align:center;padding:1.5rem 1rem;}
-.spin-btn{padding:.88rem 2.5rem;background:var(--g);color:#fff;font-weight:800;border:none;border-radius:12px;font-size:1.05rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:1.5rem;transition:all .2s;}
-.spin-btn:hover{background:var(--gh);transform:translateY(-1px);}
-.spin-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
-.spin-res{margin-top:1rem;font-weight:800;font-size:1.1rem;min-height:1.8rem;color:var(--g);}
+.spin-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.1rem;}
+.sic{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.95rem;text-align:center;box-shadow:var(--sh);}
+.sic-lbl{font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:.28rem;}
+.sic-val{font-size:1.15rem;font-weight:800;color:var(--g);}
+.spin-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2rem 1.5rem;text-align:center;box-shadow:var(--shm);position:relative;}
+.spin-prize-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.45rem;margin:.85rem 0;}
+.spz{border-radius:8px;padding:.45rem .3rem;text-align:center;}
+.spz-a{font-size:.79rem;font-weight:800;}
+.spz-p{font-size:.67rem;color:var(--muted);margin-top:.1rem;}
+.spin-hist{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:.95rem;margin-top:.8rem;box-shadow:var(--sh);}
+.hist-row{display:flex;justify-content:space-between;padding:.38rem 0;border-bottom:1px solid var(--border);font-size:.81rem;}
+.hist-row:last-child{border-bottom:none;}
+
 /* TRIVIA */
-.trivia-opt{width:100%;padding:.75rem 1rem;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;text-align:left;font-size:.88rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;transition:all .2s;margin-bottom:.5rem;}
-.trivia-opt:hover{border-color:var(--g);}
-.trivia-opt.correct{background:#F0FDF4;border-color:var(--g);color:#15803D;font-weight:700;}
-.trivia-opt.wrong{background:#FEF2F2;border-color:var(--red);color:var(--red);}
+.topt{width:100%;padding:.72rem 1rem;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;text-align:left;font-size:.87rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;transition:all .2s;margin-bottom:.48rem;display:block;}
+.topt:hover{border-color:var(--g);}
+.topt.correct{background:#F0FDF4;border-color:var(--g);color:#15803D;font-weight:700;}
+.topt.wrong{background:#FEF2F2;border-color:var(--red);color:var(--red);}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:1rem;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+
 /* NOTIF */
-.npanel{position:fixed;top:56px;right:1rem;width:305px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 16px 50px rgba(0,0,0,.14);z-index:200;display:none;max-height:380px;overflow-y:auto;}
-.nh{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.9rem;}
-.nitem{padding:.8rem 1.1rem;border-bottom:1px solid var(--border);}
+.npanel{position:fixed;top:56px;right:1rem;width:300px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 16px 50px rgba(0,0,0,.14);z-index:200;display:none;max-height:360px;overflow-y:auto;}
+.nh{padding:.85rem 1.05rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.88rem;}
+.nitem{padding:.75rem 1.05rem;border-bottom:1px solid var(--border);}
 .nitem:last-child{border-bottom:none;}
-.nitem h5{font-size:.86rem;margin-bottom:.2rem;font-weight:700;}
-.nitem p{font-size:.78rem;color:var(--muted);}
-.nempty{padding:2rem;text-align:center;color:var(--muted);font-size:.88rem;}
+.nitem h5{font-size:.85rem;margin-bottom:.18rem;font-weight:700;}
+.nitem p{font-size:.77rem;color:var(--muted);}
+.nempty{padding:2rem;text-align:center;color:var(--muted);font-size:.87rem;}
+
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;}
+.overlay.open{display:block;}
+
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes glowPulse{0%,100%{opacity:.2;}50%{opacity:.4;}}
+@keyframes bounceIn{0%{transform:scale(.8);opacity:0;}60%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+
 @media(max-width:768px){
   .sb{transform:translateX(-100%);}
   .sb.open{transform:translateX(0);}
@@ -162,7 +199,8 @@ tr:hover td{background:var(--card2);}
   .ham{display:block;}
   .overlay.open{display:block;}
   .sgrid{grid-template-columns:repeat(2,1fr);}
-  .content-grid{grid-template-columns:1fr;}
+  .cgrid{grid-template-columns:1fr;}
+  .spin-info-grid{grid-template-columns:repeat(3,1fr);}
 }
 </style>
 </head>
@@ -172,48 +210,50 @@ tr:hover td{background:var(--card2);}
 <aside class="sb" id="sb">
   <div class="sb-logo"><div class="logo">Earn<span>Hub</span></div></div>
   <div class="sb-sec">Main Menu</div>
-  <button class="ni active" onclick="go('dash',this)"><span class="ic">🏠</span>Dashboard</button>
+  <button class="ni active" data-sec="dash">🏠 &nbsp;Dashboard</button>
   <div class="sb-sec">Financial</div>
-  <button class="ni" onclick="go('voucher',this)"><span class="ic">🎟️</span>Voucher</button>
-  <button class="ni" onclick="go('recharge',this)"><span class="ic">💳</span>Account Recharge</button>
-  <button class="ni" onclick="go('withdraw',this)"><span class="ic">💸</span>Withdraw</button>
-  <button class="ni" onclick="go('redeem',this)"><span class="ic">🎁</span>Redeem Bonus</button>
+  <button class="ni" data-sec="withdraw">💸 &nbsp;Withdraw</button>
+  <button class="ni" data-sec="voucher">🎟️ &nbsp;Voucher</button>
+  <button class="ni" data-sec="recharge">💳 &nbsp;Account Recharge</button>
+  <button class="ni" data-sec="redeem">🎁 &nbsp;Redeem Bonus</button>
   <div class="sb-sec">Community</div>
-  <button class="ni" onclick="go('share',this)"><span class="ic">📤</span>Share WhatsApp</button>
-  <button class="ni" onclick="openWA()"><span class="ic">👥</span>Join Group</button>
-  <button class="ni" onclick="go('downlines',this)"><span class="ic">🌐</span>Downlines</button>
-  <button class="ni" onclick="go('chat',this)"><span class="ic">💬</span>Chat Foreigners</button>
+  <button class="ni" data-sec="share">📤 &nbsp;Share &amp; Earn</button>
+  <button class="ni" id="joinWaBtn">👥 &nbsp;Join Group</button>
+  <button class="ni" data-sec="downlines">🌐 &nbsp;Downlines</button>
+  <button class="ni" data-sec="chat">💬 &nbsp;Chat Foreigners</button>
   <div class="sb-sec">Products</div>
-  <button class="ni" onclick="go('spin',this)"><span class="ic">🎰</span>Spin Games</button>
-  <button class="ni" onclick="go('aviator',this)"><span class="ic">✈️</span>Aviator Predictor</button>
-  <button class="ni" onclick="go('revshare',this)"><span class="ic">📈</span>Aviator REVSHARE</button>
+  <button class="ni" data-sec="spin">🎰 &nbsp;Spin Games</button>
+  <button class="ni" data-sec="aviator">✈️ &nbsp;Aviator Predictor</button>
+  <button class="ni" data-sec="revshare">📈 &nbsp;Aviator REVSHARE</button>
   <div class="sb-sec">Digital Services</div>
-  <button class="ni" onclick="go('ads',this)"><span class="ic">📣</span>Ads Earnings</button>
-  <button class="ni" onclick="go('tiktok',this)"><span class="ic">🎵</span>TikTok Earn</button>
-  <button class="ni" onclick="go('youtube',this)"><span class="ic">📺</span>YouTube Earn</button>
-  <button class="ni" onclick="go('trivia',this)"><span class="ic">🧩</span>Trivia Questions</button>
-  <button class="ni" onclick="go('articles',this)"><span class="ic">✍️</span>Articles</button>
-  <button class="ni" onclick="go('forex',this)"><span class="ic">💱</span>Forex Lessons</button>
-  <button class="ni" onclick="go('ebooks',this)"><span class="ic">📚</span>Business Ebooks</button>
-  <button class="ni" onclick="go('tournaments',this)"><span class="ic">🏆</span>Tournaments</button>
+  <button class="ni" data-sec="ads">📣 &nbsp;Ads Earnings</button>
+  <button class="ni" data-sec="tiktok">🎵 &nbsp;TikTok Earn</button>
+  <button class="ni" data-sec="youtube">📺 &nbsp;YouTube Earn</button>
+  <button class="ni" data-sec="trivia">🧩 &nbsp;Trivia Questions</button>
+  <button class="ni" data-sec="articles">✍️ &nbsp;Articles</button>
+  <button class="ni" data-sec="forex">💱 &nbsp;Forex Lessons</button>
+  <button class="ni" data-sec="ebooks">📚 &nbsp;Business Ebooks</button>
+  <button class="ni" data-sec="tournaments">🏆 &nbsp;Tournaments</button>
   <div class="sb-sec">Account</div>
-  <button class="ni" onclick="go('profile',this)"><span class="ic">👤</span>Profile</button>
-  <div class="sb-foot"><button class="lbtn" onclick="doLogout()">🚪 Logout</button></div>
+  <button class="ni" data-sec="profile">👤 &nbsp;Profile</button>
+  <div class="sb-foot"><button class="lbtn" id="logoutBtn">🚪 Logout</button></div>
 </aside>
-<div class="overlay" id="overlay" onclick="closeSb()"></div>
+<div class="overlay" id="overlay"></div>
 
+<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:.9rem;">
-      <button class="ham" onclick="toggleSb()">☰</button>
-      <div class="page-t" id="ptitle">Dashboard</div>
+      <button class="ham" id="hamBtn">☰</button>
+      <span class="page-t" id="ptitle">Dashboard</span>
     </div>
     <div style="display:flex;align-items:center;gap:.8rem;">
-      <span style="font-size:.83rem;color:var(--muted);">Hi, <span id="topUser" style="color:var(--g);font-weight:700;"></span></span>
-      <button class="nb" onclick="toggleNotif()">🔔<span class="nbadge" id="nbadge"></span></button>
+      <span style="font-size:.82rem;color:var(--muted);">Hi, <span id="topUser" style="color:var(--g);font-weight:700;"></span></span>
+      <button class="nb" id="notifBtn">🔔<span class="nbadge" id="nbadge"></span></button>
     </div>
   </div>
 
+  <!-- NOTIF PANEL -->
   <div class="npanel" id="npanel">
     <div class="nh">🔔 Notifications</div>
     <div id="nlist"><div class="nempty">No new notifications</div></div>
@@ -221,11 +261,11 @@ tr:hover td{background:var(--card2);}
 
   <div class="cnt">
 
-    <!-- DASHBOARD -->
+    <!-- DASHBOARD HOME -->
     <div class="sec active" id="s-dash">
       <div class="wbanner">
         <h2>Welcome Back, <span id="wname" style="color:#86EFAC;"></span> 👋</h2>
-        <p>Explore 10+ earning tools — YouTube, TikTok, trivia, articles, spin games and more. Earn KES 100 for every referral! 💰</p>
+        <p>Explore 10+ earning tools — YouTube, TikTok, trivia, articles, spin games and more. Earn KES 100 for every referral!</p>
         <div class="pills">
           <span class="pill">10+ Earning Tools</span>
           <span class="pill">KES 100 Per Referral</span>
@@ -233,12 +273,12 @@ tr:hover td{background:var(--card2);}
         </div>
       </div>
       <div class="sgrid">
-        <div class="sc"><div class="lbl">💸 Activation Fee</div><div class="val" id="d-exp">KSh 0</div><div class="sl">One-time payment</div></div>
-        <div class="sc"><div class="lbl">💰 Total Earnings</div><div class="val" id="d-tot">KSh 0</div><div class="sl">All Sources</div></div>
-        <div class="sc"><div class="lbl">💳 Main Balance</div><div class="val" id="d-bal">KSh 0</div><div class="sl">Withdrawable (min 500)</div></div>
-        <div class="sc"><div class="lbl">👥 Affiliate Earnings</div><div class="val" id="d-aff">KSh 0</div><div class="sl">Withdrawable (min 100)</div></div>
-        <div class="sc"><div class="lbl">🏦 Total Withdrawn</div><div class="val" id="d-wd">KSh 0</div><div class="sl">All withdrawals</div></div>
-        <div class="sc"><div class="lbl">🎁 Agent Bonus</div><div class="val" id="d-bon">KSh 100</div><div class="sl">Bonus earnings</div></div>
+        <div class="sc"><div class="lbl">💸 Activation Fee</div><div class="val" id="d-exp">KSh 0</div><div class="sl">One-time</div></div>
+        <div class="sc"><div class="lbl">💰 Total Earnings</div><div class="val" id="d-tot">KSh 0</div><div class="sl">All sources</div></div>
+        <div class="sc"><div class="lbl">💳 Main Balance</div><div class="val" id="d-bal">KSh 0</div><div class="sl">Min wd KES 500</div></div>
+        <div class="sc"><div class="lbl">👥 Affiliate</div><div class="val" id="d-aff">KSh 0</div><div class="sl">Min wd KES 100</div></div>
+        <div class="sc"><div class="lbl">🏦 Withdrawn</div><div class="val" id="d-wd">KSh 0</div><div class="sl">Total</div></div>
+        <div class="sc"><div class="lbl">🎁 Agent Bonus</div><div class="val" id="d-bon">KSh 100</div><div class="sl">Bonus</div></div>
       </div>
       <div class="stitle">📊 Earnings Breakdown <span class="stitle-sub">All sources</span></div>
       <div class="elist">
@@ -247,17 +287,17 @@ tr:hover td{background:var(--card2);}
         <div class="ei"><div class="eil"><div class="eico">📺</div><div><div class="enm">YouTube Earnings</div><div class="esb">Sat, Sun</div></div></div><div class="eamt" id="e-yt">KSh 0</div></div>
         <div class="ei"><div class="eil"><div class="eico">🧩</div><div><div class="enm">Trivia Earnings</div><div class="esb">Mon, Wed, Fri</div></div></div><div class="eamt" id="e-tri">KSh 0</div></div>
         <div class="ei"><div class="eil"><div class="eico">✍️</div><div><div class="enm">Articles Earnings</div><div class="esb">Mon, Fri</div></div></div><div class="eamt" id="e-art">KSh 0</div></div>
-        <div class="ei"><div class="eil"><div class="eico">👥</div><div><div class="enm">Affiliate Earnings</div><div class="esb">KES 100 per referral · Daily</div></div></div><div class="eamt" id="e-aff2">KSh 0</div></div>
+        <div class="ei"><div class="eil"><div class="eico">👥</div><div><div class="enm">Affiliate Earnings</div><div class="esb">KES 100 per referral</div></div></div><div class="eamt" id="e-aff2">KSh 0</div></div>
       </div>
-      <div style="margin-top:2rem;">
-        <div class="stitle">📅 Weekly Schedule <span class="stitle-sub">Tasks only available on assigned days</span></div>
+      <div style="margin-top:1.8rem;">
+        <div class="stitle">📅 Weekly Schedule</div>
         <div class="sgd">
-          <div class="sdcard"><h4>📺 YouTube</h4><p>Saturday &amp; Sunday only</p></div>
-          <div class="sdcard"><h4>🎵 TikTok</h4><p>Tuesday &amp; Wednesday only</p></div>
-          <div class="sdcard"><h4>🧩 Trivia</h4><p>Mon, Wed &amp; Fri only</p></div>
-          <div class="sdcard"><h4>📣 Ads</h4><p>Mon, Thu &amp; Fri only</p></div>
-          <div class="sdcard"><h4>✍️ Articles</h4><p>Monday &amp; Friday only</p></div>
-          <div class="sdcard"><h4>👥 Affiliate</h4><p>Every day — no restrictions</p></div>
+          <div class="sdcard"><h4>📺 YouTube</h4><p>Sat &amp; Sun only</p></div>
+          <div class="sdcard"><h4>🎵 TikTok</h4><p>Tue &amp; Wed only</p></div>
+          <div class="sdcard"><h4>🧩 Trivia</h4><p>Mon, Wed &amp; Fri</p></div>
+          <div class="sdcard"><h4>📣 Ads</h4><p>Mon, Thu &amp; Fri</p></div>
+          <div class="sdcard"><h4>✍️ Articles</h4><p>Mon &amp; Fri only</p></div>
+          <div class="sdcard"><h4>👥 Affiliate</h4><p>Every day</p></div>
         </div>
       </div>
     </div>
@@ -265,31 +305,26 @@ tr:hover td{background:var(--card2);}
     <!-- WITHDRAW -->
     <div class="sec" id="s-withdraw">
       <div class="stitle">💸 Withdraw Earnings</div>
-      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1.2rem;">Two separate withdrawal options. Main balance minimum is KES 500. Affiliate earnings minimum is KES 100.</p>
-      <div class="fcard" style="margin-bottom:1.2rem;">
-        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:1rem;">
-          <div style="width:38px;height:38px;border-radius:10px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">💳</div>
-          <div><div style="font-weight:700;font-size:.95rem;">Withdraw Main Balance</div><div style="font-size:.78rem;color:var(--muted);">Minimum: KES 500 · From ads, trivia, YouTube, spin etc.</div></div>
+      <div class="fcard" style="margin-bottom:1.1rem;">
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.9rem;">
+          <div style="width:36px;height:36px;border-radius:9px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:1rem;">💳</div>
+          <div><div style="font-weight:700;font-size:.93rem;">Main Balance</div><div style="font-size:.77rem;color:var(--muted);">Min KES 500 · ads, trivia, YouTube, spin</div></div>
         </div>
-        <div style="background:var(--gl);border:1px solid #BBF7D0;border-radius:10px;padding:.7rem 1rem;margin-bottom:1rem;font-size:.85rem;">
-          Available: <strong id="wd-balance" style="color:var(--g);">KES 0</strong>
-        </div>
-        <div class="fg"><label>Amount (KES) — min KES 500</label><input type="number" id="wa" placeholder="e.g. 500" min="500"/></div>
+        <div style="background:var(--gl);border:1px solid #BBF7D0;border-radius:9px;padding:.65rem .9rem;margin-bottom:.9rem;font-size:.84rem;">Available: <strong id="wd-balance" style="color:var(--g);">KES 0</strong></div>
+        <div class="fg"><label>Amount (KES)</label><input type="number" id="wa" placeholder="Minimum KES 500" min="500"/></div>
         <div class="fg"><label>M-Pesa Number</label><input type="tel" id="wp" placeholder="+254712345678"/></div>
-        <button class="btn" onclick="doWithdraw()">Request Withdrawal</button>
+        <button class="gbtn" id="wdBtn">Request Withdrawal</button>
         <div class="al" id="wal"></div>
       </div>
       <div class="fcard">
-        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:1rem;">
-          <div style="width:38px;height:38px;border-radius:10px;background:var(--gold-l);display:flex;align-items:center;justify-content:center;font-size:1.1rem;">👥</div>
-          <div><div style="font-weight:700;font-size:.95rem;">Withdraw Affiliate Earnings</div><div style="font-size:.78rem;color:var(--muted);">Minimum: KES 100 · From referral commissions only</div></div>
+        <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.9rem;">
+          <div style="width:36px;height:36px;border-radius:9px;background:var(--gold-l);display:flex;align-items:center;justify-content:center;font-size:1rem;">👥</div>
+          <div><div style="font-weight:700;font-size:.93rem;">Affiliate Earnings</div><div style="font-size:.77rem;color:var(--muted);">Min KES 100 · referral commissions only</div></div>
         </div>
-        <div style="background:var(--gold-l);border:1px solid #FDE68A;border-radius:10px;padding:.7rem 1rem;margin-bottom:1rem;font-size:.85rem;">
-          Affiliate Balance: <strong id="wd-affiliate" style="color:var(--gold);">KES 0</strong>
-        </div>
-        <div class="fg"><label>Amount (KES) — min KES 100</label><input type="number" id="wa2" placeholder="e.g. 100" min="100"/></div>
+        <div style="background:var(--gold-l);border:1px solid #FDE68A;border-radius:9px;padding:.65rem .9rem;margin-bottom:.9rem;font-size:.84rem;">Affiliate Balance: <strong id="wd-affiliate" style="color:var(--gold);">KES 0</strong></div>
+        <div class="fg"><label>Amount (KES)</label><input type="number" id="wa2" placeholder="Minimum KES 100" min="100"/></div>
         <div class="fg"><label>M-Pesa Number</label><input type="tel" id="wp2" placeholder="+254712345678"/></div>
-        <button class="btn" style="background:var(--gold);" onclick="doAffiliateWithdraw()">Withdraw Affiliate Earnings</button>
+        <button class="gbtn gbtn-gold" id="affWdBtn">Withdraw Affiliate</button>
         <div class="al" id="wal2"></div>
       </div>
     </div>
@@ -298,181 +333,157 @@ tr:hover td{background:var(--card2);}
     <div class="sec" id="s-voucher">
       <div class="stitle">🎟️ Redeem Voucher</div>
       <div class="fcard">
-        <div class="fg"><label>Voucher Code</label><input type="text" id="vc" placeholder="Enter your voucher code"/></div>
-        <button class="btn" onclick="doVoucher()">Redeem</button>
+        <div class="fg"><label>Voucher Code</label><input type="text" id="vc" placeholder="Enter voucher code"/></div>
+        <button class="gbtn" id="vcBtn">Redeem</button>
         <div class="al" id="val"></div>
       </div>
     </div>
 
-    <!-- SHARE -->
+    <!-- RECHARGE -->
+    <div class="sec" id="s-recharge">
+      <div class="stitle">💳 Account Recharge</div>
+      <div class="ccard" style="max-width:460px;">
+        <div class="ccard-hd"><div class="ccard-ico gold">💳</div><div><div class="ccard-t">Top Up Balance</div><div class="ccard-s">Contact admin for recharge details</div></div></div>
+        <p style="font-size:.86rem;color:var(--muted);margin-bottom:.8rem;">Send M-Pesa to our paybill and your balance updates within minutes.</p>
+        <div class="inote">📞 Contact admin via our WhatsApp channel for recharge details and paybill number.</div>
+        <div class="brow" style="margin-top:.9rem;">
+          <a href="https://whatsapp.com/channel/0029Vb7V16c1HspuvKNytM3j" target="_blank" class="abtn wa">📱 WhatsApp Channel</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- REDEEM BONUS -->
+    <div class="sec" id="s-redeem">
+      <div class="stitle">🎁 Redeem Bonus</div>
+      <div class="fcard">
+        <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Enter your bonus code from the EarnHub WhatsApp channel to redeem extra balance.</p>
+        <div class="fg"><label>Bonus Code</label><input type="text" id="vc2" placeholder="Enter bonus code"/></div>
+        <button class="gbtn" id="vc2Btn">Redeem Bonus</button>
+        <div class="al" id="val2"></div>
+      </div>
+    </div>
+
+    <!-- SHARE & EARN -->
     <div class="sec" id="s-share">
       <div class="stitle">📤 Share &amp; Earn — KES 100 Per Referral</div>
-      <p style="color:var(--muted);margin-bottom:1.3rem;font-size:.88rem;">Share your unique referral link. When someone activates using your link, <strong style="color:var(--gold);">KES 100</strong> is instantly credited to your balance.</p>
-      <div class="ref-code-box"><div class="ref-code-label">YOUR REFERRAL CODE</div><div class="ref-code-val" id="refCode">—</div></div>
-      <div class="ref-link-box"><div class="ref-link-txt" id="rlink">Loading…</div><button class="copy-btn" onclick="copyRef()">📋 Copy</button></div>
-      <div class="srow">
-        <a id="washr" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:.55rem;padding:.72rem 1.2rem;border-radius:10px;background:#25D366;color:#fff;font-weight:700;font-size:.87rem;text-decoration:none;">📱 Share on WhatsApp</a>
-        <button onclick="copyRef()" style="display:inline-flex;align-items:center;gap:.55rem;padding:.72rem 1.2rem;border-radius:10px;background:var(--card);border:1.5px solid var(--border);color:var(--text);font-weight:700;font-size:.87rem;cursor:pointer;">📋 Copy Link</button>
+      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1.2rem;">Share your link. Every friend who activates earns you <strong style="color:var(--gold);">KES 100</strong> instantly.</p>
+      <div class="rbox"><div class="rbox-lbl">YOUR REFERRAL CODE</div><div class="rbox-val" id="refCode">—</div></div>
+      <div class="rlink-box"><div class="rlink-txt" id="rlink">Loading…</div><button class="cpbtn" id="copyBtn">📋 Copy</button></div>
+      <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.4rem;">
+        <a id="washr" href="#" target="_blank" class="abtn wa">📱 Share on WhatsApp</a>
+        <button class="abtn out" id="copyBtn2">📋 Copy Link</button>
       </div>
       <div class="stitle">💰 Earnings Calculator</div>
-      <div class="ref-earn-grid">
-        <div class="rec"><div class="rec-amt">KES 100</div><div class="rec-lbl">1 referral</div></div>
-        <div class="rec"><div class="rec-amt">KES 500</div><div class="rec-lbl">5 referrals</div></div>
-        <div class="rec"><div class="rec-amt">KES 1,000</div><div class="rec-lbl">10 referrals</div></div>
-        <div class="rec"><div class="rec-amt">KES 5,000</div><div class="rec-lbl">50 referrals</div></div>
+      <div class="reg">
+        <div class="rec"><div class="rec-a">KES 100</div><div class="rec-l">1 referral</div></div>
+        <div class="rec"><div class="rec-a">KES 500</div><div class="rec-l">5 referrals</div></div>
+        <div class="rec"><div class="rec-a">KES 1,000</div><div class="rec-l">10 referrals</div></div>
+        <div class="rec"><div class="rec-a">KES 5,000</div><div class="rec-l">50 referrals</div></div>
+        <div class="rec"><div class="rec-a">KES 10,000</div><div class="rec-l">100 referrals</div></div>
       </div>
     </div>
 
     <!-- DOWNLINES -->
     <div class="sec" id="s-downlines">
       <div class="stitle">🌐 My Downlines</div>
-      <p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">People who signed up using your referral link. Each activation earns you <strong style="color:var(--gold);">KES 100</strong>.</p>
+      <p style="color:var(--muted);font-size:.86rem;margin-bottom:1rem;">Each activation earns you <strong style="color:var(--gold);">KES 100</strong>.</p>
       <div class="twrap">
         <table><thead><tr><th>Username</th><th>Country</th><th>Joined</th><th>Status</th></tr></thead>
-        <tbody id="dlbody"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No downlines yet. Share your referral link!</td></tr></tbody>
+        <tbody id="dlbody"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No downlines yet.</td></tr></tbody>
         </table>
       </div>
     </div>
 
     <!-- CHAT FOREIGNERS -->
     <div class="sec" id="s-chat">
-      <div class="stitle">💬 Chat &amp; Earn with Foreigners</div>
-      <div class="content-grid">
-        <div class="content-card">
-          <div class="cc-header"><div class="cc-icon blue">💬</div><div><div class="cc-title">Chat on Telegram</div><div class="cc-sub">Earn by chatting in international groups</div></div></div>
-          <div class="earn-badge">💰 Available daily — KES 50–200 per task</div>
-          <p style="font-size:.87rem;color:var(--muted);margin-bottom:.8rem;line-height:1.65;">Join international Telegram groups, engage with foreigners, help answer questions, and get paid for your time.</p>
-          <div class="task-list">
-            <div class="task-item">Join English-speaking groups</div>
-            <div class="task-item">Reply to 10 messages daily</div>
-            <div class="task-item">Welcome new members</div>
-          </div>
-          <div class="btn-row"><a href="https://t.me" target="_blank" class="link-btn blue">Open Telegram →</a></div>
+      <div class="stitle">💬 Chat &amp; Earn</div>
+      <div class="cgrid">
+        <div class="ccard">
+          <div class="ccard-hd"><div class="ccard-ico blue">💬</div><div><div class="ccard-t">Telegram Groups</div><div class="ccard-s">Earn by chatting internationally</div></div></div>
+          <div class="ebadge">💰 KES 50–200 per task · Daily</div>
+          <div class="tlist"><div class="ti">Join English-speaking groups</div><div class="ti">Reply to 10 messages daily</div><div class="ti">Welcome new members</div></div>
+          <div class="brow"><a href="https://t.me" target="_blank" class="abtn blue">Open Telegram →</a></div>
         </div>
-        <div class="content-card">
-          <div class="cc-header"><div class="cc-icon blue">🌍</div><div><div class="cc-title">EarnHub WhatsApp Channel</div><div class="cc-sub">Join our official channel for updates &amp; tips</div></div></div>
-          <div class="earn-badge">📢 Latest earning tips and opportunities</div>
-          <p style="font-size:.87rem;color:var(--muted);margin-bottom:.8rem;line-height:1.65;">Join the official EarnHub WhatsApp channel to get daily earning tips, new task announcements, and community updates.</p>
-          <div class="btn-row">
-            <a href="https://whatsapp.com/channel/0029Vb7V16c1HspuvKNytM3j" target="_blank" style="display:inline-flex;align-items:center;gap:.55rem;padding:.72rem 1.2rem;border-radius:10px;background:#25D366;color:#fff;font-weight:700;font-size:.87rem;text-decoration:none;">📱 Join EarnHub Channel</a>
-          </div>
+        <div class="ccard">
+          <div class="ccard-hd"><div class="ccard-ico blue">📢</div><div><div class="ccard-t">EarnHub WhatsApp Channel</div><div class="ccard-s">Official channel for tips &amp; updates</div></div></div>
+          <div class="ebadge">📢 Daily earning tips &amp; announcements</div>
+          <p style="font-size:.86rem;color:var(--muted);margin-bottom:.8rem;">Join to get daily tips, new task announcements, bonus codes and community updates.</p>
+          <div class="brow"><a href="https://whatsapp.com/channel/0029Vb7V16c1HspuvKNytM3j" target="_blank" class="abtn wa">📱 Join EarnHub Channel</a></div>
         </div>
       </div>
     </div>
 
- <!-- SPIN GAME -->
+    <!-- SPIN GAMES -->
     <div class="sec" id="s-spin">
       <div class="stitle">🎰 Spin &amp; Win — 3 Spins Per Day</div>
 
-      <!-- DEPOSIT MODAL -->
-      <div id="spinDepositModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem;">
-        <div style="background:#fff;border-radius:20px;padding:2rem;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.3);">
-          <div style="text-align:center;font-size:2rem;margin-bottom:.8rem;">💳</div>
-          <h3 style="font-weight:800;font-size:1.1rem;text-align:center;margin-bottom:.4rem;color:var(--dark);">Deposit to Play Spin</h3>
-          <p style="font-size:.84rem;color:var(--muted);text-align:center;margin-bottom:1.3rem;line-height:1.6;">Enter your M-Pesa number to receive an STK push. Each spin costs <strong style="color:var(--g);">KES 20</strong>. Minimum deposit is KES 20.</p>
-          <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;padding:.8rem 1rem;margin-bottom:1rem;font-size:.84rem;text-align:center;">
-            ℹ️ <strong>House edge: 10%</strong> — fairly disclosed. Prizes: KES 0–50 per spin.
-          </div>
-          <div id="depositAlert" style="padding:.65rem .9rem;border-radius:8px;font-size:.86rem;margin-bottom:.8rem;display:none;font-weight:600;"></div>
-          <div style="margin-bottom:.8rem;">
-            <label style="font-size:.82rem;font-weight:600;margin-bottom:.35rem;display:block;color:var(--muted);">M-Pesa Phone Number</label>
+      <!-- Deposit Modal -->
+      <div class="modal-bg" id="spinModal">
+        <div class="modal">
+          <div style="text-align:center;font-size:1.8rem;margin-bottom:.7rem;">💳</div>
+          <h3 style="font-weight:800;font-size:1.05rem;text-align:center;margin-bottom:.35rem;">Deposit to Play</h3>
+          <p style="font-size:.83rem;color:var(--muted);text-align:center;margin-bottom:1.1rem;line-height:1.6;">Each spin costs <strong style="color:var(--g);">KES 20</strong>. Min deposit KES 20. Enter M-Pesa number for STK push.</p>
+          <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:9px;padding:.7rem .9rem;margin-bottom:.9rem;font-size:.82rem;text-align:center;">ℹ️ House edge: 10% — transparently disclosed</div>
+          <div id="depAlert" class="al" style="margin-bottom:.7rem;"></div>
+          <div class="fg"><label>M-Pesa Number (+254...)</label>
             <div style="display:flex;gap:.5rem;">
-              <div style="padding:.75rem .9rem;background:#F1F5F9;border:1.5px solid var(--border);border-radius:10px;color:var(--muted);font-size:.9rem;font-weight:700;">+254</div>
-              <input type="tel" id="spinPhone" placeholder="712 345 678" maxlength="9" inputmode="numeric"
-                style="flex:1;padding:.75rem 1rem;background:#F8FAFC;border:1.5px solid var(--border);border-radius:10px;font-size:.9rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;"/>
+              <div style="padding:.68rem .85rem;background:#F1F5F9;border:1.5px solid var(--border);border-radius:10px;color:var(--muted);font-size:.88rem;font-weight:700;">+254</div>
+              <input type="tel" id="spinPhone" placeholder="712 345 678" maxlength="9" inputmode="numeric" style="flex:1;"/>
             </div>
           </div>
-          <div style="margin-bottom:1rem;">
-            <label style="font-size:.82rem;font-weight:600;margin-bottom:.35rem;display:block;color:var(--muted);">Amount (KES) — min KES 20</label>
-            <input type="number" id="spinAmt" value="60" min="20" step="20"
-              style="width:100%;padding:.75rem 1rem;background:#F8FAFC;border:1.5px solid var(--border);border-radius:10px;font-size:.9rem;outline:none;font-family:'Plus Jakarta Sans',sans-serif;"/>
-            <div style="display:flex;gap:.4rem;margin-top:.5rem;">
-              <button onclick="setSpinAmt(20)"  style="flex:1;padding:.4rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:7px;font-size:.78rem;font-weight:700;color:var(--g);cursor:pointer;">KES 20</button>
-              <button onclick="setSpinAmt(60)"  style="flex:1;padding:.4rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:7px;font-size:.78rem;font-weight:700;color:var(--g);cursor:pointer;">KES 60</button>
-              <button onclick="setSpinAmt(100)" style="flex:1;padding:.4rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:7px;font-size:.78rem;font-weight:700;color:var(--g);cursor:pointer;">KES 100</button>
-              <button onclick="setSpinAmt(200)" style="flex:1;padding:.4rem;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:7px;font-size:.78rem;font-weight:700;color:var(--g);cursor:pointer;">KES 200</button>
+          <div class="fg"><label>Amount (KES)</label>
+            <input type="number" id="spinAmt" value="60" min="20" step="20"/>
+            <div style="display:flex;gap:.4rem;margin-top:.45rem;">
+              <button class="abtn out" style="flex:1;justify-content:center;" id="sa20">KES 20</button>
+              <button class="abtn out" style="flex:1;justify-content:center;" id="sa60">KES 60</button>
+              <button class="abtn out" style="flex:1;justify-content:center;" id="sa100">KES 100</button>
+              <button class="abtn out" style="flex:1;justify-content:center;" id="sa200">KES 200</button>
             </div>
           </div>
-          <button id="depositBtn" onclick="initiateSpinDeposit()"
-            style="width:100%;padding:.9rem;background:var(--g);color:#fff;font-weight:700;border:none;border-radius:11px;font-size:1rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;margin-bottom:.6rem;">
-            📱 Send M-Pesa STK Push
-          </button>
-          <button onclick="closeDepositModal()"
-            style="width:100%;padding:.75rem;background:#F8FAFC;border:1.5px solid var(--border);border-radius:11px;font-size:.9rem;cursor:pointer;font-weight:600;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;">
-            Cancel
-          </button>
-          <!-- Deposit polling status -->
-          <div id="depositPolling" style="display:none;text-align:center;margin-top:1rem;">
-            <div style="width:36px;height:36px;border:3px solid #E2E8F0;border-top-color:var(--g);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto .6rem;"></div>
-            <div style="font-size:.85rem;color:var(--muted);" id="depositPollingMsg">Waiting for M-Pesa confirmation…</div>
+          <div id="depPolling" style="display:none;text-align:center;padding:.8rem 0;">
+            <div style="width:32px;height:32px;border:3px solid #E2E8F0;border-top-color:var(--g);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto .5rem;"></div>
+            <div style="font-size:.83rem;color:var(--muted);" id="depPollMsg">Waiting for M-Pesa…</div>
           </div>
+          <button class="gbtn" id="depBtn" style="width:100%;margin-bottom:.6rem;">📱 Send M-Pesa STK Push</button>
+          <button class="gbtn" id="depCancel" style="width:100%;background:#F8FAFC;color:var(--muted);border:1.5px solid var(--border);">Cancel</button>
         </div>
       </div>
 
-      <!-- SPIN GAME MAIN UI -->
-      <div style="max-width:520px;margin:0 auto;">
-        <!-- Balance & spins info -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;margin-bottom:1.2rem;">
-          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;box-shadow:var(--sh);">
-            <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:.3rem;">💳 BALANCE</div>
-            <div id="spinBalance" style="font-size:1.2rem;font-weight:800;color:var(--g);">KES 0</div>
+      <div style="max-width:500px;margin:0 auto;">
+        <div class="spin-info-grid">
+          <div class="sic"><div class="sic-lbl">💳 BALANCE</div><div class="sic-val" id="spinBalance">KES 0</div></div>
+          <div class="sic"><div class="sic-lbl">🎰 SPINS LEFT</div><div class="sic-val" id="spinCount" style="color:var(--gold);">3</div></div>
+          <div class="sic"><div class="sic-lbl">💰 COST/SPIN</div><div class="sic-val" style="color:var(--dark);">KES 20</div></div>
+        </div>
+        <div class="spin-card">
+          <div style="font-size:1.6rem;margin-bottom:.3rem;">▼</div>
+          <div style="position:relative;display:inline-block;">
+            <div style="position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from 0deg,#16A34A,#22C55E,#E8900A,#FBBF24,#16A34A);opacity:.3;animation:glowPulse 2s ease-in-out infinite;"></div>
+            <canvas id="wheel" width="250" height="250" style="border-radius:50%;border:5px solid #fff;box-shadow:0 6px 24px rgba(0,0,0,.18);position:relative;z-index:1;display:block;"></canvas>
           </div>
-          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;box-shadow:var(--sh);">
-            <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:.3rem;">🎰 SPINS LEFT</div>
-            <div id="spinCount" style="font-size:1.2rem;font-weight:800;color:var(--gold);">3</div>
+          <div id="spinResult" style="margin-top:1rem;min-height:55px;display:flex;align-items:center;justify-content:center;">
+            <div style="font-size:.88rem;color:var(--muted);">Tap SPIN to play. Each spin costs KES 20.</div>
           </div>
-          <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:center;box-shadow:var(--sh);">
-            <div style="font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:.3rem;">💰 SPIN COST</div>
-            <div style="font-size:1.2rem;font-weight:800;color:var(--dark);">KES 20</div>
+          <div style="display:flex;gap:.75rem;justify-content:center;margin-top:.9rem;flex-wrap:wrap;">
+            <button class="gbtn" id="spinBtn" style="padding:.88rem 2.2rem;font-size:1rem;border-radius:13px;box-shadow:0 4px 14px rgba(22,163,74,.35);">🎰 SPIN — KES 20</button>
+            <button class="abtn out" id="depOpenBtn" style="padding:.88rem 1.3rem;border-radius:13px;">💳 Deposit</button>
           </div>
         </div>
-
-        <!-- Wheel -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2rem 1.5rem;text-align:center;box-shadow:var(--shm);position:relative;">
-          <!-- Arrow pointer -->
-          <div style="position:absolute;top:1.2rem;left:50%;transform:translateX(-50%);font-size:1.8rem;z-index:2;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));">▼</div>
-          <div style="position:relative;display:inline-block;margin-top:.5rem;">
-            <!-- Outer glow ring -->
-            <div id="wheelGlow" style="position:absolute;inset:-8px;border-radius:50%;background:conic-gradient(from 0deg,#16A34A,#22C55E,#E8900A,#FBBF24,#16A34A);opacity:.3;animation:glowPulse 2s ease-in-out infinite;"></div>
-            <canvas id="wheel" width="260" height="260"
-              style="border-radius:50%;border:6px solid #fff;box-shadow:0 8px 30px rgba(0,0,0,.2);position:relative;z-index:1;display:block;">
-            </canvas>
-          </div>
-          <!-- Result display -->
-          <div id="spinResultDisplay" style="margin-top:1.2rem;min-height:60px;display:flex;align-items:center;justify-content:center;">
-            <div style="font-size:.9rem;color:var(--muted);">Tap SPIN to play! Each spin costs KES 20.</div>
-          </div>
-          <!-- Spin button -->
-          <div style="display:flex;gap:.8rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;">
-            <button id="spinBtn" onclick="doSpin()"
-              style="padding:.9rem 2.5rem;background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;font-weight:800;border:none;border-radius:14px;font-size:1.05rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;box-shadow:0 4px 15px rgba(22,163,74,.4);transition:all .2s;letter-spacing:.3px;">
-              🎰 SPIN — KES 20
-            </button>
-            <button onclick="showDepositModal()"
-              style="padding:.9rem 1.5rem;background:var(--card);border:1.5px solid #BBF7D0;color:var(--g);font-weight:700;border-radius:14px;font-size:.9rem;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;">
-              💳 Deposit
-            </button>
+        <div class="ccard" style="margin-top:.9rem;">
+          <div style="font-weight:700;font-size:.88rem;margin-bottom:.65rem;">🎯 Prize Table</div>
+          <div class="spin-prize-grid">
+            <div class="spz" style="background:#FEF2F2;"><div class="spz-a" style="color:var(--red);">KES 0</div><div class="spz-p">45%</div></div>
+            <div class="spz" style="background:#FFF3DC;"><div class="spz-a" style="color:var(--gold);">KES 10</div><div class="spz-p">20%</div></div>
+            <div class="spz" style="background:#F0FDF4;"><div class="spz-a" style="color:var(--g);">KES 20</div><div class="spz-p">15%</div></div>
+            <div class="spz" style="background:#F0FDF4;"><div class="spz-a" style="color:var(--g);">KES 30</div><div class="spz-p">10%</div></div>
+            <div class="spz" style="background:#EFF6FF;"><div class="spz-a" style="color:var(--blue);">KES 40</div><div class="spz-p">7%</div></div>
+            <div class="spz" style="background:#F5F3FF;"><div class="spz-a" style="color:#7C3AED;">KES 50</div><div class="spz-p">3%</div></div>
+            <div class="spz" style="background:#F8FAFC;grid-column:span 2;"><div class="spz-p" style="font-size:.72rem;">House edge: 10% · Max 3 spins/day</div></div>
           </div>
         </div>
-
-        <!-- How it works -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;margin-top:1rem;box-shadow:var(--sh);">
-          <div style="font-weight:700;font-size:.9rem;margin-bottom:.7rem;color:var(--dark);">🎯 Prize Table</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.8rem;">
-            <div style="text-align:center;background:#FEF2F2;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:var(--red);">KES 0</div><div style="font-size:.68rem;color:var(--muted);">45% chance</div></div>
-            <div style="text-align:center;background:#FFF3DC;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:var(--gold);">KES 10</div><div style="font-size:.68rem;color:var(--muted);">20% chance</div></div>
-            <div style="text-align:center;background:#F0FDF4;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:var(--g);">KES 20</div><div style="font-size:.68rem;color:var(--muted);">15% chance</div></div>
-            <div style="text-align:center;background:#F0FDF4;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:var(--g);">KES 30</div><div style="font-size:.68rem;color:var(--muted);">10% chance</div></div>
-            <div style="text-align:center;background:#EFF6FF;border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:#2563EB;">KES 40</div><div style="font-size:.68rem;color:var(--muted);">7% chance</div></div>
-            <div style="text-align:center;background:linear-gradient(135deg,#FFF3DC,#FEE2E2);border-radius:8px;padding:.5rem;"><div style="font-size:.8rem;font-weight:800;color:#7C3AED;">KES 50</div><div style="font-size:.68rem;color:var(--muted);">3% chance</div></div>
-            <div style="grid-column:span 2;background:#F8FAFC;border-radius:8px;padding:.5rem;text-align:center;"><div style="font-size:.75rem;color:var(--muted);">ℹ️ House edge: 10% · Max 3 spins/day</div></div>
-          </div>
-        </div>
-
-        <!-- Recent results -->
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;margin-top:.8rem;box-shadow:var(--sh);">
-          <div style="font-weight:700;font-size:.88rem;margin-bottom:.6rem;color:var(--dark);">📊 Your Spin History (Today)</div>
-          <div id="spinHistory" style="font-size:.82rem;color:var(--muted);">No spins yet today.</div>
+        <div class="spin-hist">
+          <div style="font-weight:700;font-size:.87rem;margin-bottom:.55rem;">📊 Today's Spins</div>
+          <div id="spinHist"><div style="font-size:.82rem;color:var(--muted);">No spins today yet.</div></div>
         </div>
       </div>
     </div>
@@ -480,20 +491,15 @@ tr:hover td{background:var(--card2);}
     <!-- AVIATOR -->
     <div class="sec" id="s-aviator">
       <div class="stitle">✈️ Aviator Predictor — Daily</div>
-      <div class="content-grid">
-        <div class="content-card">
-          <div class="cc-header"><div class="cc-icon gold">✈️</div><div><div class="cc-title">Aviator Signal Tool</div><div class="cc-sub">Available every day</div></div></div>
-          <div class="earn-badge gold">🎯 AI-powered prediction signals</div>
-          <p style="font-size:.87rem;color:var(--muted);margin-bottom:.8rem;line-height:1.65;">Use our signal tool to get predictions for the Aviator crash game. Our algorithm analyzes patterns to suggest optimal cash-out multipliers.</p>
-          <div class="task-list">
-            <div class="task-item">Get real-time multiplier signals</div>
-            <div class="task-item">Follow suggested cash-out points</div>
-            <div class="task-item">Play responsibly with small bets</div>
-          </div>
-          <div class="info-note">⚠️ <strong>Disclaimer:</strong> Aviator is a game of chance. Use signals as guidance only. Never bet more than you can afford to lose.</div>
-          <div class="btn-row" style="margin-top:1rem;">
-            <a href="https://www.betika.com" target="_blank" class="link-btn gold">Play on Betika →</a>
-            <a href="https://www.sportybet.com" target="_blank" class="link-btn gold">SportyBet →</a>
+      <div class="cgrid">
+        <div class="ccard">
+          <div class="ccard-hd"><div class="ccard-ico gold">✈️</div><div><div class="ccard-t">Aviator Signal Tool</div><div class="ccard-s">AI-powered prediction signals</div></div></div>
+          <div class="ebadge gold">🎯 Smart multiplier signals</div>
+          <div class="tlist"><div class="ti">Real-time multiplier signals</div><div class="ti">Suggested cash-out points</div><div class="ti">Pattern analysis</div></div>
+          <div class="inote">⚠️ <strong>Disclaimer:</strong> Aviator is a game of chance. Use signals as guidance only. Play responsibly.</div>
+          <div class="brow" style="margin-top:.8rem;">
+            <a href="https://www.betika.com" target="_blank" class="abtn gold">Betika →</a>
+            <a href="https://www.sportybet.com" target="_blank" class="abtn gold">SportyBet →</a>
           </div>
         </div>
       </div>
@@ -502,140 +508,101 @@ tr:hover td{background:var(--card2);}
     <!-- REVSHARE -->
     <div class="sec" id="s-revshare">
       <div class="stitle">📈 Aviator REVSHARE — Daily</div>
-      <div class="content-grid">
-        <div class="content-card">
-          <div class="cc-header"><div class="cc-icon gold">📈</div><div><div class="cc-title">Revenue Share Program</div><div class="cc-sub">Earn commission from referrals who play Aviator</div></div></div>
-          <div class="earn-badge gold">💰 5% commission per referral bet</div>
-          <p style="font-size:.87rem;color:var(--muted);margin-bottom:.8rem;line-height:1.65;">Refer people to play Aviator on partner platforms. Earn a percentage of every bet placed by your referrals — passively.</p>
-          <div class="task-list">
-            <div class="task-item">Share your referral link on WhatsApp, Facebook</div>
-            <div class="task-item">Your referrals sign up and play Aviator</div>
-            <div class="task-item">Earn 5% of their total bets automatically</div>
-          </div>
-          <div class="btn-row"><button class="link-btn gold" onclick="go('share',null)">📤 Get My Referral Link</button></div>
+      <div class="cgrid">
+        <div class="ccard">
+          <div class="ccard-hd"><div class="ccard-ico gold">📈</div><div><div class="ccard-t">Revenue Share Program</div><div class="ccard-s">Earn from referrals who play Aviator</div></div></div>
+          <div class="ebadge gold">💰 5% commission per referral bet</div>
+          <div class="tlist"><div class="ti">Share your referral link</div><div class="ti">Referrals sign up and play Aviator</div><div class="ti">Earn 5% of their bets passively</div></div>
+          <div class="brow"><button class="abtn gold" id="revShareBtn">📤 Get Referral Link</button></div>
         </div>
       </div>
     </div>
 
-    <!-- ADS EARNINGS — Mon, Thu, Fri -->
+    <!-- ADS -->
     <div class="sec" id="s-ads">
       <div class="stitle">📣 Ads Earnings</div>
-      <div id="ads-content"></div>
+      <div id="ads-wrap"></div>
     </div>
 
-    <!-- TIKTOK — Tue, Wed -->
+    <!-- TIKTOK -->
     <div class="sec" id="s-tiktok">
       <div class="stitle">🎵 TikTok Earn</div>
-      <div id="tiktok-content"></div>
+      <div id="tiktok-wrap"></div>
     </div>
 
-    <!-- YOUTUBE — Sat, Sun -->
+    <!-- YOUTUBE -->
     <div class="sec" id="s-youtube">
       <div class="stitle">📺 YouTube Earn</div>
-      <div id="youtube-content"></div>
+      <div id="youtube-wrap"></div>
     </div>
 
-    <!-- TRIVIA — Mon, Wed, Fri — 3 questions only -->
+    <!-- TRIVIA -->
     <div class="sec" id="s-trivia">
       <div class="stitle">🧩 Trivia Questions</div>
-      <div id="trivia-content"></div>
+      <div id="trivia-wrap"></div>
     </div>
 
-    <!-- ARTICLES — Mon, Fri -->
+    <!-- ARTICLES -->
     <div class="sec" id="s-articles">
       <div class="stitle">✍️ Write Articles &amp; Earn</div>
-      <div id="articles-content"></div>
+      <div id="articles-wrap"></div>
     </div>
 
-    <!-- FOREX — Daily -->
+    <!-- FOREX -->
     <div class="sec" id="s-forex">
-      <div class="stitle">💱 Forex Lessons &amp; Earn — Daily</div>
-      <div class="content-grid">
-        <div class="content-card">
-          <div class="cc-header"><div class="cc-icon blue">💱</div><div><div class="cc-title">Free Forex Lessons</div><div class="cc-sub">Learn and earn KES 20 per lesson</div></div></div>
-          <div class="earn-badge">💰 KES 20 per completed lesson</div>
-          <p style="font-size:.87rem;color:var(--muted);margin-bottom:.8rem;">Complete free forex lessons and earn KES 20 per lesson. Beginner to advanced topics covered.</p>
-          <div class="task-list">
-            <div class="task-item">Lesson 1: What is Forex? — KES 20</div>
-            <div class="task-item">Lesson 2: Reading Charts — KES 20</div>
-            <div class="task-item">Lesson 3: Support &amp; Resistance — KES 20</div>
-            <div class="task-item">Lesson 4: Risk Management — KES 20</div>
+      <div class="stitle">💱 Forex Lessons — Daily</div>
+      <div class="cgrid">
+        <div class="ccard">
+          <div class="ccard-hd"><div class="ccard-ico blue">💱</div><div><div class="ccard-t">Free Forex Lessons</div><div class="ccard-s">KES 20 per completed lesson</div></div></div>
+          <div class="ebadge">💰 KES 20 per lesson</div>
+          <div class="tlist">
+            <div class="ti">Lesson 1: What is Forex? — KES 20</div>
+            <div class="ti">Lesson 2: Reading Charts — KES 20</div>
+            <div class="ti">Lesson 3: Support &amp; Resistance — KES 20</div>
+            <div class="ti">Lesson 4: Risk Management — KES 20</div>
           </div>
-          <div class="btn-row"><a href="https://www.babypips.com/learn/forex" target="_blank" class="link-btn blue">Start Free Lessons →</a></div>
+          <div class="brow"><a href="https://www.babypips.com/learn/forex" target="_blank" class="abtn blue">Start Free Lessons →</a></div>
         </div>
       </div>
     </div>
 
-    <!-- EBOOKS — Daily -->
+    <!-- EBOOKS -->
     <div class="sec" id="s-ebooks">
       <div class="stitle">📚 Business Ebooks — Daily</div>
-      <div class="content-grid">
-        <div class="content-card">
-          <div class="cc-header"><div class="cc-icon">📚</div><div><div class="cc-title">Free Business Ebooks</div><div class="cc-sub">Read and earn KES 30 per ebook</div></div></div>
-          <div class="earn-badge">💰 KES 30 per completed ebook</div>
-          <p style="font-size:.87rem;color:var(--muted);margin-bottom:.8rem;">Read free business ebooks and answer a short quiz after each to earn KES 30.</p>
-          <div class="task-list">
-            <div class="task-item">How to Start a Business in Kenya — KES 30</div>
-            <div class="task-item">Financial Freedom for Millennials — KES 30</div>
-            <div class="task-item">Digital Marketing Basics — KES 30</div>
-            <div class="task-item">Online Earning Strategies 2024 — KES 30</div>
+      <div class="cgrid">
+        <div class="ccard">
+          <div class="ccard-hd"><div class="ccard-ico">📚</div><div><div class="ccard-t">Free Business Ebooks</div><div class="ccard-s">KES 30 per ebook read</div></div></div>
+          <div class="ebadge">💰 KES 30 per ebook</div>
+          <div class="tlist">
+            <div class="ti">How to Start a Business in Kenya — KES 30</div>
+            <div class="ti">Financial Freedom for Millennials — KES 30</div>
+            <div class="ti">Digital Marketing Basics — KES 30</div>
+            <div class="ti">Online Earning Strategies — KES 30</div>
           </div>
-          <div class="btn-row">
-            <a href="https://www.free-ebooks.net/business" target="_blank" class="link-btn">Read Free Ebooks →</a>
-            <a href="https://www.gutenberg.org" target="_blank" class="link-btn outline">Project Gutenberg →</a>
+          <div class="brow">
+            <a href="https://www.free-ebooks.net/business" target="_blank" class="abtn">Read Free Ebooks →</a>
+            <a href="https://www.gutenberg.org" target="_blank" class="abtn out">Project Gutenberg →</a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TOURNAMENTS — Daily -->
+    <!-- TOURNAMENTS -->
     <div class="sec" id="s-tournaments">
-      <div class="stitle">🏆 Tournaments &amp; Competitions — Weekly</div>
-      <div class="content-grid">
-        <div class="content-card">
-          <div class="cc-header"><div class="cc-icon gold">🏆</div><div><div class="cc-title">Weekly Top Earner</div><div class="cc-sub">Compete for top earner prize this week</div></div></div>
-          <div class="earn-badge gold">🥇 Top prize: KES 1,000</div>
-          <div class="task-list">
-            <div class="task-item">🥇 1st Place — KES 1,000 bonus</div>
-            <div class="task-item">🥈 2nd Place — KES 500 bonus</div>
-            <div class="task-item">🥉 3rd Place — KES 250 bonus</div>
-          </div>
-          <div class="info-note">📅 Tournament resets every Monday at midnight. Keep earning to climb the leaderboard!</div>
+      <div class="stitle">🏆 Tournaments — Weekly</div>
+      <div class="cgrid">
+        <div class="ccard">
+          <div class="ccard-hd"><div class="ccard-ico gold">🏆</div><div><div class="ccard-t">Weekly Top Earner</div><div class="ccard-s">Top 3 earners win weekly prizes</div></div></div>
+          <div class="ebadge gold">🥇 Top prize: KES 1,000</div>
+          <div class="tlist"><div class="ti">🥇 1st Place — KES 1,000 bonus</div><div class="ti">🥈 2nd Place — KES 500 bonus</div><div class="ti">🥉 3rd Place — KES 250 bonus</div></div>
+          <div class="inote">📅 Resets every Monday midnight. Keep earning!</div>
         </div>
-        <div class="content-card">
-          <div class="cc-header"><div class="cc-icon gold">👥</div><div><div class="cc-title">Top Referrer Tournament</div><div class="cc-sub">Most referrals this month wins</div></div></div>
-          <div class="earn-badge gold">🥇 Top prize: KES 2,000 extra</div>
-          <div class="task-list">
-            <div class="task-item">🥇 Most referrals (month) — KES 2,000 extra</div>
-            <div class="task-item">🥈 2nd most referrals — KES 1,000 extra</div>
-            <div class="task-item">🥉 3rd most referrals — KES 500 extra</div>
-          </div>
-          <div class="btn-row"><button class="link-btn gold" onclick="go('share',null)">📤 Start Referring Now</button></div>
+        <div class="ccard">
+          <div class="ccard-hd"><div class="ccard-ico gold">👥</div><div><div class="ccard-t">Top Referrer Monthly</div><div class="ccard-s">Most referrals this month wins</div></div></div>
+          <div class="ebadge gold">🥇 Top prize: KES 2,000 extra</div>
+          <div class="tlist"><div class="ti">🥇 Most referrals — KES 2,000 extra</div><div class="ti">🥈 2nd most — KES 1,000 extra</div><div class="ti">🥉 3rd most — KES 500 extra</div></div>
+          <div class="brow"><button class="abtn gold" id="tournRefBtn">📤 Start Referring Now</button></div>
         </div>
-      </div>
-    </div>
-
-    <!-- RECHARGE -->
-    <div class="sec" id="s-recharge">
-      <div class="stitle">💳 Account Recharge</div>
-      <div class="content-card" style="max-width:500px;">
-        <div class="cc-header"><div class="cc-icon gold">💳</div><div><div class="cc-title">Top Up Your Balance</div><div class="cc-sub">Contact admin for recharge</div></div></div>
-        <p style="font-size:.87rem;color:var(--muted);margin-bottom:.8rem;">Send M-Pesa to our paybill and your balance is updated within minutes.</p>
-        <div class="info-note">📞 Contact admin via WhatsApp for recharge details.</div>
-        <div class="btn-row" style="margin-top:1rem;">
-          <a href="https://whatsapp.com/channel/0029Vb7V16c1HspuvKNytM3j" target="_blank" class="link-btn">Contact Admin →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- REDEEM -->
-    <div class="sec" id="s-redeem">
-      <div class="stitle">🎁 Redeem Bonus</div>
-      <div class="fcard">
-        <p style="color:var(--muted);font-size:.88rem;margin-bottom:1.2rem;">Enter your bonus code from the EarnHub WhatsApp channel to redeem extra balance.</p>
-        <div class="fg"><label>Bonus Code</label><input type="text" id="vc2" placeholder="Enter bonus code"/></div>
-        <button class="btn" onclick="doVoucher2()">Redeem</button>
-        <div class="al" id="val2"></div>
       </div>
     </div>
 
@@ -656,102 +623,424 @@ tr:hover td{background:var(--card2);}
 </div><!-- /main -->
 
 <script>
-// ── Day helpers ──
-// 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
-const TODAY = new Date().getDay();
-const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+'use strict';
 
-const SCHEDULE = {
-  ads:     [1,4,5], // Mon, Thu, Fri
-  tiktok:  [2,3],   // Tue, Wed
-  youtube: [6,0],   // Sat, Sun
-  trivia:  [1,3,5], // Mon, Wed, Fri
-  articles:[1,5]    // Mon, Fri
+/* ═══════════════════════════════════════════
+   GLOBAL STATE
+═══════════════════════════════════════════ */
+const TODAY     = new Date().getDay(); // 0=Sun…6=Sat
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const SCHEDULE  = { ads:[1,4,5], tiktok:[2,3], youtube:[6,0], trivia:[1,3,5], articles:[1,5] };
+
+let notifOpen    = false;
+let spinning     = false;
+let wheelRot     = 0;
+let spinHistArr  = [];
+let depPollTimer = null;
+
+/* ═══════════════════════════════════════════
+   NAVIGATION — single delegated listener
+═══════════════════════════════════════════ */
+const TITLES = {
+  dash:'Dashboard', withdraw:'Withdraw', voucher:'Voucher', recharge:'Account Recharge',
+  redeem:'Redeem Bonus', share:'Share & Earn', downlines:'Downlines', chat:'Chat Foreigners',
+  spin:'Spin Games', aviator:'Aviator Predictor', revshare:'Aviator REVSHARE',
+  ads:'Ads Earnings', tiktok:'TikTok Earn', youtube:'YouTube Earn', trivia:'Trivia Questions',
+  articles:'Articles', forex:'Forex Lessons', ebooks:'Business Ebooks',
+  tournaments:'Tournaments', profile:'Profile'
 };
 
-function isTaskDay(task) {
-  return SCHEDULE[task]?.includes(TODAY) ?? true;
+function goTo(secId) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+  const sec = document.getElementById('s-' + secId);
+  if (!sec) return;
+  sec.classList.add('active');
+  // Highlight matching nav item
+  document.querySelectorAll('.ni[data-sec="'+secId+'"]').forEach(n => n.classList.add('active'));
+  document.getElementById('ptitle').textContent = TITLES[secId] || secId;
+  // Side effects
+  if (secId === 'downlines') loadDownlines();
+  if (secId === 'spin')      { drawWheel(); updateSpinInfo(); }
+  if (secId === 'trivia')    buildTrivia();
+  if (secId === 'ads')       buildDaySection('ads');
+  if (secId === 'tiktok')    buildDaySection('tiktok');
+  if (secId === 'youtube')   buildDaySection('youtube');
+  if (secId === 'articles')  buildDaySection('articles');
+  closeSb();
 }
 
-function lockedHtml(task) {
-  const days = SCHEDULE[task]?.map(d => DAY_NAMES[d]).join(', ') || '';
-  return `<div class="locked-notice">
-    <div class="lock-icon">🔒</div>
-    <h4>Not Available Today</h4>
-    <p>This task is only available on: <strong>${days}</strong>.<br>Come back on one of those days to earn!</p>
-  </div>`;
+// Sidebar nav delegation
+document.getElementById('sb').addEventListener('click', function(e) {
+  const btn = e.target.closest('.ni[data-sec]');
+  if (btn) { goTo(btn.dataset.sec); return; }
+  if (e.target.closest('#joinWaBtn')) {
+    window.open('https://whatsapp.com/channel/0029Vb7V16c1HspuvKNytM3j', '_blank');
+  }
+});
+
+/* ═══════════════════════════════════════════
+   SIDEBAR / MOBILE
+═══════════════════════════════════════════ */
+function toggleSb() {
+  document.getElementById('sb').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSb() {
+  document.getElementById('sb').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+document.getElementById('hamBtn').addEventListener('click', toggleSb);
+document.getElementById('overlay').addEventListener('click', closeSb);
+
+/* ═══════════════════════════════════════════
+   NOTIFICATIONS
+═══════════════════════════════════════════ */
+document.getElementById('notifBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  notifOpen = !notifOpen;
+  document.getElementById('npanel').style.display = notifOpen ? 'block' : 'none';
+});
+document.addEventListener('click', function(e) {
+  if (notifOpen && !e.target.closest('#npanel') && !e.target.closest('#notifBtn')) {
+    notifOpen = false;
+    document.getElementById('npanel').style.display = 'none';
+  }
+});
+
+/* ═══════════════════════════════════════════
+   LOGOUT
+═══════════════════════════════════════════ */
+document.getElementById('logoutBtn').addEventListener('click', async function() {
+  await fetch('/api/auth/logout', { method: 'POST' });
+  window.location.href = '/';
+});
+
+/* ═══════════════════════════════════════════
+   LOAD USER
+═══════════════════════════════════════════ */
+async function loadUser() {
+  try {
+    const r = await fetch('/api/auth/me');
+    const d = await r.json();
+    if (!d.success) { window.location.href = '/login'; return; }
+    const u = d.user;
+
+    // Header
+    document.getElementById('wname').textContent   = u.username;
+    document.getElementById('topUser').textContent = u.username;
+
+    // Stats
+    document.getElementById('d-exp').textContent  = 'KSh ' + (d.settings?.activation_fee || 300);
+    document.getElementById('d-tot').textContent  = 'KSh ' + (u.total_earnings     || 0);
+    document.getElementById('d-bal').textContent  = 'KSh ' + (u.balance            || 0);
+    document.getElementById('d-aff').textContent  = 'KSh ' + (u.affiliate_earnings  || 0);
+    document.getElementById('d-wd').textContent   = 'KSh ' + (u.total_withdrawn     || 0);
+    document.getElementById('d-bon').textContent  = 'KSh ' + (u.agent_bonus        || 100);
+
+    // Earnings breakdown
+    document.getElementById('e-ads').textContent  = 'KSh ' + (u.ads_earnings       || 0);
+    document.getElementById('e-tik').textContent  = 'KSh ' + (u.tiktok_earnings    || 0);
+    document.getElementById('e-yt').textContent   = 'KSh ' + (u.youtube_earnings   || 0);
+    document.getElementById('e-tri').textContent  = 'KSh ' + (u.trivia_earnings    || 0);
+    document.getElementById('e-art').textContent  = 'KSh ' + (u.articles_earnings  || 0);
+    document.getElementById('e-aff2').textContent = 'KSh ' + (u.affiliate_earnings  || 0);
+
+    // Withdraw balances
+    const wb = document.getElementById('wd-balance');
+    const wa = document.getElementById('wd-affiliate');
+    if (wb) wb.textContent = 'KES ' + (u.balance || 0);
+    if (wa) wa.textContent = 'KES ' + (u.affiliate_earnings || 0);
+
+    // Profile
+    document.getElementById('pun').value = u.username;
+    document.getElementById('pem').value = u.email;
+    document.getElementById('pco').value = u.country;
+    document.getElementById('pmo').value = u.mobile;
+    document.getElementById('prc').value = u.referral_code;
+    document.getElementById('pms').value = new Date(u.created_at).toLocaleDateString();
+
+    // Referral
+    const refUrl = window.location.origin + '/register?ref=' + u.referral_code;
+    document.getElementById('refCode').textContent = u.referral_code || '—';
+    document.getElementById('rlink').textContent   = refUrl;
+    document.getElementById('washr').href =
+      'https://wa.me/?text=' + encodeURIComponent(
+        'Join EarnHub and earn online! Use my link: ' + refUrl +
+        '\nEarn from TikTok, YouTube, Ads & more. Activate for KES 300!'
+      );
+
+    // Notifications
+    if (d.notifications && d.notifications.length > 0) {
+      const nb = document.getElementById('nbadge');
+      nb.textContent = d.notifications.length; nb.style.display = 'flex';
+      document.getElementById('nlist').innerHTML =
+        d.notifications.map(n => `<div class="nitem"><h5>${n.title}</h5><p>${n.message}</p></div>`).join('');
+    }
+
+    // Spin UI
+    updateSpinInfo(u);
+    return u;
+  } catch(e) {
+    console.error('loadUser:', e);
+    window.location.href = '/login';
+  }
 }
 
-// ── TRIVIA (3 questions only) ──
-const TRIVIA_POOL = [
-  {q:'What is the capital of Kenya?', o:['Mombasa','Nairobi','Kisumu','Nakuru'], a:1},
-  {q:'How many days are in a leap year?', o:['364','365','366','367'], a:2},
-  {q:'What does M-Pesa stand for?', o:['Mobile Peso','Mobile Pesa (money)','Mobile Pay','Mobile Prepaid'], a:1},
-  {q:'Which planet is known as the Red Planet?', o:['Venus','Saturn','Mars','Jupiter'], a:2},
-  {q:'What is 15% of 200?', o:['20','25','30','35'], a:2},
-  {q:'What is the main export of Kenya?', o:['Coffee','Tea','Flowers','All of the above'], a:3}
-];
-let tIdx=0, tScore=0, tAnswered=false, tQuestions=[];
+/* ═══════════════════════════════════════════
+   WITHDRAW
+═══════════════════════════════════════════ */
+document.getElementById('wdBtn').addEventListener('click', async function() {
+  const a = document.getElementById('wa').value;
+  const p = document.getElementById('wp').value;
+  if (!a || !p) { showAl('wal', 'Enter amount and phone.', 'err'); return; }
+  const r = await fetch('/api/user/withdraw', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ amount: parseFloat(a), mobile: p })
+  });
+  const d = await r.json();
+  showAl('wal', d.message, d.success ? 'ok' : 'err');
+  if (d.success) loadUser();
+});
 
-function buildTrivia() {
-  if (!isTaskDay('trivia')) {
-    document.getElementById('trivia-content').innerHTML = lockedHtml('trivia');
+document.getElementById('affWdBtn').addEventListener('click', async function() {
+  const a = document.getElementById('wa2').value;
+  const p = document.getElementById('wp2').value;
+  if (!a || !p) { showAl('wal2', 'Enter amount and phone.', 'err'); return; }
+  const r = await fetch('/api/user/withdraw-affiliate', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ amount: parseFloat(a), mobile: p })
+  });
+  const d = await r.json();
+  showAl('wal2', d.message, d.success ? 'ok' : 'err');
+  if (d.success) loadUser();
+});
+
+/* ═══════════════════════════════════════════
+   VOUCHER
+═══════════════════════════════════════════ */
+document.getElementById('vcBtn').addEventListener('click', async function() {
+  const c = document.getElementById('vc').value.trim();
+  const r = await fetch('/api/user/voucher', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code: c })
+  });
+  const d = await r.json(); showAl('val', d.message, d.success ? 'ok' : 'err');
+});
+
+document.getElementById('vc2Btn').addEventListener('click', async function() {
+  const c = document.getElementById('vc2').value.trim();
+  const r = await fetch('/api/user/voucher', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code: c })
+  });
+  const d = await r.json(); showAl('val2', d.message, d.success ? 'ok' : 'err');
+});
+
+/* ═══════════════════════════════════════════
+   COPY REFERRAL
+═══════════════════════════════════════════ */
+function copyRef() {
+  const txt = document.getElementById('rlink').textContent;
+  navigator.clipboard.writeText(txt)
+    .then(() => alert('✅ Referral link copied!'))
+    .catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = txt; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      alert('✅ Copied!');
+    });
+}
+document.getElementById('copyBtn').addEventListener('click', copyRef);
+document.getElementById('copyBtn2').addEventListener('click', copyRef);
+
+/* ═══════════════════════════════════════════
+   REVSHARE & TOURNAMENTS → go to share
+═══════════════════════════════════════════ */
+document.getElementById('revShareBtn').addEventListener('click', () => goTo('share'));
+document.getElementById('tournRefBtn').addEventListener('click', () => goTo('share'));
+
+/* ═══════════════════════════════════════════
+   DOWNLINES
+═══════════════════════════════════════════ */
+async function loadDownlines() {
+  const r = await fetch('/api/user/downlines');
+  const d = await r.json();
+  const tb = document.getElementById('dlbody');
+  if (!d.downlines || !d.downlines.length) {
+    tb.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No downlines yet. Share your referral link!</td></tr>';
     return;
   }
-  document.getElementById('trivia-content').innerHTML = `
-    <div class="content-card" style="max-width:500px;">
-      <div class="cc-header"><div class="cc-icon">🧩</div><div><div class="cc-title">Daily Trivia — 3 Questions</div><div class="cc-sub">KES 10 per correct answer · Max KES 30 today</div></div></div>
-      <div class="earn-badge">💰 KES 10 per correct answer — 3 questions</div>
-      <p style="font-size:.87rem;color:var(--muted);margin-bottom:1rem;">Answer all 3 trivia questions correctly to earn KES 30 credited to your balance today.</p>
-      <button class="link-btn" onclick="startTrivia()">🧩 Start Today's Trivia (3 Questions)</button>
+  tb.innerHTML = d.downlines.map(dl => `
+    <tr>
+      <td><strong>${dl.username}</strong></td>
+      <td>${dl.country}</td>
+      <td style="color:var(--muted);">${new Date(dl.created_at).toLocaleDateString()}</td>
+      <td><span style="background:${dl.is_activated?'var(--gl)':'#FEF2F2'};color:${dl.is_activated?'var(--g)':'var(--red)'};padding:.2rem .6rem;border-radius:50px;font-size:.74rem;font-weight:700;">${dl.is_activated?'Active':'Pending'}</span></td>
+    </tr>`).join('');
+}
+
+/* ═══════════════════════════════════════════
+   DAY-LOCKED SECTIONS
+═══════════════════════════════════════════ */
+function isOpen(task) { return SCHEDULE[task]?.includes(TODAY) ?? true; }
+
+function lockedHTML(task) {
+  const days = (SCHEDULE[task] || []).map(d => DAY_NAMES[d]).join(', ');
+  return `<div class="locked"><div class="lic">🔒</div><h4>Not Available Today</h4><p>This task is only available on:<br><strong>${days}</strong><br>Come back on one of those days!</p></div>`;
+}
+
+function buildDaySection(task) {
+  const wrap = document.getElementById(task + '-wrap');
+  if (!wrap) return;
+  if (!isOpen(task)) { wrap.innerHTML = lockedHTML(task); return; }
+
+  const configs = {
+    ads: {
+      title:'Watch &amp; Click Ads', sub:'KES 5–15 per interaction',
+      badge:'💰 KES 5–15 per ad task',
+      tasks:['Watch 30-second video ad — KES 5','Click and visit advertiser page — KES 10','Complete a survey ad — KES 15'],
+      btns:`<button class="abtn" id="adsEarn5">▶️ Watch Video (+KES 5)</button>
+            <button class="abtn" id="adsEarn10">👆 Click Ad (+KES 10)</button>`,
+      alId:'ads-al'
+    },
+    tiktok: {
+      title:'Watch TikTok Videos', sub:'KES 5–15 per task',
+      badge:'💰 KES 5–15 per TikTok task',
+      tasks:['Watch full video + like — KES 5','Follow a TikTok account — KES 10','Share to your story — KES 15'],
+      btns:`<a href="https://www.tiktok.com" target="_blank" class="abtn">Open TikTok →</a>
+            <button class="abtn out" id="tikEarn10">✅ Mark Done (+KES 10)</button>`,
+      alId:'tiktok-al'
+    },
+    youtube: {
+      title:'Watch YouTube Videos', sub:'KES 5–25 per task',
+      badge:'💰 KES 5–25 per YouTube task',
+      tasks:['Watch full video (3+ min) — KES 5','Subscribe to channel — KES 15','Like + Comment — KES 10','Share to WhatsApp — KES 8'],
+      btns:`<a href="https://www.youtube.com" target="_blank" class="abtn red">Open YouTube →</a>
+            <button class="abtn out" id="ytEarn15">✅ Mark Done (+KES 15)</button>`,
+      alId:'youtube-al'
+    },
+    articles: {
+      title:'Article Writing', sub:'KES 50–200 per approved article',
+      badge:'💰 KES 50–200 per article',
+      tasks:['300 words article — KES 50','500 words article — KES 100','800+ words premium — KES 200'],
+      btns:`<a href="https://docs.google.com/document/create" target="_blank" class="abtn">Write on Google Docs →</a>`,
+      alId:'art-al',
+      note:'📌 <strong>Today\'s Topics:</strong> (1) How to earn money online in Kenya. (2) Benefits of M-Pesa. (3) How to grow savings as a young person.<br><br>✅ Submit link to EarnHub WhatsApp channel for review and payment.'
+    }
+  };
+
+  const c = configs[task];
+  if (!c) return;
+  wrap.innerHTML = `
+    <p style="color:var(--muted);font-size:.86rem;margin-bottom:.9rem;">✅ Available today! Complete tasks and earn.</p>
+    <div class="cgrid">
+      <div class="ccard">
+        <div class="ccard-hd"><div class="ccard-ico">📊</div><div><div class="ccard-t">${c.title}</div><div class="ccard-s">${c.sub}</div></div></div>
+        <div class="ebadge">${c.badge}</div>
+        <div class="tlist">${c.tasks.map(t=>`<div class="ti">${t}</div>`).join('')}</div>
+        <div class="brow">${c.btns}</div>
+        ${c.note ? `<div class="inote">${c.note}</div>` : ''}
+        <div class="al" id="${c.alId}" style="margin-top:.7rem;"></div>
+      </div>
+    </div>`;
+
+  // Bind earn buttons after inserting HTML
+  if (task === 'ads') {
+    const b5  = document.getElementById('adsEarn5');
+    const b10 = document.getElementById('adsEarn10');
+    if (b5)  b5.addEventListener('click',  () => postEarn('/api/user/ads-earn',    { amount:5,  task:'video' },  'ads-al'));
+    if (b10) b10.addEventListener('click', () => postEarn('/api/user/ads-earn',    { amount:10, task:'click' },  'ads-al'));
+  }
+  if (task === 'tiktok') {
+    const b = document.getElementById('tikEarn10');
+    if (b) b.addEventListener('click', () => postEarn('/api/user/tiktok-earn',   { amount:10 }, 'tiktok-al'));
+  }
+  if (task === 'youtube') {
+    const b = document.getElementById('ytEarn15');
+    if (b) b.addEventListener('click', () => postEarn('/api/user/youtube-earn',  { amount:15 }, 'youtube-al'));
+  }
+}
+
+async function postEarn(url, body, alId) {
+  const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  const d = await r.json();
+  showAl(alId, d.message, d.success ? 'ok' : 'err');
+  if (d.success) loadUser();
+}
+
+/* ═══════════════════════════════════════════
+   TRIVIA — 3 questions, Mon/Wed/Fri
+═══════════════════════════════════════════ */
+const QPOOL = [
+  { q:'What is the capital of Kenya?',            o:['Mombasa','Nairobi','Kisumu','Nakuru'],          a:1 },
+  { q:'How many days in a leap year?',            o:['364','365','366','367'],                         a:2 },
+  { q:'What does M-Pesa stand for?',              o:['Mobile Peso','Mobile Pesa (money)','Mobile Pay','Mobile Prepaid'], a:1 },
+  { q:'Which planet is the Red Planet?',          o:['Venus','Saturn','Mars','Jupiter'],               a:2 },
+  { q:'What is 15% of 200?',                      o:['20','25','30','35'],                             a:2 },
+  { q:'Main export of Kenya?',                    o:['Coffee','Tea','Flowers','All of the above'],     a:3 }
+];
+let tIdx=0, tScore=0, tAnswered=false, tQ=[];
+
+function buildTrivia() {
+  const wrap = document.getElementById('trivia-wrap');
+  if (!wrap) return;
+  if (!isOpen('trivia')) { wrap.innerHTML = lockedHTML('trivia'); return; }
+  wrap.innerHTML = `
+    <div class="ccard" style="max-width:500px;">
+      <div class="ccard-hd"><div class="ccard-ico">🧩</div><div><div class="ccard-t">Daily Trivia — 3 Questions</div><div class="ccard-s">KES 10 per correct answer · Max KES 30</div></div></div>
+      <div class="ebadge">💰 KES 10 per correct answer</div>
+      <p style="font-size:.86rem;color:var(--muted);margin-bottom:1rem;">Answer 3 trivia questions. KES 10 per correct answer credited to your balance.</p>
+      <button class="gbtn" id="startTriviaBtn">🧩 Start Today's Trivia</button>
     </div>
-    <div id="triviaQuiz" style="display:none;margin-top:1.2rem;"></div>`;
+    <div id="triviaQ" style="max-width:500px;margin-top:1rem;"></div>`;
+  document.getElementById('startTriviaBtn').addEventListener('click', startTrivia);
 }
 
 function startTrivia() {
   tIdx=0; tScore=0;
-  // Pick 3 random questions
-  const shuffled = [...TRIVIA_POOL].sort(() => Math.random() - 0.5);
-  tQuestions = shuffled.slice(0, 3);
-  document.querySelector('.link-btn[onclick="startTrivia()"]').style.display='none';
-  document.getElementById('triviaQuiz').style.display='block';
-  showTQ();
+  tQ = [...QPOOL].sort(() => Math.random()-.5).slice(0,3);
+  document.getElementById('startTriviaBtn').style.display = 'none';
+  showQ();
 }
 
-function showTQ() {
-  if (tIdx >= tQuestions.length) {
+function showQ() {
+  const qDiv = document.getElementById('triviaQ');
+  if (!qDiv) return;
+  if (tIdx >= tQ.length) {
     const earned = tScore * 10;
-    document.getElementById('triviaQuiz').innerHTML = `
-      <div class="content-card" style="text-align:center;padding:2rem;">
-        <div style="font-size:2.5rem;margin-bottom:.8rem;">${tScore===3?'🎉':'👏'}</div>
-        <h3 style="font-size:1.2rem;font-weight:800;margin-bottom:.5rem;">Trivia Complete!</h3>
+    qDiv.innerHTML = `
+      <div class="ccard" style="text-align:center;padding:2rem;">
+        <div style="font-size:2.5rem;margin-bottom:.7rem;">${tScore===3?'🎉':'👏'}</div>
+        <h3 style="font-weight:800;margin-bottom:.4rem;">Trivia Complete!</h3>
         <p style="color:var(--muted);margin-bottom:1rem;">You got <strong>${tScore}/3</strong> correct</p>
         <div style="background:var(--gl);border:1.5px solid #BBF7D0;border-radius:12px;padding:1rem;margin-bottom:1rem;">
           <div style="font-size:1.8rem;font-weight:800;color:var(--g);">+KES ${earned}</div>
-          <div style="font-size:.82rem;color:var(--muted);">Added to your balance</div>
+          <div style="font-size:.81rem;color:var(--muted);">Added to your balance</div>
         </div>
-        <p style="font-size:.82rem;color:var(--muted);">Come back tomorrow for new trivia questions!</p>
+        <p style="font-size:.82rem;color:var(--muted);">Come back next trivia day for more questions!</p>
       </div>`;
     if (earned > 0) {
-      fetch('/api/user/trivia-earn', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:earned})})
-        .then(r=>r.json()).then(()=>loadUser()).catch(()=>{});
+      fetch('/api/user/trivia-earn', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ amount: earned })
+      }).then(() => loadUser()).catch(() => {});
     }
     return;
   }
   tAnswered = false;
-  const q = tQuestions[tIdx];
-  document.getElementById('triviaQuiz').innerHTML = `
-    <div class="content-card">
-      <div style="font-size:.78rem;color:var(--muted);font-weight:700;margin-bottom:.6rem;">QUESTION ${tIdx+1} OF 3</div>
-      <h4 style="font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:1rem;">${q.q}</h4>
-      ${q.o.map((opt,i)=>`<button class="trivia-opt" id="to${i}" onclick="answerTQ(${i})">${String.fromCharCode(65+i)}. ${opt}</button>`).join('')}
+  const q = tQ[tIdx];
+  qDiv.innerHTML = `
+    <div class="ccard">
+      <div style="font-size:.77rem;color:var(--muted);font-weight:700;margin-bottom:.55rem;">QUESTION ${tIdx+1} OF 3</div>
+      <h4 style="font-size:.98rem;font-weight:700;margin-bottom:.9rem;">${q.q}</h4>
+      ${q.o.map((opt,i) => `<button class="topt" id="to${i}">${String.fromCharCode(65+i)}. ${opt}</button>`).join('')}
     </div>`;
+  q.o.forEach((_,i) => {
+    document.getElementById('to'+i).addEventListener('click', () => answerQ(i));
+  });
 }
 
-function answerTQ(idx) {
-  if (tAnswered) return;
-  tAnswered = true;
-  const q = tQuestions[tIdx];
+function answerQ(idx) {
+  if (tAnswered) return; tAnswered = true;
+  const q = tQ[tIdx];
   if (idx === q.a) tScore++;
   for (let i=0;i<q.o.length;i++) {
     const b = document.getElementById('to'+i);
@@ -759,284 +1048,13 @@ function answerTQ(idx) {
     if (i===q.a)  b.classList.add('correct');
     else if (i===idx) b.classList.add('wrong');
   }
-  setTimeout(() => { tIdx++; showTQ(); }, 1100);
+  setTimeout(() => { tIdx++; showQ(); }, 1100);
 }
 
-// ── Build day-locked sections ──
-function buildDayContent() {
-  // ADS
-  document.getElementById('ads-content').innerHTML = isTaskDay('ads')
-    ? `<p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available today! Complete ad tasks and earn.</p>
-       <div class="content-grid">
-         <div class="content-card">
-           <div class="cc-header"><div class="cc-icon">📣</div><div><div class="cc-title">Watch &amp; Click Ads</div><div class="cc-sub">KES 5–15 per interaction</div></div></div>
-           <div class="earn-badge">💰 KES 5–15 per ad task</div>
-           <div class="task-list">
-             <div class="task-item">Watch 30-second video ad — KES 5</div>
-             <div class="task-item">Click and visit advertiser page — KES 10</div>
-             <div class="task-item">Complete a survey ad — KES 15</div>
-           </div>
-           <div class="btn-row">
-             <button class="link-btn" onclick="earnAds(5,'video')">▶️ Watch Video Ad (+KES 5)</button>
-             <button class="link-btn" onclick="earnAds(10,'click')">👆 Click Ad (+KES 10)</button>
-           </div>
-           <div class="al" id="ads-al" style="margin-top:.8rem;"></div>
-         </div>
-       </div>`
-    : lockedHtml('ads');
-
-  // TIKTOK
-  document.getElementById('tiktok-content').innerHTML = isTaskDay('tiktok')
-    ? `<p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available today! Complete TikTok tasks and earn.</p>
-       <div class="content-grid">
-         <div class="content-card">
-           <div class="cc-header"><div class="cc-icon">🎵</div><div><div class="cc-title">Watch TikTok Videos</div><div class="cc-sub">KES 5–15 per task</div></div></div>
-           <div class="earn-badge">💰 KES 5–15 per TikTok task</div>
-           <div class="task-list">
-             <div class="task-item">Watch full video + like — KES 5</div>
-             <div class="task-item">Follow a TikTok account — KES 10</div>
-             <div class="task-item">Share to your TikTok story — KES 15</div>
-           </div>
-           <div class="btn-row">
-             <a href="https://www.tiktok.com" target="_blank" class="link-btn">Open TikTok →</a>
-             <button class="link-btn outline" onclick="earnTikTok(10)">✅ Mark Task Done (+KES 10)</button>
-           </div>
-           <div class="al" id="tiktok-al" style="margin-top:.8rem;"></div>
-         </div>
-       </div>`
-    : lockedHtml('tiktok');
-
-  // YOUTUBE
-  document.getElementById('youtube-content').innerHTML = isTaskDay('youtube')
-    ? `<p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available today! Complete YouTube tasks and earn.</p>
-       <div class="content-grid">
-         <div class="content-card">
-           <div class="cc-header"><div class="cc-icon" style="background:#FEE2E2;">📺</div><div><div class="cc-title">Watch YouTube Videos</div><div class="cc-sub">KES 5–25 per task</div></div></div>
-           <div class="earn-badge">💰 KES 5–25 per YouTube task</div>
-           <div class="task-list">
-             <div class="task-item">Watch full video (3+ min) — KES 5</div>
-             <div class="task-item">Subscribe to channel — KES 15</div>
-             <div class="task-item">Like + Comment — KES 10</div>
-             <div class="task-item">Share to WhatsApp — KES 8</div>
-           </div>
-           <div class="btn-row">
-             <a href="https://www.youtube.com" target="_blank" class="link-btn red">Open YouTube →</a>
-             <button class="link-btn outline" onclick="earnYouTube(15)">✅ Mark Task Done (+KES 15)</button>
-           </div>
-           <div class="al" id="youtube-al" style="margin-top:.8rem;"></div>
-         </div>
-       </div>`
-    : lockedHtml('youtube');
-
-  // ARTICLES
-  document.getElementById('articles-content').innerHTML = isTaskDay('articles')
-    ? `<p style="color:var(--muted);font-size:.87rem;margin-bottom:1rem;">Available today! Write articles and earn.</p>
-       <div class="content-grid">
-         <div class="content-card">
-           <div class="cc-header"><div class="cc-icon">✍️</div><div><div class="cc-title">Article Writing</div><div class="cc-sub">KES 50–200 per approved article</div></div></div>
-           <div class="earn-badge">💰 KES 50–200 per article</div>
-           <div class="task-list">
-             <div class="task-item">300 words article — KES 50</div>
-             <div class="task-item">500 words article — KES 100</div>
-             <div class="task-item">800+ words premium — KES 200</div>
-           </div>
-           <div class="info-note">📌 <strong>Today's Topics:</strong> (1) How to earn money online in Kenya. (2) Benefits of M-Pesa. (3) How to grow savings as a young person.</div>
-           <div class="btn-row" style="margin-top:.8rem;">
-             <a href="https://docs.google.com/document/create" target="_blank" class="link-btn">Write on Google Docs →</a>
-           </div>
-           <div class="info-note" style="margin-top:.8rem;">✅ Submit your article link to the EarnHub WhatsApp channel for review and payment.</div>
-         </div>
-       </div>`
-    : lockedHtml('articles');
-}
-
-// ── TITLES ──
-const TITLES={dash:'Dashboard',voucher:'Voucher',recharge:'Account Recharge',withdraw:'Withdraw',redeem:'Redeem Bonus',share:'Share & Earn',downlines:'Downlines',chat:'Chat Foreigners',spin:'Spin Games',aviator:'Aviator Predictor',revshare:'Aviator REVSHARE',ads:'Ads Earnings',tiktok:'TikTok Earn',youtube:'YouTube Earn',trivia:'Trivia Questions',articles:'Articles',forex:'Forex Lessons',ebooks:'Business Ebooks',tournaments:'Tournaments',profile:'Profile'};
-let notifOpen=false, spinning=false, rot=0;
-
-async function loadUser() {
-  try {
-    const r = await fetch('/api/auth/me');
-    const d = await r.json();
-    if (!d.success) { window.location.href='/login'; return; }
-    const u = d.user;
-    document.getElementById('wname').textContent   = u.username;
-    document.getElementById('topUser').textContent  = u.username;
-    document.getElementById('d-exp').textContent   = 'KSh '+(d.settings?.activation_fee||300);
-    document.getElementById('d-tot').textContent   = 'KSh '+(u.total_earnings||0);
-    document.getElementById('d-bal').textContent   = 'KSh '+(u.balance||0);
-    document.getElementById('d-aff').textContent   = 'KSh '+(u.affiliate_earnings||0);
-    document.getElementById('d-wd').textContent    = 'KSh '+(u.total_withdrawn||0);
-    document.getElementById('d-bon').textContent   = 'KSh '+(u.agent_bonus||100);
-    document.getElementById('e-ads').textContent   = 'KSh '+(u.ads_earnings||0);
-    document.getElementById('e-tik').textContent   = 'KSh '+(u.tiktok_earnings||0);
-    document.getElementById('e-yt').textContent    = 'KSh '+(u.youtube_earnings||0);
-    document.getElementById('e-tri').textContent   = 'KSh '+(u.trivia_earnings||0);
-    document.getElementById('e-art').textContent   = 'KSh '+(u.articles_earnings||0);
-    document.getElementById('e-aff2').textContent  = 'KSh '+(u.affiliate_earnings||0);
-    document.getElementById('pun').value  = u.username;
-    document.getElementById('pem').value  = u.email;
-    document.getElementById('pco').value  = u.country;
-    document.getElementById('pmo').value  = u.mobile;
-    document.getElementById('prc').value  = u.referral_code;
-    document.getElementById('pms').value  = new Date(u.created_at).toLocaleDateString();
-    // Withdrawal displays
-    if(document.getElementById('wd-balance'))
-      document.getElementById('wd-balance').textContent   = 'KES '+(u.balance||0);
-    if(document.getElementById('wd-affiliate'))
-      document.getElementById('wd-affiliate').textContent = 'KES '+(u.affiliate_earnings||0);
-    // Referral
-    const refUrl = window.location.origin+'/register?ref='+u.referral_code;
-    document.getElementById('refCode').textContent = u.referral_code||'—';
-    document.getElementById('rlink').textContent   = refUrl;
-    document.getElementById('washr').href =
-      'https://wa.me/?text='+encodeURIComponent('Join EarnHub! Use my referral: '+refUrl+'\nEarn from TikTok, YouTube, Ads & more. Activate for KES 300 and I earn KES 100!');
-    // Notifications
-    if (d.notifications && d.notifications.length > 0) {
-      const nb = document.getElementById('nbadge');
-      nb.textContent = d.notifications.length; nb.style.display = 'flex';
-      document.getElementById('nlist').innerHTML =
-        d.notifications.map(n=>`<div class="nitem"><h5>${n.title}</h5><p>${n.message}</p></div>`).join('');
-    }
-  } catch { window.location.href='/login'; }
-}
-
-function go(id, el) {
-  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
-  document.getElementById('s-'+id).classList.add('active');
-  if (el) el.classList.add('active');
-  document.getElementById('ptitle').textContent = TITLES[id]||id;
-  if (id==='downlines') loadDownlines();
-  if (id==='spin')      drawWheel();
-  if (id==='trivia')    buildTrivia();
-  closeSb();
-}
-
-// WhatsApp channel link — correct URL
-function openWA() {
-  window.open('https://whatsapp.com/channel/0029Vb7V16c1HspuvKNytM3j', '_blank');
-}
-
-function toggleSb() { document.getElementById('sb').classList.toggle('open'); document.getElementById('overlay').classList.toggle('open'); }
-function closeSb()  { document.getElementById('sb').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
-function toggleNotif() { notifOpen=!notifOpen; document.getElementById('npanel').style.display=notifOpen?'block':'none'; }
-async function doLogout() { await fetch('/api/auth/logout',{method:'POST'}); window.location.href='/'; }
-
-// Withdrawals
-async function doWithdraw() {
-  const a=document.getElementById('wa').value, p=document.getElementById('wp').value;
-  if(!a||!p){showAl('wal','Enter amount and phone number.','err');return;}
-  const r=await fetch('/api/user/withdraw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:parseFloat(a),mobile:p})});
-  const d=await r.json(); showAl('wal',d.message,d.success?'ok':'err');
-  if(d.success) loadUser();
-}
-async function doAffiliateWithdraw() {
-  const a=document.getElementById('wa2').value, p=document.getElementById('wp2').value;
-  if(!a||!p){showAl('wal2','Enter amount and phone number.','err');return;}
-  const r=await fetch('/api/user/withdraw-affiliate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:parseFloat(a),mobile:p})});
-  const d=await r.json(); showAl('wal2',d.message,d.success?'ok':'err');
-  if(d.success) loadUser();
-}
-async function doVoucher()  { const c=document.getElementById('vc').value; const r=await fetch('/api/user/voucher',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:c})}); const d=await r.json(); showAl('val',d.message,d.success?'ok':'err'); }
-async function doVoucher2() { const c=document.getElementById('vc2').value; const r=await fetch('/api/user/voucher',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:c})}); const d=await r.json(); showAl('val2',d.message,d.success?'ok':'err'); }
-
-function copyRef() {
-  const txt=document.getElementById('rlink').textContent;
-  navigator.clipboard.writeText(txt).then(()=>alert('✅ Referral link copied!')).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('✅ Copied!');
-  });
-}
-
-async function loadDownlines() {
-  const r=await fetch('/api/user/downlines'); const d=await r.json();
-  const tb=document.getElementById('dlbody');
-  if(!d.downlines||!d.downlines.length){
-    tb.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem;">No downlines yet. Share your referral link!</td></tr>';return;
-  }
-  tb.innerHTML=d.downlines.map(dl=>`<tr><td><strong>${dl.username}</strong></td><td>${dl.country}</td><td style="color:var(--muted);">${new Date(dl.created_at).toLocaleDateString()}</td><td><span style="background:${dl.is_activated?'var(--gl)':'#FEF2F2'};color:${dl.is_activated?'var(--g)':'var(--red)'};padding:.2rem .6rem;border-radius:50px;font-size:.75rem;font-weight:700;">${dl.is_activated?'Active':'Pending'}</span></td></tr>`).join('');
-}
-
-// Earning actions for day-locked tasks
-async function earnAds(amount, task) {
-  const r=await fetch('/api/user/ads-earn',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount,task})});
-  const d=await r.json();
-  const el=document.getElementById('ads-al');
-  if(el){el.textContent=d.message;el.className='al '+(d.success?'ok':'err');el.style.display='block';}
-  if(d.success) loadUser();
-}
-async function earnTikTok(amount) {
-  const r=await fetch('/api/user/tiktok-earn',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount})});
-  const d=await r.json();
-  const el=document.getElementById('tiktok-al');
-  if(el){el.textContent=d.message;el.className='al '+(d.success?'ok':'err');el.style.display='block';}
-  if(d.success) loadUser();
-}
-async function earnYouTube(amount) {
-  const r=await fetch('/api/user/youtube-earn',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount})});
-  const d=await r.json();
-  const el=document.getElementById('youtube-al');
-  if(el){el.textContent=d.message;el.className='al '+(d.success?'ok':'err');el.style.display='block';}
-  if(d.success) loadUser();
-}
-
-function showAl(id,msg,type){const e=document.getElementById(id);e.textContent=msg;e.className='al '+(type==='ok'?'ok':'err');e.style.display='block';}
-
-// ── SPIN ──
-function drawWheel(){
-  const cv=document.getElementById('wheel'); if(!cv)return;
-  const ctx=cv.getContext('2d');
-  const prizes=['KES 0','KES 5','KES 0','KES 10','KES 0','KES 20','KES 0','KES 5'];
-  const colors=['#F1F5F9','#16A34A','#F1F5F9','#E8900A','#F1F5F9','#16A34A','#F1F5F9','#E8900A'];
-  const arc=(2*Math.PI)/prizes.length;
-  ctx.clearRect(0,0,220,220);
-  prizes.forEach((p,i)=>{
-    const a=rot*(Math.PI/180)+i*arc;
-    ctx.beginPath();ctx.moveTo(110,110);ctx.arc(110,110,105,a,a+arc);ctx.closePath();
-    ctx.fillStyle=colors[i];ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
-    ctx.save();ctx.translate(110,110);ctx.rotate(a+arc/2);
-    ctx.textAlign='right';ctx.fillStyle=i%2===0?'#64748B':'#fff';
-    ctx.font='bold 11px Plus Jakarta Sans';ctx.fillText(p,92,4);ctx.restore();
-  });
-  ctx.beginPath();ctx.arc(110,110,14,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();
-  ctx.beginPath();ctx.arc(110,110,12,0,2*Math.PI);ctx.fillStyle='#16A34A';ctx.fill();
-}
-async function doSpin(){
-  if(spinning)return; spinning=true;
-  const btn=document.getElementById('spinBtn'); btn.disabled=true;
-  document.getElementById('spinRes').textContent='';
-  const spins=360*5+Math.random()*360, dur=3000, start=performance.now(), startR=rot;
-  function animate(now){
-    const el=now-start,prog=Math.min(el/dur,1),ease=1-Math.pow(1-prog,4);
-    rot=(startR+spins*ease)%360; drawWheel();
-    if(prog<1){requestAnimationFrame(animate);return;}
-    spinning=false; btn.disabled=false;
-    fetch('/api/user/spin',{method:'POST'}).then(r=>r.json()).then(d=>{
-      document.getElementById('spinRes').textContent=d.message;
-      if(d.prize>0) loadUser();
-    });
-  }
-  requestAnimationFrame(animate);
-}
-
-document.addEventListener('click', e => {
-  if(notifOpen && !e.target.closest('.npanel') && !e.target.closest('.nb')){
-    notifOpen=false; document.getElementById('npanel').style.display='none';
-  }
-});
-
-// Build day-locked content and load user on startup
-buildDayContent();
-loadUser();
-  // After loadUser sets all the stats, add:
-updateSpinUI(u);
-  // ── SPIN GAME ──
-let spinning     = false;
-let rot          = 0;
-let spinHistory  = [];
-let depositPollT = null;
-
-const SEGMENTS = [
+/* ═══════════════════════════════════════════
+   SPIN GAME
+═══════════════════════════════════════════ */
+const SEGS = [
   { label:'KES 0',  prize:0,  color:'#EF4444' },
   { label:'KES 10', prize:10, color:'#F59E0B' },
   { label:'KES 0',  prize:0,  color:'#EF4444' },
@@ -1050,294 +1068,214 @@ const SEGMENTS = [
 ];
 
 function drawWheel(highlight) {
-  const cv  = document.getElementById('wheel');
-  if (!cv)  return;
+  const cv = document.getElementById('wheel');
+  if (!cv) return;
   const ctx = cv.getContext('2d');
-  const cx  = 130, cy = 130, r = 120;
-  const arc = (2 * Math.PI) / SEGMENTS.length;
-  ctx.clearRect(0, 0, 260, 260);
-  SEGMENTS.forEach((seg, i) => {
-    const a = rot * (Math.PI / 180) + i * arc;
-    // Segment fill
-    ctx.beginPath(); ctx.moveTo(cx, cy);
-    ctx.arc(cx, cy, r, a, a + arc); ctx.closePath();
-    ctx.fillStyle   = (highlight === i) ? '#FFFFFF' : seg.color;
-    ctx.fill();
+  const cx=125, cy=125, r=115, arc=(2*Math.PI)/SEGS.length;
+  ctx.clearRect(0,0,250,250);
+  SEGS.forEach((seg,i) => {
+    const a = wheelRot*(Math.PI/180) + i*arc;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,a,a+arc); ctx.closePath();
+    ctx.fillStyle   = (highlight===i) ? '#fff' : seg.color; ctx.fill();
     ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
-    // Label
-    ctx.save();
-    ctx.translate(cx, cy); ctx.rotate(a + arc / 2);
-    ctx.textAlign    = 'right';
-    ctx.fillStyle    = (highlight === i) ? seg.color : '#fff';
-    ctx.font         = 'bold 12px Plus Jakarta Sans';
-    ctx.shadowColor  = 'rgba(0,0,0,.3)'; ctx.shadowBlur = 3;
-    ctx.fillText(seg.label, r - 8, 4);
-    ctx.restore();
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(a+arc/2);
+    ctx.textAlign='right'; ctx.fillStyle=(highlight===i)?seg.color:'#fff';
+    ctx.font='bold 11px Plus Jakarta Sans'; ctx.shadowColor='rgba(0,0,0,.25)'; ctx.shadowBlur=3;
+    ctx.fillText(seg.label, r-7, 4); ctx.restore();
   });
-  // Center circle
-  ctx.beginPath(); ctx.arc(cx, cy, 22, 0, 2 * Math.PI);
-  ctx.fillStyle = '#fff'; ctx.fill();
-  ctx.beginPath(); ctx.arc(cx, cy, 18, 0, 2 * Math.PI);
-  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 18);
-  grad.addColorStop(0, '#22C55E'); grad.addColorStop(1, '#16A34A');
-  ctx.fillStyle = grad; ctx.fill();
-  ctx.fillStyle = '#fff'; ctx.font = 'bold 9px Plus Jakarta Sans';
-  ctx.textAlign = 'center'; ctx.fillText('SPIN', cx, cy + 3);
+  // Centre
+  ctx.beginPath(); ctx.arc(cx,cy,20,0,2*Math.PI); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.beginPath(); ctx.arc(cx,cy,16,0,2*Math.PI);
+  const g=ctx.createRadialGradient(cx,cy,0,cx,cy,16);
+  g.addColorStop(0,'#22C55E'); g.addColorStop(1,'#16A34A');
+  ctx.fillStyle=g; ctx.fill();
+  ctx.fillStyle='#fff'; ctx.font='bold 8px Plus Jakarta Sans'; ctx.textAlign='center'; ctx.shadowBlur=0;
+  ctx.fillText('SPIN',cx,cy+3);
 }
 
-function updateSpinUI(userData) {
-  if (!userData) return;
-  const el = document.getElementById('spinBalance');
-  if (el) el.textContent = 'KES ' + (userData.balance || 0);
-  const today       = new Date().toISOString().slice(0, 10);
-  const lastDay     = userData.last_spin_day || '';
-  const spinsUsed   = lastDay === today ? (userData.spins_today || 0) : 0;
-  const spinsLeft   = Math.max(0, 3 - spinsUsed);
-  const sc          = document.getElementById('spinCount');
-  if (sc) {
-    sc.textContent = spinsLeft;
-    sc.style.color = spinsLeft === 0 ? 'var(--red)' : 'var(--gold)';
+function updateSpinInfo(user) {
+  const sb = document.getElementById('spinBalance');
+  const sc = document.getElementById('spinCount');
+  if (!sb || !sc) return;
+  if (!user) {
+    fetch('/api/auth/me').then(r=>r.json()).then(d => { if(d.success) updateSpinInfo(d.user); });
+    return;
   }
+  sb.textContent = 'KES ' + (user.balance || 0);
+  const today    = new Date().toISOString().slice(0,10);
+  const used     = user.last_spin_day===today ? (user.spins_today||0) : 0;
+  const left     = Math.max(0, 3-used);
+  sc.textContent = left;
+  sc.style.color = left===0 ? 'var(--red)' : 'var(--gold)';
   const btn = document.getElementById('spinBtn');
-  if (btn) btn.disabled = spinsLeft === 0 || spinning;
+  if (btn) {
+    btn.disabled = left===0 || spinning;
+    btn.textContent = left===0 ? '🔒 No Spins Left' : '🎰 SPIN — KES 20';
+    btn.style.opacity = left===0 ? '.6' : '1';
+  }
 }
 
-async function doSpin() {
+// Spin button
+document.getElementById('spinBtn').addEventListener('click', async function() {
   if (spinning) return;
-  const btn = document.getElementById('spinBtn');
-  btn.disabled = true;
-  spinning     = true;
+  const btn = this; btn.disabled=true; spinning=true;
+  document.getElementById('spinResult').innerHTML = '<div style="font-size:.85rem;color:var(--muted);">🎰 Spinning…</div>';
 
-  // Pre-spin flash
-  document.getElementById('spinResultDisplay').innerHTML =
-    '<div style="font-size:.85rem;color:var(--muted);">🎰 Spinning…</div>';
-
-  // Call backend first to get result
   let result;
   try {
     const r = await fetch('/api/user/spin', { method:'POST', headers:{'Content-Type':'application/json'} });
     result  = await r.json();
   } catch(e) {
-    spinning = false; btn.disabled = false;
-    document.getElementById('spinResultDisplay').innerHTML =
-      '<div style="color:var(--red);font-size:.85rem;">Network error. Try again.</div>';
+    spinning=false; btn.disabled=false;
+    document.getElementById('spinResult').innerHTML = '<div style="color:var(--red);font-size:.85rem;">Network error. Try again.</div>';
     return;
   }
-
   if (!result.success) {
-    spinning = false; btn.disabled = false;
-    document.getElementById('spinResultDisplay').innerHTML =
-      `<div style="color:var(--red);font-size:.88rem;font-weight:600;">⚠️ ${result.message}</div>`;
+    spinning=false; btn.disabled=false;
+    document.getElementById('spinResult').innerHTML = `<div style="color:var(--red);font-size:.87rem;font-weight:600;">⚠️ ${result.message}</div>`;
     return;
   }
 
-  // Find which segment matches the prize
-  const prize = result.prize;
-  // Pick a segment index that matches the prize
-  const matching = SEGMENTS.map((s,i)=>({...s,i})).filter(s=>s.prize===prize);
-  const target   = matching[Math.floor(Math.random()*matching.length)];
-  const segIdx   = target.i;
+  // Find segment index for this prize
+  const matches = SEGS.map((s,i)=>({...s,i})).filter(s=>s.prize===result.prize);
+  const segIdx  = matches[Math.floor(Math.random()*matches.length)].i;
+  const arc     = 360/SEGS.length;
+  const segCtr  = segIdx*arc + arc/2;
+  const extra   = 360*(5+Math.floor(Math.random()*3));
+  const target  = extra + (360-wheelRot%360) + (180-segCtr);
 
-  // Calculate rotation so that segment lands under the pointer (top)
-  const arc       = 360 / SEGMENTS.length;
-  const segCenter = segIdx * arc + arc / 2;
-  const extraSpins= 360 * (5 + Math.floor(Math.random() * 3));
-  const targetRot = extraSpins + (360 - (rot % 360)) + (180 - segCenter);
+  const dur=4000, startT=performance.now(), startR=wheelRot;
+  function anim(now) {
+    const el=now-startT, prog=Math.min(el/dur,1), ease=1-Math.pow(1-prog,3);
+    wheelRot=startR+target*ease;
+    drawWheel(prog>0.97?segIdx:undefined);
+    if (prog<1) { requestAnimationFrame(anim); return; }
 
-  // Animate
-  const dur   = 4000;
-  const start = performance.now();
-  const startR= rot;
+    // Done
+    spinning=false;
+    const p=result.prize, nc=result.netChange, sl=result.spinsLeft;
+    const ns=nc>=0?'+':'';
+    let html;
+    if (p===50) html=`<div style="animation:bounceIn .5s;"><div style="font-size:1.8rem;">🎉🏆</div><div style="font-size:1.15rem;font-weight:800;color:#7C3AED;">JACKPOT! KES 50!</div><div style="font-size:.84rem;color:var(--g);">Net ${ns}KES ${nc} · ${sl} spin${sl===1?'':'s'} left</div></div>`;
+    else if (p>=30) html=`<div><div style="font-size:1.5rem;">🎉</div><div style="font-size:1.05rem;font-weight:800;color:var(--g);">You won KES ${p}!</div><div style="font-size:.83rem;color:var(--muted);">Net ${ns}KES ${nc} · ${sl} spins left</div></div>`;
+    else if (p>0)  html=`<div><div style="font-size:1.3rem;">😊</div><div style="font-size:.98rem;font-weight:700;color:var(--gold);">Won KES ${p}</div><div style="font-size:.83rem;color:var(--muted);">Net ${ns}KES ${nc} · ${sl} spins left</div></div>`;
+    else           html=`<div><div style="font-size:1.3rem;">😔</div><div style="font-size:.98rem;font-weight:700;color:var(--red);">No win this time</div><div style="font-size:.83rem;color:var(--muted);">Lost KES ${result.spinCost} · ${sl} spins left today</div></div>`;
+    document.getElementById('spinResult').innerHTML = html;
 
-  function animate(now) {
-    const elapsed = now - start;
-    const prog    = Math.min(elapsed / dur, 1);
-    // Ease out cubic
-    const ease    = 1 - Math.pow(1 - prog, 3);
-    rot           = startR + targetRot * ease;
-    drawWheel(prog > 0.97 ? segIdx : undefined);
-    if (prog < 1) { requestAnimationFrame(animate); return; }
+    // History
+    spinHistArr.unshift({ prize:p, nc, time:new Date().toLocaleTimeString() });
+    if (spinHistArr.length>3) spinHistArr=spinHistArr.slice(0,3);
+    document.getElementById('spinHist').innerHTML = spinHistArr.map(h=>
+      `<div class="hist-row"><span>${h.time}</span><span style="font-weight:700;color:${h.prize>0?'var(--g)':'var(--red)'};">${h.prize>0?'+':''}KES ${h.prize} (net ${h.nc>=0?'+':''}${h.nc})</span></div>`
+    ).join('');
 
-    // Done spinning
-    spinning = false;
-
-    // Show result
-    const won     = result.won;
-    const netSign = result.netChange >= 0 ? '+' : '';
-    let resultHtml;
-    if (prize === 50) {
-      resultHtml = `<div style="animation:bounceIn .5s;">
-        <div style="font-size:2rem;margin-bottom:.4rem;">🎉🎊🏆</div>
-        <div style="font-size:1.2rem;font-weight:800;color:#7C3AED;">JACKPOT! KES ${prize}!</div>
-        <div style="font-size:.85rem;color:var(--g);font-weight:600;">Net: ${netSign}KES ${result.netChange}</div>
-        <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">${result.spinsLeft} spin${result.spinsLeft===1?'':'s'} left today</div>
-      </div>`;
-    } else if (prize >= 30) {
-      resultHtml = `<div>
-        <div style="font-size:1.8rem;margin-bottom:.3rem;">🎉</div>
-        <div style="font-size:1.1rem;font-weight:800;color:var(--g);">You won KES ${prize}!</div>
-        <div style="font-size:.85rem;color:var(--muted);">Net: ${netSign}KES ${result.netChange} · ${result.spinsLeft} spins left</div>
-      </div>`;
-    } else if (prize > 0) {
-      resultHtml = `<div>
-        <div style="font-size:1.5rem;margin-bottom:.3rem;">${won?'😊':'😕'}</div>
-        <div style="font-size:1rem;font-weight:700;color:${won?'var(--g)':'var(--gold)'};">${prize===20?'Break even!':'Won KES '+prize}</div>
-        <div style="font-size:.83rem;color:var(--muted);">Net: ${netSign}KES ${result.netChange} · ${result.spinsLeft} spins left</div>
-      </div>`;
-    } else {
-      resultHtml = `<div>
-        <div style="font-size:1.5rem;margin-bottom:.3rem;">😔</div>
-        <div style="font-size:1rem;font-weight:700;color:var(--red);">No win this time</div>
-        <div style="font-size:.83rem;color:var(--muted);">Lost KES ${result.spinCost} · ${result.spinsLeft} spins left today</div>
-      </div>`;
-    }
-    document.getElementById('spinResultDisplay').innerHTML = resultHtml;
-
-    // Update spin history
-    const time = new Date().toLocaleTimeString();
-    spinHistory.unshift({ prize, netChange: result.netChange, time });
-    if (spinHistory.length > 3) spinHistory = spinHistory.slice(0, 3);
-    document.getElementById('spinHistory').innerHTML = spinHistory.map(h =>
-      `<div style="display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);">
-        <span>${h.time}</span>
-        <span style="font-weight:700;color:${h.prize>0?'var(--g)':'var(--red)'};">${h.prize>0?'+':''}KES ${h.prize} (net ${h.netChange>=0?'+':''}${h.netChange})</span>
-      </div>`
-    ).join('') || 'No spins yet today.';
-
-    // Update balance display
-    const balEl = document.getElementById('spinBalance');
-    if (balEl) balEl.textContent = 'KES ' + result.newBalance;
-    const sc = document.getElementById('spinCount');
-    if (sc) {
-      sc.textContent = result.spinsLeft;
-      sc.style.color = result.spinsLeft === 0 ? 'var(--red)' : 'var(--gold)';
-    }
-
-    // Re-enable button if spins left
-    if (result.spinsLeft > 0) {
-      btn.disabled = false;
-    } else {
-      btn.textContent = '🔒 No Spins Left Today';
-      btn.style.opacity = '.6';
-      btn.style.cursor  = 'not-allowed';
-    }
-
-    // Refresh full user data
+    // Update spin info
+    const sb2=document.getElementById('spinBalance');
+    if(sb2) sb2.textContent='KES '+result.newBalance;
+    const sc2=document.getElementById('spinCount');
+    if(sc2){ sc2.textContent=sl; sc2.style.color=sl===0?'var(--red)':'var(--gold)'; }
+    btn.disabled=sl===0||spinning;
+    btn.textContent=sl===0?'🔒 No Spins Left':'🎰 SPIN — KES 20';
+    btn.style.opacity=sl===0?'.6':'1';
     loadUser();
   }
-  requestAnimationFrame(animate);
-}
+  requestAnimationFrame(anim);
+});
 
-// ── DEPOSIT MODAL ──
-function showDepositModal() {
-  const modal = document.getElementById('spinDepositModal');
-  modal.style.display = 'flex';
-  document.getElementById('depositAlert').style.display    = 'none';
-  document.getElementById('depositPolling').style.display  = 'none';
-  document.getElementById('depositBtn').disabled           = false;
-  document.getElementById('depositBtn').textContent        = '📱 Send M-Pesa STK Push';
-}
-function closeDepositModal() {
-  document.getElementById('spinDepositModal').style.display = 'none';
-  if (depositPollT) { clearInterval(depositPollT); depositPollT = null; }
-}
-function setSpinAmt(n) {
-  document.getElementById('spinAmt').value = n;
-}
+/* ─── DEPOSIT MODAL ─── */
+document.getElementById('depOpenBtn').addEventListener('click', () => {
+  document.getElementById('spinModal').classList.add('open');
+  document.getElementById('depAlert').style.display='none';
+  document.getElementById('depPolling').style.display='none';
+  document.getElementById('depBtn').disabled=false;
+  document.getElementById('depBtn').textContent='📱 Send M-Pesa STK Push';
+});
+document.getElementById('depCancel').addEventListener('click', () => {
+  document.getElementById('spinModal').classList.remove('open');
+  if(depPollTimer){ clearInterval(depPollTimer); depPollTimer=null; }
+});
+document.getElementById('sa20').addEventListener('click',  ()=>{ document.getElementById('spinAmt').value=20; });
+document.getElementById('sa60').addEventListener('click',  ()=>{ document.getElementById('spinAmt').value=60; });
+document.getElementById('sa100').addEventListener('click', ()=>{ document.getElementById('spinAmt').value=100; });
+document.getElementById('sa200').addEventListener('click', ()=>{ document.getElementById('spinAmt').value=200; });
 
-async function initiateSpinDeposit() {
-  const rawPhone = document.getElementById('spinPhone').value.trim();
-  const amount   = parseFloat(document.getElementById('spinAmt').value) || 0;
-
-  if (!rawPhone || rawPhone.length < 9) {
-    showDepositAlert('Enter a valid 9-digit M-Pesa number.', 'error'); return;
-  }
-  if (amount < 20) {
-    showDepositAlert('Minimum deposit is KES 20.', 'error'); return;
-  }
-
-  const btn = document.getElementById('depositBtn');
-  btn.disabled = true; btn.textContent = '⏳ Sending STK push…';
-  showDepositAlert('', '');
-
+document.getElementById('depBtn').addEventListener('click', async function() {
+  const raw = document.getElementById('spinPhone').value.trim();
+  const amt = parseFloat(document.getElementById('spinAmt').value)||0;
+  if (!raw||raw.length<9) { showDepAl('Enter a valid 9-digit M-Pesa number.','err'); return; }
+  if (amt<20) { showDepAl('Minimum deposit is KES 20.','err'); return; }
+  this.disabled=true; this.textContent='⏳ Sending STK push…'; showDepAl('','');
   try {
-    const r = await fetch('/api/user/spin-deposit', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: '+254' + rawPhone, amount })
+    const r=await fetch('/api/user/spin-deposit',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({phone:'+254'+raw,amount:amt})
     });
-    const d = await r.json();
-    if (d.success) {
-      document.getElementById('depositPolling').style.display = 'block';
-      document.getElementById('depositPollingMsg').textContent = 'STK push sent! Enter your M-Pesa PIN…';
-      startDepositPoll();
-    } else {
-      showDepositAlert(d.message || 'Failed to send STK push. Try again.', 'error');
-      btn.disabled = false; btn.textContent = '📱 Send M-Pesa STK Push';
+    const d=await r.json();
+    if(d.success){
+      document.getElementById('depPolling').style.display='block';
+      document.getElementById('depPollMsg').textContent='STK push sent! Enter your M-Pesa PIN…';
+      startDepPoll(amt);
+    }else{
+      showDepAl(d.message||'Failed. Try again.','err');
+      this.disabled=false; this.textContent='📱 Send M-Pesa STK Push';
     }
-  } catch {
-    showDepositAlert('Network error. Check your connection.', 'error');
-    btn.disabled = false; btn.textContent = '📱 Send M-Pesa STK Push';
+  }catch{
+    showDepAl('Network error.','err');
+    this.disabled=false; this.textContent='📱 Send M-Pesa STK Push';
   }
-}
+});
 
-function startDepositPoll() {
-  let pc = 0;
-  depositPollT = setInterval(async () => {
+function startDepPoll(amt) {
+  let pc=0;
+  depPollTimer=setInterval(async()=>{
     pc++;
-    try {
-      const r = await fetch('/api/user/spin-deposit/status?_=' + Date.now());
-      const d = await r.json();
-      if (d.deposited) {
-        clearInterval(depositPollT); depositPollT = null;
-        document.getElementById('depositPollingMsg').textContent = `✅ KES ${d.amount} deposited successfully!`;
-        showDepositAlert(`KES ${d.amount} added to your balance! You can now spin.`, 'success');
-        document.getElementById('depositPolling').style.display = 'none';
-        setTimeout(closeDepositModal, 2000);
-        loadUser().then(u => updateSpinUI(u));
+    try{
+      const r=await fetch('/api/user/spin-deposit/status?_='+Date.now());
+      const d=await r.json();
+      if(d.deposited){
+        clearInterval(depPollTimer);depPollTimer=null;
+        document.getElementById('depPolling').style.display='none';
+        showDepAl('✅ KES '+d.amount+' deposited! You can now spin.','ok');
+        setTimeout(()=>{ document.getElementById('spinModal').classList.remove('open'); loadUser(); },2000);
         return;
       }
-      if (d.failed) {
-        clearInterval(depositPollT); depositPollT = null;
-        document.getElementById('depositPolling').style.display = 'none';
-        showDepositAlert(d.message || 'Payment failed. Try again.', 'error');
-        document.getElementById('depositBtn').disabled    = false;
-        document.getElementById('depositBtn').textContent = '📱 Send M-Pesa STK Push';
-        return;
+      if(d.failed){
+        clearInterval(depPollTimer);depPollTimer=null;
+        document.getElementById('depPolling').style.display='none';
+        showDepAl(d.message||'Payment failed. Try again.','err');
+        document.getElementById('depBtn').disabled=false;
+        document.getElementById('depBtn').textContent='📱 Send M-Pesa STK Push';
       }
-    } catch (e) { console.log('Deposit poll:', e.message); }
-    if (pc >= 60) { // 3 min timeout
-      clearInterval(depositPollT); depositPollT = null;
-      document.getElementById('depositPolling').style.display = 'none';
-      showDepositAlert('Timeout. If you paid, your balance will update shortly.', 'error');
-      document.getElementById('depositBtn').disabled    = false;
-      document.getElementById('depositBtn').textContent = '📱 Send M-Pesa STK Push';
+    }catch(e){console.log('dep poll:',e.message);}
+    if(pc>=60){ clearInterval(depPollTimer);depPollTimer=null;
+      document.getElementById('depPolling').style.display='none';
+      showDepAl('Timeout. If you paid, balance will update shortly.','err');
+      document.getElementById('depBtn').disabled=false;
+      document.getElementById('depBtn').textContent='📱 Send M-Pesa STK Push';
     }
-  }, 3000);
+  },3000);
 }
 
-function showDepositAlert(msg, type) {
-  const e = document.getElementById('depositAlert');
-  if (!msg) { e.style.display = 'none'; return; }
-  e.textContent    = msg;
-  e.style.display  = 'block';
-  e.style.background  = type==='success' ? '#F0FDF4' : '#FEF2F2';
-  e.style.border      = type==='success' ? '1px solid #BBF7D0' : '1px solid #FECACA';
-  e.style.color       = type==='success' ? '#15803D' : '#DC2626';
-  e.style.borderRadius= '8px';
-  e.style.padding     = '.65rem .9rem';
+function showDepAl(msg,type){
+  const e=document.getElementById('depAlert');
+  if(!msg){e.style.display='none';return;}
+  e.textContent=msg; e.className='al '+(type==='ok'?'ok':'err'); e.style.display='block';
 }
 
-// Add keyframe for wheel glow and bounceIn
-const styleEl = document.createElement('style');
-styleEl.textContent = `
-@keyframes glowPulse{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:.4;transform:scale(1.03);}}
-@keyframes bounceIn{0%{transform:scale(.8);opacity:0;}60%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
-@keyframes spin{to{transform:rotate(360deg);}}
-`;
-document.head.appendChild(styleEl);
+/* ═══════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════ */
+function showAl(id,msg,type){
+  const e=document.getElementById(id);
+  if(!e)return;
+  e.textContent=msg; e.className='al '+(type==='ok'?'ok':'err'); e.style.display='block';
+}
 
-// Draw wheel on load
-window.addEventListener('load', () => { drawWheel(); });
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+drawWheel();
+loadUser();
 </script>
 </body>
 </html>
